@@ -233,11 +233,12 @@ class ModelEvaluator:
             traceback.print_exc()
             return None
 
-    def quick_evaluate(self, timesteps: int) -> Optional[dict]:
+    def quick_evaluate(self, timesteps: int, save_path: Optional[Path] = None) -> Optional[dict]:
         """Train and evaluate in one step (for screening).
 
         Args:
             timesteps: Training timesteps.
+            save_path: Path to save the best model checkpoint (optional).
 
         Returns:
             Dict with combined training + quick eval metrics.
@@ -267,9 +268,22 @@ class ModelEvaluator:
                 gradient_steps=-1, policy_delay=2, seed=42, verbose=0
             )
 
+            # Setup best model callback
+            callback = None
+            if save_path:
+                callback = BestModelCallback(
+                    check_freq=1, last_n=10,
+                    save_path=save_path, verbose=1
+                )
+
             t0 = time.time()
-            model.learn(total_timesteps=timesteps)
+            model.learn(total_timesteps=timesteps, callback=callback)
             elapsed = time.time() - t0
+
+            # If save_path given but callback didn't save, save final model
+            if save_path and not save_path.exists():
+                save_path.parent.mkdir(parents=True, exist_ok=True)
+                model.save(str(save_path))
 
             # Extract training metrics
             x, y = ts2xy(load_results(log_dir), "timesteps")
@@ -282,21 +296,26 @@ class ModelEvaluator:
 
             # Quick eval: run 10 episodes with trained model
             eval_rewards = []
+            angle_errors = []
             completed = 0
             for _ in range(10):
                 obs, _ = env_instance.reset()
                 done = False
                 total_r = 0.0
                 steps = 0
+                ep_angle_errors = []
                 while not done:
                     action, _ = model.predict(obs, deterministic=True)
                     obs, reward, terminated, truncated, _ = env_instance.step(action)
                     total_r += reward
                     steps += 1
                     done = terminated or truncated
+                    ep_angle_errors.append(getattr(env_instance, 'angle_error', 0.0))
                 eval_rewards.append(total_r)
                 if steps >= env_instance.max_step_num:
                     completed += 1
+                if ep_angle_errors:
+                    angle_errors.append(float(np.mean(ep_angle_errors)))
 
             env_monitored.close()
             self._clean_logs(log_dir)
@@ -309,6 +328,7 @@ class ModelEvaluator:
                 "timesteps": timesteps,
                 "eval_mean_reward": float(np.mean(eval_rewards)),
                 "completion_rate": completed / 10,
+                "lateral_error": float(np.mean(angle_errors)) if angle_errors else 0.0,
             }
 
         except Exception as e:
