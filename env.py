@@ -962,7 +962,9 @@ class Attitude_control_stage1(gym.Env):
         residual_penalty = 0.0
         residual_smoothness_penalty = 0.0
         if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
-            residual_penalty = -0.1 * np.sum(self.last_residual_action**2)
+            # Scale penalty based on tracking error - more penalty when error is large
+            error_scale = 1.0 + 2.0 * min(current_error, 1.0)
+            residual_penalty = -0.2 * error_scale * np.sum(self.last_residual_action**2)
             # Add smoothness penalty for residual action changes
             if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
                 residual_smoothness_penalty = -0.05 * np.sum((self.last_residual_action - self.prev_residual_action)**2)

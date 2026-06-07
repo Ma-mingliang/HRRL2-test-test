@@ -4278,3 +4278,29 @@ f_residual_aware_reward_openreview_1dgp543ohn, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T14:14:36.430633+00:00] v0532 - ✗ REJECTED
+
+**Candidate ID:** `reward_c013`
+**Description:** Added smoothness penalty for residual action changes to reduce oscillations and improve tracking stability (rationale: The current residual penalty only penalizes action magnitude but not smoothness. Adding a penalty for changes in residual actions (||u_res_t - u_res_{t-1}||^2) will encourage smoother corrections, reducing oscillations and improving tracking stability. This aligns with the research idea's template that includes lambda_smooth * norm(u_res - prev_u_res). The small penalty weight (0.05) ensures it doesn't dominate the task reward while still promoting smoother behavior.)
+
+### Reward Formula / Change
+```
+Added smoothness penalty for residual action changes to reduce oscillations and improve tracking stability (rationale: The current residual penalty only penalizes action magnitude but not smoothness. Adding a penalty for changes in residual actions (||u_res_t - u_res_{t-1}||^2) will encourage smoother corrections, reducing oscillations and improving tracking stability. This aligns with the research idea's template that includes lambda_smooth * norm(u_res - prev_u_res). The small penalty weight (0.05) ensures it doesn't dominate the task reward while still promoting smoother behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_huslmvdg5k, f_residual_aware_reward_openreview_jy750ih1y0
+
+---
+

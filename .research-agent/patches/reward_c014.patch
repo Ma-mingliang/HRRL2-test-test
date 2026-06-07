@@ -1,16 +1,16 @@
 --- a/env.py
 +++ b/env.py
-@@ -1027,2 +1027,13 @@
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-         action_penalty = -0.02 * abs(target_handle_
-+        
-+        # 6. 残差动作惩罚：鼓励残差控制器输出平顺
-+        # 获取残差动作（假设环境中有残差动作信息）
-+        residual_penalty = 0.0
-+        if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
-+            residual_norm = np.linalg.norm(self.last_residual_action)
-+            residual_penalty = -0.1 * residual_norm**2  # 惩罚残差动作幅度
-+            # 额外惩罚残差动作变化（平滑性）
-+            if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
-+                residual_smoothness = np.linalg.norm(self.last_residual_action - self.prev_residual_action)
-+                residual_penalty -= 0.05 * residual_smoothness
+@@ -960,10 +960,12 @@
+         # 8. Residual action penalty (from research idea F_residual_aware_reward)
+         # Penalize large residual actions to encourage smooth corrections
+         residual_penalty = 0.0
+         residual_smoothness_penalty = 0.0
+         if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
+-            residual_penalty = -0.1 * np.sum(self.last_residual_action**2)
++            # Scale penalty based on tracking error - more penalty when error is large
++            error_scale = 1.0 + 2.0 * min(current_error, 1.0)
++            residual_penalty = -0.2 * error_scale * np.sum(self.last_residual_action**2)
+             # Add smoothness penalty for residual action changes
+             if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
+                 residual_smoothness_penalty = -0.05 * np.sum((self.last_residual_action - self.prev_residual_action)**2)
+             self.prev_residual_action = self.last_residual_action.copy()
