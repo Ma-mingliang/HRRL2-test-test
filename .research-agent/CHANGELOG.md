@@ -3702,3 +3702,31 @@ c_curriculum_subgoal_reward_openreview_dhoxjoy1sp, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T11:36:34.361384+00:00] v0510 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c038`
+**Description:** Added a safety gate to prevent reward hacking by limiting the maximum bonus reward and adding a penalty for excessive angular velocity (rationale: The current reward function shows perfect completion rate but very low lateral error (0.0041), suggesting potential reward hacking where the agent might be gaming the bonus system. By adding a safety gate that scales down bonus rewards when angular velocity is high, we prevent the agent from achieving high precision through aggressive, unstable movements. The modified bonus calculation also provides smoother gradients near the ultra-precision threshold, which should improve training stability while maintaining the high completion rate.)
+
+### Reward Formula / Change
+```
+Added a safety gate to prevent reward hacking by limiting the maximum bonus reward and adding a penalty for excessive angular velocity (rationale: The current reward function shows perfect completion rate but very low lateral error (0.0041), suggesting potential reward hacking where the agent might be gaming the bonus system. By adding a safety gate that scales down bonus rewards when angular velocity is high, we prevent the agent from achieving high precision through aggressive, unstable movements. The modified bonus calculation also provides smoother gradients near the ultra-precision threshold, which should improve training stability while maintaining the high completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 935.1014 (std: 0.0000)
+- **lateral_error:** 0.0031 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openreview_ieduruo55f
+
+---
+
