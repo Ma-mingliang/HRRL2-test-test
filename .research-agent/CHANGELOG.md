@@ -3449,3 +3449,31 @@ c_curriculum_subgoal_reward_openreview_hqwhxvzcmj, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T10:52:45.798917+00:00] v0501 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c029`
+**Description:** Add a curriculum stage gate to the angular velocity subgoal reward to prevent reward hacking and ensure the agent progresses through stages safely (rationale: The current subgoal reward can cause reward hacking where the agent focuses on reducing angular velocity at the expense of tracking accuracy. By gating the subgoal reward to only apply when tracking error is above 0.05, we ensure the agent prioritizes tracking first, then uses velocity reduction as a secondary objective. This aligns with the curriculum learning idea where stages should be completed sequentially. The baseline shows excellent tracking (lateral_error: 0.0041), so this change should maintain performance while preventing potential reward hacking in more challenging scenarios.)
+
+### Reward Formula / Change
+```
+Add a curriculum stage gate to the angular velocity subgoal reward to prevent reward hacking and ensure the agent progresses through stages safely (rationale: The current subgoal reward can cause reward hacking where the agent focuses on reducing angular velocity at the expense of tracking accuracy. By gating the subgoal reward to only apply when tracking error is above 0.05, we ensure the agent prioritizes tracking first, then uses velocity reduction as a secondary objective. This aligns with the curriculum learning idea where stages should be completed sequentially. The baseline shows excellent tracking (lateral_error: 0.0041), so this change should maintain performance while preventing potential reward hacking in more challenging scenarios.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 922.6499 (std: 0.0000)
+- **lateral_error:** 0.0031 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_mhratccbtk, c_curriculum_subgoal_reward_openreview_tjhhb6cscw
+
+---
+
