@@ -4330,3 +4330,29 @@ f_residual_aware_reward_openreview_l8pjfrpuuq, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T14:15:29.152356+00:00] v0534 - ✗ REJECTED
+
+**Candidate ID:** `reward_c015`
+**Description:** Added a scaling factor to the residual action penalty based on tracking error magnitude, making the penalty more aggressive when tracking is poor and more lenient when tracking is good. (rationale: The current linear scaling (1.0 + 2.0 * min(current_error, 1.0)) provides a maximum 3x penalty increase when error is large. By using exponential scaling (1.0 + 3.0 * (1.0 - exp(-5.0 * current_error))), we get: 1) Near-zero penalty when tracking is excellent (error < 0.01), allowing fine residual corrections; 2) Rapid penalty increase for moderate errors (0.1-0.5), strongly discouraging residual actions when they're not needed; 3) Maximum ~4x penalty for large errors, more aggressively discouraging residual actions during poor tracking. This should improve action smoothness while maintaining tracking precision, as the residual penalty becomes more context-aware.)
+
+### Reward Formula / Change
+```
+Added a scaling factor to the residual action penalty based on tracking error magnitude, making the penalty more aggressive when tracking is poor and more lenient when tracking is good. (rationale: The current linear scaling (1.0 + 2.0 * min(current_error, 1.0)) provides a maximum 3x penalty increase when error is large. By using exponential scaling (1.0 + 3.0 * (1.0 - exp(-5.0 * current_error))), we get: 1) Near-zero penalty when tracking is excellent (error < 0.01), allowing fine residual corrections; 2) Rapid penalty increase for moderate errors (0.1-0.5), strongly discouraging residual actions when they're not needed; 3) Maximum ~4x penalty for large errors, more aggressively discouraging residual actions during poor tracking. This should improve action smoothness while maintaining tracking precision, as the residual penalty becomes more context-aware.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_pech3gfc9d, f_residual_aware_reward_openreview_ar9uz1tmsz
+
+---
+
