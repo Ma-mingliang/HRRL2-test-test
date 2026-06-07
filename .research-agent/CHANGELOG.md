@@ -2292,3 +2292,34 @@ b_safety_constraint_reward_openreview_qcz3g6mh3l, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T09:32:44.235640+00:00] v0477 - ✗ REJECTED
+
+**Candidate ID:** `reward_c005`
+**Description:** Added a stability bonus for maintaining low angular velocity when tracking error is small, and adjusted the improvement reward scaling to better balance exploration and exploitation. (rationale: The current reward function shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward value (930.85) suggests there's room for improvement in reward shaping. Adding a stability bonus encourages the agent to maintain smooth control when already tracking well, which should reduce oscillations and improve overall performance. Scaling down the improvement reward by 0.5 prevents it from dominating the reward signal while still providing useful gradient information. This modification aligns with the research idea of using potential-based reward shaping while adding a practical stability component that should improve both tracking accuracy and control smoothness.)
+
+### Reward Formula / Change
+```
+Added a stability bonus for maintaining low angular velocity when tracking error is small, and adjusted the improvement reward scaling to better balance exploration and exploitation. (rationale: The current reward function shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward value (930.85) suggests there's room for improvement in reward shaping. Adding a stability bonus encourages the agent to maintain smooth control when already tracking well, which should reduce oscillations and improve overall performance. Scaling down the improvement reward by 0.5 prevents it from dominating the reward signal while still providing useful gradient information. This modification aligns with the research idea of using potential-based reward shaping while adding a practical stability component that should improve both tracking accuracy and control smoothness.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 868.8525 (std: 0.0000)
+- **lateral_error:** 0.0057 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.1047 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_hu7hujemiw, a_potential_based_reward_openreview_lxfl2g3yxb
+
+---
+
