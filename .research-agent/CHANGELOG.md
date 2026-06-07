@@ -1224,3 +1224,26 @@ a_potential_based_reward_arxiv_2605_01787, a_potential_based_reward_openreview_0
 
 ---
 
+## [2026-06-07T07:55:21.950644+00:00] v0457 - ✗ REJECTED
+
+**Candidate ID:** `reward_c010`
+**Description:** Added potential-based reward shaping for tracking and heading errors to encourage continuous improvement while preserving optimal policy (rationale: The original code had a potential-based reward shaping formula that was mathematically correct but could be clearer. This change makes the implementation more explicit by separating the potential calculations for tracking and heading errors, which improves code readability and maintainability. The potential-based shaping preserves the optimal policy while providing denser reward signals that encourage continuous improvement in tracking and heading accuracy. This should help the agent learn faster and achieve better path tracking performance.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping for tracking and heading errors to encourage continuous improvement while preserving optimal policy (rationale: The original code had a potential-based reward shaping formula that was mathematically correct but could be clearer. This change makes the implementation more explicit by separating the potential calculations for tracking and heading errors, which improves code readability and maintainability. The potential-based shaping preserves the optimal policy while providing denser reward signals that encourage continuous improvement in tracking and heading accuracy. This should help the agent learn faster and achieve better path tracking performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_tdomx6s4f5, a_potential_based_reward_arxiv_1902_06239
+
+---
+
