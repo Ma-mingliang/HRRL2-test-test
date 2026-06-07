@@ -951,7 +951,6 @@ class Attitude_control_stage1(gym.Env):
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
-        # 3.5 安全约束惩罚：防止过度振荡
         safety_penalty = 0.0
         max_safe_angular_velocity = 2.0  # 安全阈值
         violation = max(0, angular_velocity - max_safe_angular_velocity)
@@ -960,10 +959,11 @@ class Attitude_control_stage1(gym.Env):
             safety_penalty = -1.0 * violation**2 - 0.2 * violation
             # Safety gate: reduce task reward when violating safety constraints
             # More gradual gating based on violation severity
-            gate_factor = max(0.1, 1.0 - 0.4 * violation)
+            gate_factor = max(0.3, 1.0 - 0.3 * violation)
             tracking_reward *= gate_factor
             bonus_reward *= gate_factor
             # Additional penalty for excessive angular velocity
+            safety_penalty -= 0.1 * angular_velocity
             safety_penalty -= 0.1 * angular_velocity
         else:
             safety_penalty = 0.0

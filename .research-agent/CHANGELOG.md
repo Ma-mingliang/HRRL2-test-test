@@ -3331,3 +3331,34 @@ b_safety_constraint_reward_openreview_7lfmnvnmfj, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T10:48:56.678831+00:00] v0497 - ✗ REJECTED
+
+**Candidate ID:** `reward_c025`
+**Description:** Added a safety gate that reduces tracking reward when angular velocity exceeds a threshold, with a more gradual penalty scaling (rationale: The current safety gate uses a fixed 0.5 multiplier regardless of violation severity. This change implements a more gradual gating mechanism where the reward reduction scales with the violation magnitude. For small violations (just above threshold), the gate factor is close to 1.0, preserving most task reward. For larger violations, the gate factor decreases more aggressively. This prevents over-penalizing minor safety violations while still strongly discouraging dangerous behavior, which should improve both safety and task performance by avoiding excessive conservatism.)
+
+### Reward Formula / Change
+```
+Added a safety gate that reduces tracking reward when angular velocity exceeds a threshold, with a more gradual penalty scaling (rationale: The current safety gate uses a fixed 0.5 multiplier regardless of violation severity. This change implements a more gradual gating mechanism where the reward reduction scales with the violation magnitude. For small violations (just above threshold), the gate factor is close to 1.0, preserving most task reward. For larger violations, the gate factor decreases more aggressively. This prevents over-penalizing minor safety violations while still strongly discouraging dangerous behavior, which should improve both safety and task performance by avoiding excessive conservatism.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 868.8525 (std: 0.0000)
+- **lateral_error:** 0.0057 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.1047 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_uqrs6vfcsd, b_safety_constraint_reward_openreview_zseebz7zj5
+
+---
+
