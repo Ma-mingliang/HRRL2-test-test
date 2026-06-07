@@ -940,20 +940,13 @@ class Attitude_control_stage1(gym.Env):
         tracking_reward = -min(current_error**2, max_penalty)
         
         # 2. 高精度奖励
-        # 2. 高精度奖励
         bonus_reward = 0.0
         if current_error < 0.005:
-            bonus_reward = min(1.0, 0.5 + 0.5 * (0.005 - current_error) / 0.005)
+            bonus_reward = 1.0
         elif current_error < 0.01:
-            bonus_reward = 0.5
+            bonus_reward = 0.7
         elif current_error < 0.02:
             bonus_reward = 0.2
-        
-        # Safety gate: limit bonus if angular velocity is too high
-        if angular_velocity > 0.5:
-            bonus_reward *= max(0.1, 1.0 - (angular_velocity - 0.5) * 2.0)
-        elif angular_velocity > 0.3:
-            bonus_reward *= max(0.5, 1.0 - (angular_velocity - 0.3) * 2.5)
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
@@ -990,11 +983,8 @@ class Attitude_control_stage1(gym.Env):
         # 4.1 Potential-based reward shaping (preserves optimal policy)
         # Phi(s) = -k * |error|, so gamma*Phi(s') - Phi(s) = k*(|e_t| - gamma*|e_t+1|)
         gamma = 0.99
-        k_phi = 0.5
+        k_phi = 1.0
         potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
-        # Gate against unsafe behavior: only apply when angular velocity is reasonable
-        if angular_velocity > 0.3:
-            potential_shaping *= max(0.2, 1.0 - (angular_velocity - 0.3) * 2.0)
         
         # 5. 课程学习子目标奖励
 
