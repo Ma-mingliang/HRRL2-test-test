@@ -958,8 +958,6 @@ class Attitude_control_stage1(gym.Env):
         # 4. 改进奖励
         improvement_reward = 0.0
         error_reduction = abs(state_last_raw[0]) - current_error
-        if error_reduction > 0:
-            improvement_reward = 0.3 * error_reduction
         
         # 4.1 Potential-based reward shaping (preserves optimal policy)
         # Phi(s) = -k * |error|, so gamma*Phi(s') - Phi(s) = k*(|e_t| - gamma*|e_t+1|)

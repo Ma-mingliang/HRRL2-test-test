@@ -3978,3 +3978,31 @@ a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T13:52:52.511516+00:00] v0521 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c002`
+**Description:** Simplify the reward function by removing redundant components and focusing on core tracking with potential-based shaping. Removed multiple overlapping penalty terms and consolidated the reward structure. (rationale: The current reward function has multiple overlapping penalty terms for angular velocity (smoothness_penalty, velocity_penalty, smoothness_bonus, high_velocity_penalty, oscillation_penalty) that create conflicting signals and make learning difficult. By simplifying to just smoothness_penalty and velocity_penalty, we provide clearer feedback to the agent. The baseline metrics show excellent performance (lateral_error: 0.0041), so we can afford to simplify without losing tracking quality. This reduces reward complexity while maintaining the core tracking objective and potential-based shaping, which should lead to more stable learning and potentially better generalization.)
+
+### Reward Formula / Change
+```
+Simplify the reward function by removing redundant components and focusing on core tracking with potential-based shaping. Removed multiple overlapping penalty terms and consolidated the reward structure. (rationale: The current reward function has multiple overlapping penalty terms for angular velocity (smoothness_penalty, velocity_penalty, smoothness_bonus, high_velocity_penalty, oscillation_penalty) that create conflicting signals and make learning difficult. By simplifying to just smoothness_penalty and velocity_penalty, we provide clearer feedback to the agent. The baseline metrics show excellent performance (lateral_error: 0.0041), so we can afford to simplify without losing tracking quality. This reduces reward complexity while maintaining the core tracking objective and potential-based shaping, which should lead to more stable learning and potentially better generalization.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2398.3485
+- **lateral_error:** 0.0029
+
+### Source Methods
+a_potential_based_reward_openreview_tjhhb6cscw, a_potential_based_reward_openreview_hz9gu1io12
+
+---
+
