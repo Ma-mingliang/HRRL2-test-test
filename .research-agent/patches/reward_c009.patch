@@ -1,14 +1,18 @@
 --- a/env.py
 +++ b/env.py
-@@ -64,3 +64,12 @@
-         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
-                  math.tan(x) * ((l
-+        
-+        # Potential-based reward shaping for tracking improvement
-+        if hasattr(self, 'prev_lateral_error'):
-+            gamma = 0.99
-+            k_phi = 0.5
-+            tracking_improvement = abs(self.prev_lateral_error) - abs(lateral_error)
-+            potential_reward = k_phi * (gamma * (-abs(lateral_error)) - (-abs(self.prev_lateral_error)))
-+            reward += potential_reward
-+        self.prev_lateral_error = lateral_error
+@@ -997,15 +997,3 @@
+         # 4. 改进奖励
+         # 4. 改进奖励
+         improvement_reward = 0.0
+-        error_reduction = abs(state_last_raw[0]) - current_error
+-        gamma = 0.98
+-        # Use absolute error as potential for more direct improvement signal
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        # Scale improvement reward based on progress and stability
+-        progress_scale = 1.0
+-        if error_reduction > 0:  # Making progress
+-            progress_scale = 1.2
+-        if current_error < 0.05 and angular_velocity < 0.2:
+-            progress_scale *= 1.3
+-        imp

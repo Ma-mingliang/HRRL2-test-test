@@ -2466,3 +2466,34 @@ c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T09:52:40.696302+00:00] v0480 - ✗ REJECTED
+
+**Candidate ID:** `reward_c008`
+**Description:** Enhanced the potential-based reward shaping by adding a scaling factor that increases when the agent is making good progress toward the target, while maintaining the potential-based structure to preserve policy incentives. (rationale: The current improvement reward uses a stability_scale that only activates when both error and velocity are low, which may not provide sufficient incentive during the initial learning phase. By adding a progress_scale that increases when the agent is actively reducing error (error_reduction > 0), we provide stronger positive feedback for making progress toward the target. This maintains the potential-based structure (gamma * Phi(s_next) - Phi(s)) while adding a multiplicative factor that encourages consistent improvement. The scaling is conservative (1.2x for progress, 1.3x for stability) to avoid reward hacking while still providing clearer learning signals. This should help reduce the lateral error (currently 0.0041) by giving the agent more consistent feedback on its improvement trajectory.)
+
+### Reward Formula / Change
+```
+Enhanced the potential-based reward shaping by adding a scaling factor that increases when the agent is making good progress toward the target, while maintaining the potential-based structure to preserve policy incentives. (rationale: The current improvement reward uses a stability_scale that only activates when both error and velocity are low, which may not provide sufficient incentive during the initial learning phase. By adding a progress_scale that increases when the agent is actively reducing error (error_reduction > 0), we provide stronger positive feedback for making progress toward the target. This maintains the potential-based structure (gamma * Phi(s_next) - Phi(s)) while adding a multiplicative factor that encourages consistent improvement. The scaling is conservative (1.2x for progress, 1.3x for stability) to avoid reward hacking while still providing clearer learning signals. This should help reduce the lateral error (currently 0.0041) by giving the agent more consistent feedback on its improvement trajectory.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 897.5800 (std: 0.0000)
+- **lateral_error:** 0.0042 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.0192 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_23703
+
+---
+
