@@ -993,6 +993,12 @@ class Attitude_control_stage1(gym.Env):
             # Additional bonus for very high precision
             if current_error < 0.005:
                 precision_bonus += 1.0
+            # Stability bonus: reward consistent low-error performance
+            if hasattr(self, 'prev_precision_error') and self.prev_precision_error < precision_threshold:
+                # Extra bonus for maintaining precision over time
+                stability_bonus = 0.5 * np.exp(-20.0 * current_error)
+                precision_bonus += stability_bonus
+            self.prev_precision_error = current_error
             reward += precision_bonus
         return reward
 
