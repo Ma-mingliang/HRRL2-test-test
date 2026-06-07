@@ -1,0 +1,11 @@
+--- a/env.py
++++ b/env.py
+@@ -35,4 +35,7 @@
+                 if abs(self.lateral_error) < 0.05:  # ~5cm threshold
+                     reward += 0.1 * safety_factor
+                 # Additional small reward for very low error to encourage stability
+-                if abs(
++                if abs(self.lateral_error) < 0.02:  # ~2cm threshold
++                    reward += 0.2 * safety_factor
++                # Additional small reward for very low error to encourage stability
++                if abs(

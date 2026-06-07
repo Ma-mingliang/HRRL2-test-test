@@ -2497,3 +2497,34 @@ a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_2
 
 ---
 
+## [2026-06-07T09:57:43.312992+00:00] v0500 - ✗ REJECTED
+
+**Candidate ID:** `reward_c031`
+**Description:** Added curriculum-based stage weighting to the progress reward to encourage more aggressive error reduction in early training stages (rationale: The baseline shows excellent performance (lateral_error: 0.0041), but the current stage_weight is constant at 10.0. By increasing the weight to 15.0 when error is larger (>0.1m), we provide stronger gradient signal during early learning when the bike is still far from the path. This should accelerate initial convergence while maintaining the same weight (10.0) for fine-tuning near the target, potentially improving sample efficiency without sacrificing final performance.)
+
+### Reward Formula / Change
+```
+Added curriculum-based stage weighting to the progress reward to encourage more aggressive error reduction in early training stages (rationale: The baseline shows excellent performance (lateral_error: 0.0041), but the current stage_weight is constant at 10.0. By increasing the weight to 15.0 when error is larger (>0.1m), we provide stronger gradient signal during early learning when the bike is still far from the path. This should accelerate initial convergence while maintaining the same weight (10.0) for fine-tuning near the target, potentially improving sample efficiency without sacrificing final performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 897.5800 (std: 0.0000)
+- **lateral_error:** 0.0042 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.0192 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_hz9gu1io12, c_curriculum_subgoal_reward_openreview_rgvqh3gjea
+
+---
+

@@ -36,6 +36,9 @@
                     reward += 0.1 * safety_factor
                 # Additional small reward for very low error to encourage stability
                 if abs(self.lateral_error) < 0.02:  # ~2cm threshold
+                    reward += 0.2 * safety_factor
+                # Additional small reward for very low error to encourage stability
+                if abs(
                     reward += 0.05 * safety_factor
                 # Update previous error for next step
                 self.prev_lateral_error = abs(self.lateral_error)
