@@ -4304,3 +4304,29 @@ f_residual_aware_reward_openreview_huslmvdg5k, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T14:15:04.136103+00:00] v0533 - ✗ REJECTED
+
+**Candidate ID:** `reward_c014`
+**Description:** Added a scaling factor to the residual action penalty to make it more effective when tracking error is large, and increased the penalty weight to better discourage residual actions. (rationale: The current residual penalty is too weak and doesn't adapt to tracking performance. By scaling the penalty based on current error, we make it more aggressive when the system is struggling (large error) and less aggressive when tracking is good. This encourages the residual controller to be more conservative when it's most needed, reducing oscillations and improving smoothness. The increased base penalty (0.1 → 0.2) also makes the penalty more effective overall. This should reduce residual action magnitude and improve tracking smoothness without compromising completion rate.)
+
+### Reward Formula / Change
+```
+Added a scaling factor to the residual action penalty to make it more effective when tracking error is large, and increased the penalty weight to better discourage residual actions. (rationale: The current residual penalty is too weak and doesn't adapt to tracking performance. By scaling the penalty based on current error, we make it more aggressive when the system is struggling (large error) and less aggressive when tracking is good. This encourages the residual controller to be more conservative when it's most needed, reducing oscillations and improving smoothness. The increased base penalty (0.1 → 0.2) also makes the penalty more effective overall. This should reduce residual action magnitude and improve tracking smoothness without compromising completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_l8pjfrpuuq, f_residual_aware_reward_openreview_n67dlqk5c4
+
+---
+
