@@ -1293,3 +1293,26 @@ f_residual_aware_reward_openreview_1dgp543ohn, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T07:56:10.975159+00:00] v0460 - ✗ REJECTED
+
+**Candidate ID:** `reward_c013`
+**Description:** Fixed missing variable reference and added proper residual action penalty calculation (rationale: The original code had a critical bug: 'potential_tracking' was referenced but never defined. This fix adds the missing calculation for potential_tracking using the same pattern as potential_heading. Additionally, the residual action penalty section was incomplete (line 31 was cut off). This ensures the reward function properly implements both potential-based shaping for tracking improvement and residual action penalties as specified in the research ideas, which should improve training stability and encourage smoother residual control actions.)
+
+### Reward Formula / Change
+```
+Fixed missing variable reference and added proper residual action penalty calculation (rationale: The original code had a critical bug: 'potential_tracking' was referenced but never defined. This fix adds the missing calculation for potential_tracking using the same pattern as potential_heading. Additionally, the residual action penalty section was incomplete (line 31 was cut off). This ensures the reward function properly implements both potential-based shaping for tracking improvement and residual action penalties as specified in the research ideas, which should improve training stability and encourage smoother residual control actions.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_huslmvdg5k, f_residual_aware_reward_openreview_jy750ih1y0
+
+---
+
