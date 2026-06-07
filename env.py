@@ -33,6 +33,20 @@
             potential_prev = -k_phi * normalized_prev_tracking - k_heading * normalized_prev_heading
             shaping_reward = gamma * potential_current - potential_prev
             reward += shaping_reward
+            # Calculate potential-based shaping reward
+            tracking_potential = -normalized_prev_tracking  # Potential function: negative normalized error
+            heading_potential = -normalized_prev_heading
+            # Apply potential difference: gamma * Phi(s') - Phi(s)
+            tracking_shaping = gamma * (-normalized_tracking) - tracking_potential
+            heading_shaping = gamma * (-normalized_heading) - heading_potential
+            # Add shaping to reward
+            reward += k_phi * tracking_shaping + k_heading * heading_shaping
+            # Apply potential-based shaping: gamma * Phi(s_next) - Phi(s)
+            # Phi(s) = -k_phi * normalized_tracking_error - k_heading * normalized_heading_error
+            potential_current = -k_phi * normalized_tracking - k_heading * normalized_heading
+            potential_prev = -k_phi * normalized_prev_tracking - k_heading * normalized_prev_heading
+            shaping_reward = gamma * potential_current - potential_prev
+            reward += shaping_reward
     
             # where Phi(s) = -|error| (negative error as potential)
             potential_heading = gamma * (-normalized_heading) - (-normalized_prev_heading)

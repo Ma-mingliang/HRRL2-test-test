@@ -1,6 +1,6 @@
 --- a/env.py
 +++ b/env.py
-@@ -12,19 +12,25 @@
+@@ -12,18 +12,24 @@
          if hasattr(self, 'prev_tracking_error'):
              tracking_improvement = abs(self.prev_tracking_error) - abs(current_tracking_error)
              heading_improvement = abs(self.prev_heading_error) - abs(current_heading_error)
@@ -25,4 +25,3 @@
 +            potential_prev = -k_phi * normalized_prev_tracking - k_heading * normalized_prev_heading
 +            shaping_reward = gamma * potential_current - potential_prev
 +            reward += shaping_reward
-     
