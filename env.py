@@ -960,12 +960,22 @@ class Attitude_control_stage1(gym.Env):
             safety_gate_penalty = -5.0 * heading_violation  # Additional penalty to gate task reward
             # Apply safety gate to the final reward calculation
             # This implements B_safety_constraint_reward: reward -= lambda_violation * max(0, constraint_value)
-            reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_gate_penalty + safety_penalty
-        else:
-            reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_penalty
+            heading_penalty += safety_gate_penalty
         velocity = abs(state_raw[3])  # v is velocity
         velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed
         angular_velocity = abs(state_raw[2])  # w0 is angular velocity
+        
+        reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_penalty
+        
+        # 7. Small bonus for maintaining very low tracking error
+        if current_error < 0.01:  # Very precise tracking
+            self.prev_residual_action = self.last_residual_action.copy()
+        
+        # 7. Small bonus for maintaining very low tracking error
+        if current_error < 0.01:  # Very precise tracking
+            reward += 0.5  # Small bonus for precision
+        
+        return reward
         angular_penalty = -0.05 * angular_velocity**2
         
         # Safety constraint: penalize excessive angular velocity that could cause instability
