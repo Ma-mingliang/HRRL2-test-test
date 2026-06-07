@@ -2752,3 +2752,60 @@ c_curriculum_subgoal_reward_openreview_b6awzauzpv, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T10:26:25.149800+00:00] v0485 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c013`
+**Description:** Added residual action penalty to encourage smoother residual control actions, aligning with the research idea of penalizing residual action magnitude and roughness. (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041, completion_rate: 1.0000). Adding residual action penalties aligns with the research idea to encourage smoother residual control outputs. This should improve action smoothness metrics without degrading tracking performance, as the penalty is applied only to residual actions (not the base controller). The penalty magnitude is conservative (0.1 for magnitude, 0.05 for smoothness) to avoid reward hacking while still providing learning signal for smoother residual control.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to encourage smoother residual control actions, aligning with the research idea of penalizing residual action magnitude and roughness. (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041, completion_rate: 1.0000). Adding residual action penalties aligns with the research idea to encourage smoother residual control outputs. This should improve action smoothness metrics without degrading tracking performance, as the penalty is applied only to residual actions (not the base controller). The penalty magnitude is conservative (0.1 for magnitude, 0.05 for smoothness) to avoid reward hacking while still providing learning signal for smoother residual control.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 947.1593 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+f_residual_aware_reward_openreview_huslmvdg5k, f_residual_aware_reward_openreview_jy750ih1y0
+
+---
+
+## [2026-06-07T10:26:40.825330+00:00] v0486 - ✗ REJECTED
+
+**Candidate ID:** `reward_c014`
+**Description:** Added residual action penalty to encourage smoother control outputs by penalizing large residual actions (rationale: The research idea suggests penalizing residual action magnitude and roughness to improve control smoothness. This modification adds a residual action penalty that encourages the residual controller to produce smaller, smoother outputs. Since the baseline already shows good tracking (lateral_error: 0.0041), this change should improve action smoothness without sacrificing tracking performance. The penalty is gated by checking if residual action information exists, making it safe for environments without residual control.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to encourage smoother control outputs by penalizing large residual actions (rationale: The research idea suggests penalizing residual action magnitude and roughness to improve control smoothness. This modification adds a residual action penalty that encourages the residual controller to produce smaller, smoother outputs. Since the baseline already shows good tracking (lateral_error: 0.0041), this change should improve action smoothness without sacrificing tracking performance. The penalty is gated by checking if residual action information exists, making it safe for environments without residual control.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 1032
+    residual_penalty = 0.0
+    ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+f_residual_aware_reward_openreview_l8pjfrpuuq, f_residual_aware_reward_openreview_n67dlqk5c4
+
+---
+

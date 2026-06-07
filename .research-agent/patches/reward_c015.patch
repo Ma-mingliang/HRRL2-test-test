@@ -1,20 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -64,2 +64,17 @@
-         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
-                  math.tan(x) * ((l
-+        
-+        # Residual action penalty for smoother control
-+        lambda_res = 0.1
-+        lambda_smooth = 0.05
-+        
-+        # Calculate residual action magnitude penalty
-+        residual_norm = np.dot(action, action) if 'action' in locals() else 0
-+        
-+        # Calculate action smoothness penalty (difference from previous action)
-+        action_smoothness = 0
-+        if hasattr(self, 'prev_action') and self.prev_action is not None:
-+            action_smoothness = np.linalg.norm(action - self.prev_action)
-+        
-+        # Apply penalties to reward
-+        reward -= lambda_res * residual_norm + lambda_smooth * action_smoothness
+@@ -960,5 +960,10 @@
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+         
++        # 6. 残差动作惩罚 - 鼓励残差动作平滑
++        residual_penalty = 0.0
++        if hasattr(self, 'prev_residual') and self.prev_residual is not None:
++            residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
++        self.prev_residual = target_handle_angle
+         
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty

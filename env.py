@@ -1,67 +1,8 @@
-"""
+﻿"""
 自行车自平衡与路径跟踪控制系统
 
 包含：
-        # 路径跟踪奖励
-        reward = 0.0
-        
-        # Safety constraint: penalize excessive roll angle
-        roll_angle = abs(self.bike_roll)
-        safe_roll_limit = 0.3  # ~17 degrees
-        safety_factor = 1.0
-        if roll_angle > safe_roll_limit:
-            violation = roll_angle - safe_roll_limit
-            lambda_violation = 50.0
-            reward -= lambda_violation * violation
-            # Scale down task reward when in unsafe condition
-            safety_factor = max(0.0, 1.0 - (violation / 0.2))
-            # Additional penalty for near-fall condition
-            if roll_angle > 0.5:  # ~28 degrees
-                reward -= 100.0
-                safety_factor = 0.0
-        
-        # 横向误差惩罚
-        if self.lateral_error is not None:
-            # Curriculum subgoal reward for path tracking progress
-            if hasattr(self, 'prev_lateral_error') and self.prev_lateral_error is not None:
-                # Reward progress toward reducing lateral error
-                progress = self.prev_lateral_error - abs(self.lateral_error)
-                # Scale by safety factor to gate against unsafe behavior
-                # Dynamic stage weight based on current error magnitude
-                current_error = abs(self.lateral_error)
-                stage_weight = 15.0 if current_error > 0.1 else 10.0  # beta_stage
-                reward += stage_weight * progress * safety_factor
-                # Small constant reward for maintaining low error
-                if abs(self.lateral_error) < 0.05:  # ~5cm threshold
-                    reward += 0.1 * safety_factor
-                if abs(
-                # Additional small reward for very low error to encourage stability
-                if abs(self.lateral_error) < 0.02:  # ~2cm threshold
-                    reward += 0.2 * safety_factor
-                    # Extra bonus for perfect tracking
-                    if abs(self.lateral_error) < 0.005:  # ~5mm threshold
-                        reward += 0.3 * safety_factor
-                if abs(self.lateral_error) < 0.02:  # ~2cm threshold
-                    reward += 0.2 * safety_factor
-                # Additional small reward for very low error to encourage stability
-                if abs(self.lateral_error) < 0.02:  # ~2cm threshold
-                    reward += 0.2 * safety_factor
-                # Additional small reward for very low error to encourage stability
-                if abs(
-                    reward += 0.2 * safety_factor
-                # Small constant reward for maintaining low error
-                if abs(self.lateral_error) < 0.05:  # ~5cm threshold
-                    reward += 0.1 * safety_factor
-                if abs(self.lateral_error) < 0.02:  # ~2cm threshold
-                    reward += 0.2 * safety_factor
-                # Additional small reward for very low error to encourage stability
-                if abs(
-                    reward += 0.05 * safety_factor
-                # Update previous error for next step
-                self.prev_lateral_error = abs(self.lateral_error)
-            else:
-                self.prev_lateral_error = abs(self.lateral_error)
-
+- 第一阶段：纯强化学习平衡控制器
 - 第三阶段：自适应Stanley控制器
 """
 
@@ -1006,61 +947,26 @@ class Attitude_control_stage1(gym.Env):
             bonus_reward = 0.5
         elif current_error < 0.02:
             bonus_reward = 0.2
+        
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
-        # 3.5 稳定性奖励：当跟踪误差小且角速度低时给予额外奖励
-        stability_bonus = 0.0
-        if current_error < 0.02 and angular_velocity < 0.1:
-            stability_bonus = 0.3
         # 4. 改进奖励
         improvement_reward = 0.0
-        # 4.5 Potential-based reward shaping using error improvement
-        # Phi(s) = -k_phi * |error|, so gamma*Phi(s') - Phi(s) = k_phi*(|e_t| - gamma*|e_t+1|)
-        # This encourages faster error reduction while preserving optimal policy
-        k_phi = 0.5
-        gamma = 0.99
-        last_error = abs(state_last_raw[0])
-        current_error_val = abs(state_raw[0])
-        potential_shaping = k_phi * (last_error - gamma * current_error_val)
-        improvement_reward = potential_shaping
-        # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-        action_penalty = -0.02 * abs(target_handle_angle)
+        error_reduction = abs(state_last_raw[0]) - current_error
+        if error_reduction > 0:
+            improvement_reward = 0.3 * error_reduction
         
-        # 6. 残差动作惩罚：鼓励残差控制输出平滑且幅度小
-        # 假设残差动作存储在self.residual_action中（如果存在）
-        residual_penalty = 0.0
-        if hasattr(self, 'residual_action') and self.residual_action is not None:
-            residual_norm = np.linalg.norm(self.residual_action)
-            residual_penalty = -0.1 * residual_norm**2
-            # 如果有前一残差动作，添加平滑惩罚
-            if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
-                residual_smoothness = np.linalg.norm(self.residual_action - self.prev_residual_action)
-                residual_penalty -= 0.05 * residual_smoothness
-        
-        # 6. 残差动作惩罚（基于研究想法）
-        # 鼓励残差动作平滑且幅度小
-        residual_penalty = 0.0
-        if hasattr(self, 'prev_residual_action'):
-            # 惩罚残差动作幅度
-            residual_penalty -= 0.01 * (target_handle_angle ** 2)
-            # 惩罚残差动作变化（平滑性）
-            residual_penalty -= 0.005 * abs(target_handle_angle - self.prev_residual_action)
-        self.prev_residual_action = target_handle_angle
-        
-        # 6. 残差动作惩罚：鼓励残差控制器输出平顺且幅度小
-        # 假设残差动作是target_handle_angle与基础控制器输出的差值
-        # 这里用target_handle_angle的平方作为残差幅度的代理
-        residual_penalty = -0.01 * target_handle_angle**2
-        
-        # 7. 残差动作平滑性惩罚：惩罚残差动作的剧烈变化
-        # 使用角速度作为残差变化率的代理
-        residual_smoothness = -0.005 * angular_velocity**2
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
+        # 6. 残差动作惩罚 - 鼓励残差动作平滑
+        residual_penalty = 0.0
+        if hasattr(self, 'prev_residual') and self.prev_residual is not None:
+            residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
+        self.prev_residual = target_handle_angle
         
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
         return reward
 
     def reset(self, seed=None, options=None):
