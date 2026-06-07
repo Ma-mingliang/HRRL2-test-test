@@ -1,0 +1,68 @@
+metrics:
+  primary:
+    - name: reward
+      direction: maximize
+    - name: lateral_error
+      direction: minimize
+  safety:
+    - name: completion_rate
+      direction: maximize
+  metric_regex:
+    reward: "reward\\s*=\\s*([\\d.-]+)"
+    lateral_error: "lateral_error\\s*=\\s*([\\d.-]+)"
+    completion_rate: "completion_rate\\s*=\\s*([\\d.-]+)"
+
+execution:
+  max_steps: 50000
+  train_command: E:/Anaconda/envs/RL2/python.exe .research-agent/train.py {seed}
+  eval_command: E:/Anaconda/envs/RL2/python.exe .research-agent/evaluate.py {seed}
+  full_eval_seeds:
+    - 42
+  confirmation_seeds:
+    - 42
+  timeout_seconds_per_seed: 600
+
+evaluation:
+  test_episodes: 30
+  checkpoint_dir: model/checkpoints
+  modifiable_files:
+    - env.py
+  metrics:
+    - name: completion_rate
+      direction: maximize
+      weight: 0.4
+      hard_min: 0.3
+    - name: reward
+      direction: maximize
+      weight: 0.4
+    - name: lateral_error
+      direction: minimize
+      weight: 0.2
+      hard_max: 50.0
+  composite_threshold: 0.0
+  llm_weight: 0.2
+
+budget:
+  wall_clock_hours: 8
+
+llm:
+  provider: openai_compatible
+  model: mimo-v2.5-pro
+  base_url: "https://token-plan-sgp.xiaomimimo.com/v1"
+  api_key_env: "MIMO_API_KEY"
+  timeout_seconds: 120
+  max_retries: 3
+  max_tokens: 8192
+  qps: 2.0
+
+project:
+  path: D:\research-agent\HRRL2
+
+optimizer:
+  active_categories:
+    - A_potential_based_reward
+    - F_residual_aware_reward
+    - B_safety_constraint_reward
+    - C_curriculum_subgoal_reward
+    - G_llm_reward_generation
+  methods_per_category: 2

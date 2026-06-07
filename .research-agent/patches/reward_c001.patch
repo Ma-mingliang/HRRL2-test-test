@@ -1,0 +1,15 @@
+--- a/env.py
++++ b/env.py
+@@ -954,5 +954,11 @@
+                     gamma = 0.99  # Discount factor from research
+ 
+                     # Conservative potential: higher alpha when near unsafe boundaries
+                     # This creates risk-aware potentials that penalize unsafe states more heavily
+-                    alpha = 2.0  # Base scaling
++                    # Adaptive alpha: increase penalty as error grows (safety-aware)
++                    if current_error > 0.3:
++                        alpha = 4.0  # Strong penalty for large errors
++                    elif current_error > 0.1:
++                        alpha = 3.0  # Moderate penalty
++                    else:
++                        alpha = 2.0  # Base scaling for small errors

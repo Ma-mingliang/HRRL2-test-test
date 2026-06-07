@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "project_path": "D:\research-agent\\HRRL2",
+  "work_dir": ".research-agent",
+  "phase": "planned",
+  "front_agent": {
+    "caller": null,
+    "objective_written": true,
+    "objective_file": "front_agent_objective.json"
+  },
+  "project_understanding": {
+    "report": "reports/project_understanding.md",
+    "json": "reports/project_understanding.json",
+    "project_type": []
+  },
+  "task_classification": {
+    "task_types": [],
+    "confidence": 0.0,
+    "report": "reports/task_classification.json"
+  },
+  "strategy_selection": {
+    "selected_optimizers": [],
+    "report": "reports/strategy_selection.md",
+    "json": "reports/strategy_selection.json"
+  },
+  "experiment_plan": {
+    "report": "reports/experiment_plan.md",
+    "json": "reports/experiment_plan.json",
+    "phases": [
+      "baseline"
+    ]
+  },
+  "git": {
+    "project_is_git_repo": null,
+    "baseline_commit": null,
+    "current_best_commit": null,
+    "rollback_target_commit": null,
+    "pre_run_stash": null,
+    "dirty_worktree_policy": "abort"
+  },
+  "current_best": null,
+  "candidate_queue": [],
+  "needs_more_evidence": [],
+  "literature": {
+    "arxiv_papers": null,
+    "paper_taxonomy": null,
+    "selected_evidence": null,
+    "extracted_ideas": null
+  },
+  "resource_usage": {
+    "wall_clock_seconds": 0,
+    "gpu_seconds": null,
+    "candidates": 0,
+    "full_evals": 0
+  },
+  "stop_reason": null,
+  "progress": null,
+  "applied_patches": []
+}

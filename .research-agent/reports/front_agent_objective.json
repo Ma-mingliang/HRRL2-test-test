@@ -1,0 +1,12 @@
+{
+  "name": "optimize_balance_reward",
+  "description": "Optimize the reward function for bicycle balance control (Stage 1) to maximize reward and minimize tilt error",
+  "focus": [
+    "reward shaping",
+    "potential-based reward",
+    "safety constraints",
+    "residual control"
+  ],
+  "primary_metric": "reward",
+  "primary_metric_direction": "maximize"
+}

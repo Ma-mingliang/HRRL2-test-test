@@ -842,7 +842,7 @@ class Attitude_control_stage1(gym.Env):
         p.setTimeStep(self.cycle)
         
         self.max_step_num = 1000
-        self.min_success_steps = 300
+        self.min_success_steps = 1000
         self.angle_error = 0
         self.angle_error_csv = []
         
@@ -928,41 +928,97 @@ class Attitude_control_stage1(gym.Env):
         return np.array([dis_angle, theta0, w0, v])
 
     def __calculate_reward(self, state_last, state, target_handle_angle=0.0):
-        """改进的奖励函数"""
-        state_last_raw = self.__observation_reduction(state_last)
-        state_raw = self.__observation_reduction(state)
-        
-        current_error = abs(state_raw[0])
-        angular_velocity = abs(state_raw[2])
-        
-        # 1. 核心跟踪奖励
-        max_penalty = 2.0
-        tracking_reward = -min(current_error**2, max_penalty)
-        
-        # 2. 高精度奖励
-        bonus_reward = 0.0
-        if current_error < 0.005:
-            bonus_reward = 1.0
-        elif current_error < 0.01:
-            bonus_reward = 0.5
-        elif current_error < 0.02:
-            bonus_reward = 0.2
-        
-        # 3. 平顺性惩罚
-        smoothness_penalty = -0.05 * angular_velocity
-        
-        # 4. 改进奖励
-        improvement_reward = 0.0
-        error_reduction = abs(state_last_raw[0]) - current_error
-        if error_reduction > 0:
-            improvement_reward = 0.3 * error_reduction
-        
-        # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
-        
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
-        
-        return reward
+                    """Potential-based reward shaping with conservative potential function"""
+                    state_last_raw = self.__observation_reduction(state_last)
+                    state_raw = self.__observation_reduction(state)
+
+                    current_error = abs(state_raw[0])  # dis_angle (tilt from vertical)
+                    angular_velocity = state_raw[2]  # w0 (can be negative)
+                    last_error = abs(state_last_raw[0])
+                    last_angular_velocity = state_last_raw[2]
+
+                    # 1. Core tracking reward (based on current error)
+                    max_penalty = 2.0
+                    tracking_reward = -min(current_error**2, max_penalty)
+
+                    # 2. High precision bonus
+                    bonus_reward = 0.0
+                    if current_error < 0.005:
+                        bonus_reward = 1.0
+                    elif current_error < 0.01:
+                        bonus_reward = 0.5
+                    elif current_error < 0.02:
+                        bonus_reward = 0.2
+
+                    # 3. Potential-Based Reward Shaping (PBRS) with discount factor
+                    gamma = 0.99  # Discount factor from research
+
+                    # Conservative potential: higher alpha when near unsafe boundaries
+                    # This creates risk-aware potentials that penalize unsafe states more heavily
+                    # Adaptive alpha: increase penalty as error grows (safety-aware)
+                    if current_error > 0.3:
+                        alpha = 4.0  # Strong penalty for large errors
+                    elif current_error > 0.1:
+                        alpha = 3.0  # Moderate penalty
+                    else:
+                        alpha = 2.0  # Base scaling for small errors
+                    # This creates risk-aware potentials that penalize unsafe states more heavily
+                    alpha = 2.0  # Base scaling
+                    if current_error > 0.5:  # Near tipping point - increase penalty weight
+                        alpha = 4.0 * (1.0 + current_error)  # Escalating penalty
+
+                    # Calculate potentials with safety-aware scaling
+                    potential_current = -alpha * current_error
+                    potential_last = -alpha * last_error  # Use same alpha for consistency
+
+                    # PBRS shaped reward: gamma * Phi(s') - Phi(s)
+                    # This preserves optimal policy while providing learning signal
+                    shaped_reward = gamma * potential_current - potential_last
+
+                    # Risk-gating: reduce shaping when error is dangerously high
+                    risk_gate = 1.0
+                    if current_error > 0.5:  # Approaching unsafe region
+                        risk_gate = max(0.2, 1.0 - 1.5 * (current_error - 0.5))
+
+                    improvement_reward = shaped_reward * risk_gate
+
+                    # 4. Action penalty for smooth control
+                    action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+
+                    # 5. Safety boundary reward (gated against unsafe behavior)
+                    safety_bonus = 0.0
+                    if current_error > 0.8:  # Near tipping point
+                        safety_bonus = -2.0 * (current_error - 0.8)
+                    elif current_error < 0.05:  # Very balanced
+                        safety_bonus = 0.5
+
+                    # 6. Oscillation penalty (excessive angular velocity changes)
+                    oscillation_penalty = 0.0
+                    if abs(angular_velocity) > 5.0:  # Large oscillations
+                        oscillation_penalty = -0.1 * (abs(angular_velocity) - 5.0)
+
+                    # 7. Learning progress reward (decays over time)
+                    learning_progress = 0.0
+                    if self.step_num > 0:
+                        progress_factor = 1.0 - min(self.step_num / self.max_step_num, 1.0)
+                        learning_progress = 0.1 * progress_factor
+
+                    # 8. Terminal condition bonus for long survival
+                    survival_bonus = 0.0
+                    if self.step_num > 800:  # Survived most of episode
+                        survival_bonus = 0.5
+
+                    # Compute total reward
+                    reward = (tracking_reward + bonus_reward + improvement_reward + 
+                             action_penalty + safety_bonus + oscillation_penalty + 
+                             learning_progress + survival_bonus)
+
+                    # Ensure finite and bounded reward
+                    if math.isnan(reward) or math.isinf(reward):
+                        reward = 0.0
+                    reward = max(-100.0, min(100.0, reward))
+
+                    return reward
 
     def reset(self, seed=None, options=None):
         """重置环境"""

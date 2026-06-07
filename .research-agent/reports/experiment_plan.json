@@ -1,0 +1,77 @@
+{
+  "ok": true,
+  "timestamp": "2026-06-07T06:22:54.148850+00:00",
+  "phase": "planned",
+  "report_path": "reports/experiment_plan.md",
+  "json_path": "reports/experiment_plan.json",
+  "plan": {
+    "version": 1,
+    "generated_at": "2026-06-07T06:22:54.148850+00:00",
+    "project_path": "D:\research-agent\\HRRL2",
+    "objective_name": "",
+    "global_budget": {
+      "wall_clock_hours": 8,
+      "gpu_hours": null
+    },
+    "phases": [
+      {
+        "phase_id": "baseline",
+        "dependencies": [],
+        "optimizer": null,
+        "objective_summary": "Establish immutable baseline metrics before any candidate patch.",
+        "allowed_changes": [],
+        "forbidden_changes": [
+          {
+            "type": "all_project_files"
+          }
+        ],
+        "train_command": "E:/Anaconda/envs/RL2/python.exe .research-agent/train.py {seed}",
+        "eval_command": "E:/Anaconda/envs/RL2/python.exe .research-agent/evaluate.py {seed}",
+        "primary_metrics": [
+          "reward",
+          "lateral_error"
+        ],
+        "safety_metrics": [
+          "completion_rate"
+        ],
+        "budget": {
+          "timeout_seconds": 600
+        },
+        "rollback_policy": "git_checkout",
+        "cleanup_policy": "none",
+        "status": "pending"
+      },
+      {
+        "phase_id": "reward",
+        "dependencies": [
+          "baseline"
+        ],
+        "optimizer": "reward",
+        "task_types": [
+          "reward_shaping"
+        ],
+        "objective_summary": "Optimize reward function using paper-based methods",
+        "allowed_changes": [
+          "env.py"
+        ],
+        "forbidden_changes": [],
+        "train_command": "E:/Anaconda/envs/RL2/python.exe .research-agent/train.py {seed}",
+        "eval_command": "E:/Anaconda/envs/RL2/python.exe .research-agent/evaluate.py {seed}",
+        "primary_metrics": [
+          "reward",
+          "lateral_error"
+        ],
+        "safety_metrics": [
+          "completion_rate"
+        ],
+        "budget": {
+          "timeout_seconds": 600
+        },
+        "rollback_policy": "git_commit",
+        "cleanup_policy": "none",
+        "status": "pending"
+      }
+    ]
+  },
+  "next_action": "Call 'search-papers --json' before optimizer proposal."
+}
