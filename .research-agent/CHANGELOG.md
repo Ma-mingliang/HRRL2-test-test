@@ -4434,3 +4434,55 @@ b_safety_constraint_reward_openreview_hqwhxvzcmj, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T14:17:25.844843+00:00] v0538 - ✗ REJECTED
+
+**Candidate ID:** `reward_c019`
+**Description:** Added a safety gate that penalizes the reward when angular velocity exceeds a safe threshold, implementing the B_safety_constraint_reward research idea. This gates the task reward with explicit penalties for constraint violations. (rationale: The current safety penalty is weak (-0.5 coefficient) and may not sufficiently discourage unsafe angular velocities. By increasing the penalty coefficient to 2.0 and making it more explicit as a safety gate, we better implement the B_safety_constraint_reward research idea. This should reduce constraint violations (excessive angular velocity) while maintaining the high completion rate (1.0) and low lateral error (0.0041). The stronger penalty will make the agent more cautious about angular velocity, potentially improving stability without sacrificing tracking performance.)
+
+### Reward Formula / Change
+```
+Added a safety gate that penalizes the reward when angular velocity exceeds a safe threshold, implementing the B_safety_constraint_reward research idea. This gates the task reward with explicit penalties for constraint violations. (rationale: The current safety penalty is weak (-0.5 coefficient) and may not sufficiently discourage unsafe angular velocities. By increasing the penalty coefficient to 2.0 and making it more explicit as a safety gate, we better implement the B_safety_constraint_reward research idea. This should reduce constraint violations (excessive angular velocity) while maintaining the high completion rate (1.0) and low lateral error (0.0041). The stronger penalty will make the agent more cautious about angular velocity, potentially improving stability without sacrificing tracking performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_dju2kvsdts, b_safety_constraint_reward_openreview_rgvqh3gjea
+
+---
+
+## [2026-06-07T14:20:02.656385+00:00] v0539 - ✗ REJECTED
+
+**Candidate ID:** `reward_c020`
+**Description:** No-op candidate (LLM unavailable)
+
+### Reward Formula / Change
+```
+No-op candidate (LLM unavailable)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty_patch
+
+### Source Methods
+b_safety_constraint_reward_openreview_umvicbadkk, b_safety_constraint_reward_openreview_v3kavlfvrd
+
+---
+
