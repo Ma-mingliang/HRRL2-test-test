@@ -1,139 +1,9 @@
-"""
+﻿"""
 自行车自平衡与路径跟踪控制系统
 
 包含：
-        diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
-                 math.tan(x) * ((l
-        
-        # Potential-based reward shaping for tracking improvement
-        # This encourages reducing tracking error over time while preserving optimal policy
-        # Potential-based reward shaping for tracking improvement
-        # This encourages reducing tracking error over time while preserving optimal policy
-        if hasattr(self, 'prev_tracking_error'):
-            tracking_improvement = abs(self.prev_tracking_error) - abs(current_tracking_error)
-            heading_improvement = abs(self.prev_heading_error) - abs(current_heading_error)
-            gamma = 0.99  # Discount factor for potential function
-            k_phi = 0.1   # Weight for tracking improvement
-            k_heading = 0.05  # Weight for heading improvement
-            # Normalize errors to prevent reward magnitude issues
-            max_tracking_error = 2.0  # Expected maximum tracking error
-            max_heading_error = 1.0   # Expected maximum heading error
-            # Safety gate: only apply shaping when errors are within safe bounds
-            safe_tracking = min(abs(current_tracking_error), max_tracking_error)
-            safe_prev_tracking = min(abs(self.prev_tracking_error), max_tracking_error)
-            safe_heading = min(abs(current_heading_error), max_heading_error)
-            safe_prev_heading = min(abs(self.prev_heading_error), max_heading_error)
-            normalized_tracking = safe_tracking / max_tracking_error
-            normalized_prev_tracking = safe_prev_tracking / max_tracking_error
-            normalized_heading = safe_heading / max_heading_error
-            # Apply potential-based shaping: gamma * Phi(s') - Phi(s)
-            tracking_shaping = gamma * normalized_tracking - normalized_prev_tracking
-            heading_shaping = gamma * normalized_heading - normalized_prev_heading
-            reward += k_phi * tracking_shaping + k_heading * heading_shaping
-            
-            # Potential-based shaping: gamma * Phi(s_next) - Phi(s)
-            # Phi(s) = -k_phi * normalized_tracking - k_heading * normalized_heading
-            potential_current = -k_phi * normalized_tracking - k_heading * normalized_heading
-            potential_prev = -k_phi * normalized_prev_tracking - k_heading * normalized_prev_heading
-            shaping_reward = gamma * potential_current - potential_prev
-            reward += shaping_reward
-            # Apply potential-based shaping: gamma * Phi(s_next) - Phi(s)
-            # Phi(s) = -k_phi * normalized_tracking_error - k_heading * normalized_heading_error
-            potential_current = -k_phi * normalized_tracking - k_heading * normalized_heading
-            potential_prev = -k_phi * normalized_prev_tracking - k_heading * normalized_prev_heading
-            shaping_reward = gamma * potential_current - potential_prev
-            reward += shaping_reward
-            # Calculate potential-based shaping reward
-            tracking_potential = -normalized_prev_tracking  # Potential function: negative normalized error
-            heading_potential = -normalized_prev_heading
-            # Apply potential difference: gamma * Phi(s') - Phi(s)
-            tracking_shaping = gamma * (-normalized_tracking) - tracking_potential
-            heading_shaping = gamma * (-normalized_heading) - heading_potential
-            # Add shaping to reward
-            reward += k_phi * tracking_shaping + k_heading * heading_shaping
-            # Apply potential-based shaping: gamma * Phi(s_next) - Phi(s)
-            # Phi(s) = -k_phi * normalized_tracking_error - k_heading * normalized_heading_error
-            potential_current = -k_phi * normalized_tracking - k_heading * normalized_heading
-            potential_prev = -k_phi * normalized_prev_tracking - k_heading * normalized_prev_heading
-            shaping_reward = gamma * potential_current - potential_prev
-            reward += shaping_reward
-    
-            # where Phi(s) = -|error| (negative error as potential)
-            potential_heading = gamma * (-normalized_heading) - (-normalized_prev_heading)
-            potential_tracking = gamma * (-normalized_tracking) - (-normalized_prev_tracking)
-            potential_reward = k_phi * potential_tracking + k_heading * potential_heading
-            potential_tracking = gamma * (-abs(current_tracking_error)) - (-abs(self.prev_tracking_error))
-            potential_reward = k_phi * potential_tracking + k_heading * potential_heading
-            # Add to main reward (assuming reward is computed elsewhere)
-            if hasattr(self, 'reward'):
-                self.reward += potential_reward
-        
-        # Residual action penalty to discourage excessive residual control effort
-        if hasattr(self, 'prev_residual_action') and hasattr(self, 'residual_action'):
-            # Calculate residual action magnitude penalty
-            residual_norm = np.linalg.norm(self.residual_action)
-            lambda_res = 0.1  # Weight for residual action magnitude
-            
-            # Calculate action smoothness penalty (difference from previous residual)
-            if hasattr(self, 'prev_residual_action'):
-                action_diff = np.linalg.norm(self.residual_action - self.prev_residual_action)
-                lambda_smooth = 0.05  # Weight for action smoothness
-                self.reward -= lambda_res * residual_norm**2 + lambda_smooth * action_diff
-            else:
-                self.reward -= lambda_res * residual_norm**2
-            # Calculate residual action magnitude penalty
-            residual_norm = np.linalg.norm(self.residual_action)
-            lambda_res = 0.1  # Weight for residual action magnitude
-            
-            # Calculate residual action smoothness penalty
-            if hasattr(self, 'prev_residual_action'):
-                action_diff = np.linalg.norm(self.residual_action - self.prev_residual_action)
-                lambda_smooth = 0.05  # Weight for action smoothness
-                smoothness_penalty = lambda_smooth * action_diff
-            else:
-                smoothness_penalty = 0.0
-            
-            # Add penalties to reward
-            if hasattr(self, 'reward'):
-                self.reward -= lambda_res * residual_norm**2 + smoothness_penalty
-            # Calculate residual action magnitude penalty
-            lambda_res = 0.1  # Weight for residual action magnitude
-            lambda_smooth = 0.05  # Weight for action smoothness
-            
-            # Penalize residual action magnitude
-            residual_norm = np.linalg.norm(self.residual_action)
-            residual_penalty = lambda_res * residual_norm**2
-            
-            # Penalize action roughness (change in residual action)
-            action_diff = np.linalg.norm(self.residual_action - self.prev_residual_action)
-            smoothness_penalty = lambda_smooth * action_diff
-            
-            # Subtract penalties from reward
-            if hasattr(self, 'reward'):
-                self.reward -= (residual_penalty + smoothness_penalty)
-            # Calculate residual action magnitude penalty
-            residual_norm = np.linalg.norm(self.residual_action)
-            lambda_res = 0.1  # Weight for residual action magnitude
-            
-            # Calculate residual action smoothness penalty
-            if hasattr(self, 'prev_residual_action'):
-                action_diff = np.linalg.norm(self.residual_action - self.prev_residual_action)
-                lambda_smooth = 0.05  # Weight for action smoothness
-                self.reward -= lambda_res * residual_norm**2 + lambda_smooth * action_diff
-            else:
-                self.reward -= lambda_res * residual_norm**2
-            lambda_res = 0.01  # Weight for residual magnitude penalty
-            lambda_smooth = 0.005  # Weight for action smoothness penalty
-            residual_norm = np.dot(self.residual_action, self.residual_action)
-            
-            # Subtract from main reward
-            if hasattr(self, 'reward'):
-                self.reward -= residual_penalty
-            self.reward -= lambda_res * residual_norm + lambda_smooth * smoothness_norm
-            self.prev_residual_action = self.residual_action.copy()
-        self.prev_tracking_error = current_tracking_error
-        self.prev_heading_error = current_heading_error
-        self.prev_heading_error = current_heading_error
+- 第一阶段：纯强化学习平衡控制器
+- 第三阶段：自适应Stanley控制器
 """
 
 import gymnasium as gym
@@ -1082,10 +952,10 @@ class Attitude_control_stage1(gym.Env):
         smoothness_penalty = -0.05 * angular_velocity
         
         # 4. 改进奖励
-        gamma = 0.99
-        potential_current = -current_error
-        potential_last = -abs(state_last_raw[0])
-        improvement_reward = gamma * potential_current - potential_last
+        improvement_reward = 0.0
+        error_reduction = abs(state_last_raw[0]) - current_error
+        if error_reduction > 0:
+            improvement_reward = 0.3 * error_reduction
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)

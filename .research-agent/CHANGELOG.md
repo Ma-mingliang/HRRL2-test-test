@@ -1501,3 +1501,34 @@ a_potential_based_reward_openreview_ubnujziy2o, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T09:12:50.351054+00:00] v0473 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Replace the improvement_reward with a potential-based shaping term using gamma * Phi(s_next) - Phi(s) to better align with long-term tracking performance (rationale: The current improvement_reward only rewards error reduction when it occurs, which can lead to inconsistent learning signals. Using potential-based shaping (gamma * Phi(s_next) - Phi(s)) provides a more stable and theoretically grounded reward signal that preserves optimal policies while encouraging consistent error reduction. This should improve tracking stability and reduce variance in the learning process, potentially leading to better lateral error metrics while maintaining the high completion rate.)
+
+### Reward Formula / Change
+```
+Replace the improvement_reward with a potential-based shaping term using gamma * Phi(s_next) - Phi(s) to better align with long-term tracking performance (rationale: The current improvement_reward only rewards error reduction when it occurs, which can lead to inconsistent learning signals. Using potential-based shaping (gamma * Phi(s_next) - Phi(s)) provides a more stable and theoretically grounded reward signal that preserves optimal policies while encouraging consistent error reduction. This should improve tracking stability and reduce variance in the learning process, potentially leading to better lateral error metrics while maintaining the high completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 918.0035 (std: 0.0000)
+- **lateral_error:** 0.0045 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.0250 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openreview_6lm1jxxlxb
+
+---
+
