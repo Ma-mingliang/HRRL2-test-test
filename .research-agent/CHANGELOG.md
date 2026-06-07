@@ -3646,3 +3646,31 @@ c_curriculum_subgoal_reward_openreview_b6awzauzpv, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T11:24:37.435283+00:00] v0508 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c036`
+**Description:** Added dynamic stage weighting for subgoal rewards based on current error magnitude to better align with curriculum learning principles (rationale: The current reward function already achieves perfect completion rate (1.0) and low lateral error (0.0041). To further improve precision, I added an ultra-precision stage with higher weights when error < 0.005. This creates a stronger incentive for the agent to achieve sub-millimeter accuracy, which should reduce the lateral error from 0.0041 to even smaller values. The modification is minimal and maintains the existing curriculum structure while adding finer granularity for precision optimization.)
+
+### Reward Formula / Change
+```
+Added dynamic stage weighting for subgoal rewards based on current error magnitude to better align with curriculum learning principles (rationale: The current reward function already achieves perfect completion rate (1.0) and low lateral error (0.0041). To further improve precision, I added an ultra-precision stage with higher weights when error < 0.005. This creates a stronger incentive for the agent to achieve sub-millimeter accuracy, which should reduce the lateral error from 0.0041 to even smaller values. The modification is minimal and maintains the existing curriculum structure while adding finer granularity for precision optimization.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 941.1131 (std: 0.0000)
+- **lateral_error:** 0.0035 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_r7ppkxmovk, c_curriculum_subgoal_reward_arxiv_2104_06410
+
+---
+

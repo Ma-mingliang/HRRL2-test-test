@@ -960,14 +960,20 @@ class Attitude_control_stage1(gym.Env):
         # 5. 课程学习子目标奖励
         subgoal_reward = 0.0
         subgoal_thresholds = [0.05, 0.1, 0.2]
-        # Dynamic stage weights based on current error magnitude with progress scaling
-        # More aggressive weighting for precision phase to encourage fine-tuning
+        # Dynamic stage progression based on error magnitude
         if current_error < 0.005:
-            subgoal_weights = [1.5, 0.8, 0.4]  # Very high weights for ultra-precision
+            current_stage = 0  # Ultra-precision stage
+            subgoal_weights = [1.5, 0.8, 0.4]
         elif current_error < 0.01:
-            subgoal_weights = [1.0, 0.6, 0.3]  # High weights for precision phase
+            current_stage = 1  # Precision stage
+            subgoal_weights = [1.0, 0.6, 0.3]
         else:
-            subgoal_weights = [0.5, 0.3, 0.15]  # Original weights for exploration phase
+            current_stage = 2  # Coarse stage
+            subgoal_weights = [0.5, 0.3, 0.15]
+        
+        # Calculate progress to current stage subgoal
+        progress_to_subgoal = max(0, abs(state_last_raw[0]) - current_error)
+        subgoal_reward = subgoal_weights[current_stage] * progress_to_subgoal
         
         for i, threshold in enumerate(subgoal_thresholds):
             if current_error < threshold:

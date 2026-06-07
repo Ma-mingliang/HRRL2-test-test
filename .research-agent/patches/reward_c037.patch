@@ -1,16 +1,28 @@
 --- a/env.py
 +++ b/env.py
-@@ -64,2 +64,13 @@
-         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
-                  math.tan(x) * ((l
+@@ -960,11 +960,17 @@
+         # 5. 课程学习子目标奖励
+         subgoal_reward = 0.0
+         subgoal_thresholds = [0.05, 0.1, 0.2]
+-        # Dynamic stage weights based on current error magnitude with progress scaling
+-        # More aggressive weighting for precision phase to encourage fine-tuning
+-        if current_error < 0.005:
+-            subgoal_weights = [1.5, 0.8, 0.4]  # Very high weights for ultra-precision
+-        elif current_error < 0.01:
+-            subgoal_weights = [1.0, 0.6, 0.3]  # High weights for precision phase
+-        else:
+-            subgoal_weights = [0.5, 0.3, 0.15]  # Origin
++        # Dynamic stage progression based on error magnitude
++        if current_error < 0.005:
++            current_stage = 0  # Ultra-precision stage
++            subgoal_weights = [1.5, 0.8, 0.4]
++        elif current_error < 0.01:
++            current_stage = 1  # Precision stage
++            subgoal_weights = [1.0, 0.6, 0.3]
++        else:
++            current_stage = 2  # Coarse stage
++            subgoal_weights = [0.5, 0.3, 0.15]
 +        
-+        # Curriculum subgoal reward: reward progress toward intermediate waypoints
-+        if hasattr(self, 'current_stage') and hasattr(self, 'subgoal_positions'):
-+            if self.current_stage < len(self.subgoal_positions):
-+                subgoal = self.subgoal_positions[self.current_stage]
-+                current_dist = np.linalg.norm(self.bike_position[:2] - subgoal[:2])
-+                if hasattr(self, 'prev_subgoal_dist'):
-+                    progress = self.prev_subgoal_dist - current_dist
-+                    stage_weight = [1.0, 0.8, 0.6, 0.4]  # Decreasing weight as stages progress
-+                    reward += stage_weight[min(self.current_stage, len(stage_weight)-1)] * progress * 10.0
-+                self.prev_subgoal_dist = current_dist
++        # Calculate progress to current stage subgoal
++        progress_to_subgoal = max(0, abs(state_last_raw[0]) - current_error)
++        subgoal_reward = subgoal_weights[current_stage] * progress_to_subgoal
