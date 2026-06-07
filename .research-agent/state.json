@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c039",
+    "candidate_id": "reward_c040",
     "optimizer": "reward",
-    "description": "Simplify the adaptive scaling in potential-based reward shaping to reduce complexity and potential instability (rationale: The current adaptive scaling (error_scale = 1.0 + 2.0 * min(current_error, 1.0)) creates non-linear scaling that can cause instability when errors are large. With baseline metrics showing excellent performance (lateral_error: 0.0041, completion_rate: 1.0000), the system is already performing well. Simplifying to constant scaling (k_phi = base_k_phi) reduces potential reward hacking risks from the adaptive component while maintaining the core potential-based shaping that preserves optimal policy. This aligns with the research idea's warning about avoiding proxy metrics that dominate task success.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -943,5 +943,4 @@\n         # Adaptive scaling: increase shaping magnitude when error is large\n         base_k_phi = 2.0\n-        error_scale = 1.0 + 2.0 * min(current_error, 1.0)  # Scale up to 3x when error > 0.5\n-        k_phi = base_k_phi * error_scale\n+        k_phi = base_k_phi\n         potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)",
-    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_obpqdcwlfd\", \"g_llm_reward_generation_openreview_tdfrn1tbgh\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:OBpQdCWLfd\", \"openreview:TDfrN1TbGH\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added adaptive scaling to potential-based reward shaping to increase learning signal when error is large, while maintaining stability when error is small (rationale: The current reward function shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but the potential shaping uses a fixed scaling factor. By making the shaping adaptive - stronger when error is large (to encourage faster convergence) and weaker when error is small (to avoid overshooting and oscillations) - we can potentially improve training efficiency and reduce final tracking error. This maintains the theoretical guarantee of potential-based shaping while adding practical benefits for learning dynamics.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -943,4 +943,7 @@\n         # Adaptive scaling: increase shaping magnitude when error is large\n         base_k_phi = 2.0\n-        k_phi = base_k_phi\n+        # Scale up shaping when error is large to encourage faster convergence\n+        # Scale down when error is small to avoid overshooting\n+        error_scale = min(3.0, 1.0 + 2.0 * current_error)\n+        k_phi = base_k_phi * error_scale\n         potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_",
+    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_cmn54vpksz\", \"g_llm_reward_generation_openreview_gbwovfgek8\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:cmN54vPKsz\", \"openreview:gBwovFgeK8\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-07T15:19:09.459766+00:00"
+    "timestamp": "2026-06-07T15:24:49.324201+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 40,
-    "full_evals_run": 37
+    "candidates_proposed": 41,
+    "full_evals_run": 38
   },
   "stop_reason": null,
   "progress": null,
@@ -237,6 +237,10 @@
     {
       "candidate_id": "reward_c040",
       "applied_at": "2026-06-07T15:19:22.695624+00:00"
+    },
+    {
+      "candidate_id": "reward_c041",
+      "applied_at": "2026-06-07T15:25:05.253577+00:00"
     }
   ],
   "baseline_fair_eval": {

@@ -4996,3 +4996,31 @@ g_llm_reward_generation_openreview_obpqdcwlfd, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-07T15:24:49.331304+00:00] v0559 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c040`
+**Description:** Added adaptive scaling to potential-based reward shaping to increase learning signal when error is large, while maintaining stability when error is small (rationale: The current reward function shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but the potential shaping uses a fixed scaling factor. By making the shaping adaptive - stronger when error is large (to encourage faster convergence) and weaker when error is small (to avoid overshooting and oscillations) - we can potentially improve training efficiency and reduce final tracking error. This maintains the theoretical guarantee of potential-based shaping while adding practical benefits for learning dynamics.)
+
+### Reward Formula / Change
+```
+Added adaptive scaling to potential-based reward shaping to increase learning signal when error is large, while maintaining stability when error is small (rationale: The current reward function shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but the potential shaping uses a fixed scaling factor. By making the shaping adaptive - stronger when error is large (to encourage faster convergence) and weaker when error is small (to avoid overshooting and oscillations) - we can potentially improve training efficiency and reduce final tracking error. This maintains the theoretical guarantee of potential-based shaping while adding practical benefits for learning dynamics.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2364.3363
+- **lateral_error:** 0.0045
+
+### Source Methods
+g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openreview_gbwovfgek8
+
+---
+

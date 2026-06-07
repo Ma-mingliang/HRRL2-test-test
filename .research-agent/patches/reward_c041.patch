@@ -1,14 +1,17 @@
 --- a/env.py
 +++ b/env.py
-@@ -957,6 +957,11 @@
-         # 3. 平顺性惩罚
-         smoothness_penalty = -0.05 * angular_velocity
-         
-+        # 3.2. Velocity penalty for excessive angular velocity
-+        velocity_penalty = 0.0
-+        if angular_velocity > 0.1:
-+            velocity_penalty = -0.1 * (angular_velocity - 0.1)
-+        
-         # 3.5. Additional oscillation penalty for high angular velocity
-         oscillation_penalty = 0.0
-         if angular_velocity > 0.2:
+@@ -988,10 +988,13 @@
+         # Precision bonus
+         # Smooth exponential precision bonus for fine tracking
+         precision_threshold = 0.02  # Start rewarding at 2cm error
+         if current_error < precision_threshold:
+             # Exponential scaling: stronger bonus as error approaches zero
+-            precision_bonus = 2.0 * np.exp(-100.0 * current_error)
++            # Adaptive scaling: increase bonus magnitude as error gets smaller
++            # This creates stronger incentive for very precise tracking
++            scaling_factor = 1.0 + 5.0 * (precision_threshold - current_error) / precision_threshold
++            precision_bonus = 2.0 * scaling_factor * np.exp(-100.0 * current_error)
+             # Additional bonus for very high precision
+             if current_error < 0.005:
+                 precision_bonus += 1.0
+             reward += precision_bonus
