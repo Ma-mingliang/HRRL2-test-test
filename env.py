@@ -27,7 +27,9 @@
                 # Reward progress toward reducing lateral error
                 progress = self.prev_lateral_error - abs(self.lateral_error)
                 # Scale by safety factor to gate against unsafe behavior
-                stage_weight = 10.0  # beta_stage
+                # Dynamic stage weight based on current error magnitude
+                current_error = abs(self.lateral_error)
+                stage_weight = 15.0 if current_error > 0.1 else 10.0  # beta_stage
                 reward += stage_weight * progress * safety_factor
                 # Small constant reward for maintaining low error
                 if abs(self.lateral_error) < 0.05:  # ~5cm threshold

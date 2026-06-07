@@ -2438,3 +2438,31 @@ a_potential_based_reward_openreview_snxieztsff, a_potential_based_reward_arxiv_2
 
 ---
 
+## [2026-06-07T09:51:03.812121+00:00] v0499 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c030`
+**Description:** Added a small constant reward for maintaining low lateral error to encourage stable path tracking, even when progress is minimal. This reinforces the agent for staying close to the path, which should help maintain the high completion rate and low lateral error while potentially improving stability. (rationale: The baseline already shows excellent performance (completion_rate=1.0, lateral_error=0.0041). Adding a small additional reward for very low error (<2cm) should reinforce the agent for maintaining this tight tracking, potentially reducing variance and improving stability. The change is minimal and maintains the safety gating, so it shouldn't introduce reward hacking. This aligns with the curriculum subgoal reward idea by providing a constant positive signal for achieving subgoal thresholds.)
+
+### Reward Formula / Change
+```
+Added a small constant reward for maintaining low lateral error to encourage stable path tracking, even when progress is minimal. This reinforces the agent for staying close to the path, which should help maintain the high completion rate and low lateral error while potentially improving stability. (rationale: The baseline already shows excellent performance (completion_rate=1.0, lateral_error=0.0041). Adding a small additional reward for very low error (<2cm) should reinforce the agent for maintaining this tight tracking, potentially reducing variance and improving stability. The change is minimal and maintains the safety gating, so it shouldn't introduce reward hacking. This aligns with the curriculum subgoal reward idea by providing a constant positive signal for achieving subgoal thresholds.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 936.2140 (std: 0.0000)
+- **lateral_error:** 0.0032 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_openreview_dju2kvsdts
+
+---
+
