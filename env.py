@@ -961,6 +961,8 @@ class Attitude_control_stage1(gym.Env):
             # Safety gate: reduce task reward when violating safety constraints
             tracking_reward *= 0.5
             bonus_reward *= 0.5
+            # Additional penalty for excessive angular velocity
+            safety_penalty -= 0.1 * angular_velocity
         else:
             safety_penalty = 0.0
         
