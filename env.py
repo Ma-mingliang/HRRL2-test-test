@@ -946,7 +946,11 @@ class Attitude_control_stage1(gym.Env):
         # 3. Action penalty for smooth control
         action_penalty = -0.01 * abs(target_handle_angle)
         
-        reward = tracking_reward + potential_shaping + action_penalty
+        # 4. Heading error penalty to reduce oscillations
+        heading_error = abs(state_raw[1])  # theta0 is heading error
+        heading_penalty = -0.5 * heading_error**2
+        
+        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty
         
         return reward
 

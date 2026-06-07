@@ -4034,3 +4034,34 @@ a_potential_based_reward_openreview_ubnujziy2o, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T14:05:28.871423+00:00] v0523 - ✗ REJECTED
+
+**Candidate ID:** `reward_c004`
+**Description:** Simplify the reward function by removing redundant components and focusing on the core tracking error with potential-based shaping. The current function has overlapping bonus rewards, subgoal rewards, and potential shaping that may cause conflicting signals. I'll consolidate to a cleaner structure with just tracking reward, potential shaping, and a small action penalty. (rationale: The current reward function has multiple overlapping components (bonus rewards, subgoal rewards, potential shaping) that may create conflicting signals and make learning unstable. By simplifying to just tracking reward + potential shaping + action penalty, we: 1) Remove redundant bonus rewards that duplicate the tracking reward's purpose, 2) Remove complex subgoal logic that may not be necessary given the good baseline performance, 3) Increase the potential shaping weight (k_phi from 1.0 to 2.0) to provide stronger learning signal for error reduction, 4) Simplify action penalty to be more direct. This should lead to more stable learning while maintaining the core tracking objective. The baseline already shows excellent performance (lateral_error: 0.0041), so simplification may help maintain or improve this while reducing reward complexity.)
+
+### Reward Formula / Change
+```
+Simplify the reward function by removing redundant components and focusing on the core tracking error with potential-based shaping. The current function has overlapping bonus rewards, subgoal rewards, and potential shaping that may cause conflicting signals. I'll consolidate to a cleaner structure with just tracking reward, potential shaping, and a small action penalty. (rationale: The current reward function has multiple overlapping components (bonus rewards, subgoal rewards, potential shaping) that may create conflicting signals and make learning unstable. By simplifying to just tracking reward + potential shaping + action penalty, we: 1) Remove redundant bonus rewards that duplicate the tracking reward's purpose, 2) Remove complex subgoal logic that may not be necessary given the good baseline performance, 3) Increase the potential shaping weight (k_phi from 1.0 to 2.0) to provide stronger learning signal for error reduction, 4) Simplify action penalty to be more direct. This should lead to more stable learning while maintaining the core tracking objective. The baseline already shows excellent performance (lateral_error: 0.0041), so simplification may help maintain or improve this while reducing reward complexity.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 826.1800
+- **lateral_error:** 0.0180
+
+### Rejection Reason
+Score -0.7230 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2502_01307, a_potential_based_reward_openreview_anosgmzrdv
+
+---
+
