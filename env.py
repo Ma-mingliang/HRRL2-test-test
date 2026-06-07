@@ -1022,6 +1022,17 @@ class Attitude_control_stage1(gym.Env):
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle)
         
+        # 6. 残差动作惩罚：鼓励残差控制输出平滑且幅度小
+        # 假设残差动作存储在self.residual_action中（如果存在）
+        residual_penalty = 0.0
+        if hasattr(self, 'residual_action') and self.residual_action is not None:
+            residual_norm = np.linalg.norm(self.residual_action)
+            residual_penalty = -0.1 * residual_norm**2
+            # 如果有前一残差动作，添加平滑惩罚
+            if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
+                residual_smoothness = np.linalg.norm(self.residual_action - self.prev_residual_action)
+                residual_penalty -= 0.05 * residual_smoothness
+        
         # 6. 残差动作惩罚（基于研究想法）
         # 鼓励残差动作平滑且幅度小
         residual_penalty = 0.0

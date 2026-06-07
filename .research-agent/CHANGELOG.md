@@ -2696,3 +2696,31 @@ c_curriculum_subgoal_reward_openreview_pmkwnv6azi, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T10:20:07.578676+00:00] v0484 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c012`
+**Description:** Added residual action penalty to encourage smoother control outputs by penalizing large residual actions and their changes (rationale: The current reward function focuses on tracking error and angular velocity but doesn't directly penalize control effort. Adding residual action penalties encourages the policy to produce smoother, smaller control adjustments, which should reduce oscillations and improve stability. This aligns with the research idea of penalizing residual action magnitude and roughness, which can prevent reward hacking while maintaining task performance. The small coefficients (0.01 and 0.005) ensure the penalty doesn't dominate the tracking reward.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to encourage smoother control outputs by penalizing large residual actions and their changes (rationale: The current reward function focuses on tracking error and angular velocity but doesn't directly penalize control effort. Adding residual action penalties encourages the policy to produce smoother, smaller control adjustments, which should reduce oscillations and improve stability. This aligns with the research idea of penalizing residual action magnitude and roughness, which can prevent reward hacking while maintaining task performance. The small coefficients (0.01 and 0.005) ensure the penalty doesn't dominate the tracking reward.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 947.1593 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+f_residual_aware_reward_openreview_1dgp543ohn, f_residual_aware_reward_openreview_82vbpvhegr
+
+---
+

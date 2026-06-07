@@ -1,19 +1,16 @@
 --- a/env.py
 +++ b/env.py
-@@ -60,6 +60,16 @@
-         for i in range(20):
-             f = math.tan(x) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) - \
-                 ((l / v)**2) * g * math.tan(theta)
+@@ -1022,2 +1022,13 @@
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+         action_penalty = -0.02 * abs(target_handle_angle)
 +        
-+        # Add residual action penalty to reward
-+        if hasattr(self, 'prev_residual_action') and hasattr(self, 'residual_action'):
++        # 6. 残差动作惩罚：鼓励残差控制输出平滑且幅度小
++        # 假设残差动作存储在self.residual_action中（如果存在）
++        residual_penalty = 0.0
++        if hasattr(self, 'residual_action') and self.residual_action is not None:
 +            residual_norm = np.linalg.norm(self.residual_action)
-+            smoothness_penalty = np.linalg.norm(self.residual_action - self.prev_residual_action)
-+            
-+            lambda_res = 0.1  # Penalty for residual action magnitude
-+            lambda_smooth = 0.05  # Penalty for action roughness
-+            
-+            self.reward -= lambda_res * residual_norm**2 + lambda_smooth * smoothness_penalty
-         
-         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
-                  math.tan(x) * ((l
++            residual_penalty = -0.1 * residual_norm**2
++            # 如果有前一残差动作，添加平滑惩罚
++            if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
++                residual_smoothness = np.linalg.norm(self.residual_action - self.prev_residual_action)
++                residual_penalty -= 0.05 * residual_smoothness
