@@ -3786,3 +3786,31 @@ g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-07T11:55:03.845875+00:00] v0513 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c041`
+**Description:** Added a small velocity penalty to discourage excessive angular velocity even when tracking error is low, promoting smoother control (rationale: The current reward function focuses heavily on tracking error reduction but may allow excessive angular velocity when error is small. Adding a velocity penalty (starting at 0.1 threshold) encourages smoother control even during precise tracking, which should reduce oscillations and improve stability. This addresses the research idea's concern about reward hacking by ensuring the agent doesn't exploit high angular velocity to achieve low error at the cost of smoothness.)
+
+### Reward Formula / Change
+```
+Added a small velocity penalty to discourage excessive angular velocity even when tracking error is low, promoting smoother control (rationale: The current reward function focuses heavily on tracking error reduction but may allow excessive angular velocity when error is small. Adding a velocity penalty (starting at 0.1 threshold) encourages smoother control even during precise tracking, which should reduce oscillations and improve stability. This addresses the research idea's concern about reward hacking by ensuring the agent doesn't exploit high angular velocity to achieve low error at the cost of smoothness.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 940.6645 (std: 0.0000)
+- **lateral_error:** 0.0031 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+g_llm_reward_generation_openreview_g9ylcfd8bq, g_llm_reward_generation_openreview_iqnzibspz5
+
+---
+

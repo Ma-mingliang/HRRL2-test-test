@@ -1,12 +1,15 @@
 --- a/env.py
 +++ b/env.py
-@@ -64,2 +64,9 @@
-         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
-                  math.tan(x) * ((l
+@@ -960,7 +960,12 @@
+         # 3.2. Velocity penalty for excessive angular velocity
+         velocity_penalty = 0.0
+         if angular_velocity > 0.1:
+             velocity_penalty = -0.1 * (angular_velocity - 0.1)
 +        
-+        # Add penalty for excessive steering angle changes
-+        if hasattr(self, 'prev_steering_angle'):
-+            steering_change = abs(x - self.prev_steering_angle)
-+            if steering_change > 0.1:  # Threshold for excessive change
-+                reward -= 0.5 * steering_change
-+        self.prev_steering_angle = x
++        # 3.3. Smoothness bonus for low angular velocity when tracking well
++        smoothness_bonus = 0.0
++        if current_error < 0.02 and angular_velocity < 0.1:
++            smoothness_bonus = 0.05 * (0.1 - angular_velocity) / 0.1
+         
+         # 3.5. Additional oscillation penalty for high angular velocity
+         oscillation_penalty = 0.0
