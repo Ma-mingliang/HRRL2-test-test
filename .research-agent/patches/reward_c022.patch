@@ -1,16 +1,15 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,11 +954,12 @@
-         # 3.5 安全约束惩罚：防止过度振荡
-         safety_penalty = 0.0
-         max_safe_angular_velocity = 2.0  # 安全阈值
-         violation = max(0, angular_velocity - max_safe_angular_velocity)
-         if violation > 0:
--            safety_penalty = -0.5 * violation**2 - 0.1 * violation
-+            # Explicit safety constraint penalty with proper scaling
-+            safety_penalty = -1.0 * violation**2 - 0.2 * violation
-             # Safety gate: reduce task reward when violating safety constraints
-             tracking_reward *= 0.5
-             bonus_reward *= 0.5
-         else:
-             safety_penalty = 0.0
+@@ -949,5 +949,12 @@
+         # 4. Heading error penalty to reduce oscillations
+         heading_error = abs(state_raw[1])  # theta0 is heading error
+         heading_penalty = -0.5 * heading_error**2
++        
++        # Safety constraint: penalize excessive heading error that could cause instability
++        heading_error_limit = 0.5  # Safe heading error threshold (radians)
++        heading_violation = max(0, heading_error - heading_error_limit)
++        if heading_violation > 0:
++            lambda_heading = 3.0  # Strong penalty for dangerous heading errors
++            heading_penalty -= lambda_heading * heading_violation**2
+         
+         # 5. Velocity reward to encourage smooth motion

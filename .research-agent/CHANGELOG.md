@@ -4486,3 +4486,29 @@ b_safety_constraint_reward_openreview_umvicbadkk, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T14:20:36.844353+00:00] v0540 - ✗ REJECTED
+
+**Candidate ID:** `reward_c021`
+**Description:** Fixed missing action_penalty variable reference and removed duplicate code (rationale: The original code had two issues: 1) Duplicate code blocks for calculating residual_penalty (lines 978-984), and 2) Reference to undefined variable 'action_penalty' in the reward calculation (line 990). The fix removes the duplicate code and removes the undefined variable reference from the reward sum.)
+
+### Reward Formula / Change
+```
+Fixed missing action_penalty variable reference and removed duplicate code (rationale: The original code had two issues: 1) Duplicate code blocks for calculating residual_penalty (lines 978-984), and 2) Reference to undefined variable 'action_penalty' in the reward calculation (line 990). The fix removes the duplicate code and removes the undefined variable reference from the reward sum.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_3zar4hakpw, b_safety_constraint_reward_openreview_imlpdfbvin
+
+---
+
