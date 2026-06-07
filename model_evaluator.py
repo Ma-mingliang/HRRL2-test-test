@@ -108,11 +108,11 @@ class ModelEvaluator:
                 gradient_steps=-1, policy_delay=2, seed=42, verbose=0
             )
 
-            # Setup best model callback (eval every 5000 steps, 10 episodes)
+            # Setup best model callback (check every step, 10-episode average)
             callback = None
             if save_path:
                 callback = BestModelCallback(
-                    eval_freq=5000, eval_episodes=10,
+                    check_freq=1, last_n=10,
                     save_path=save_path, verbose=1
                 )
 

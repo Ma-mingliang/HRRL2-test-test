@@ -1,0 +1,23 @@
+--- a/env.py
++++ b/env.py
+@@ -1,4 +1,4 @@
+-﻿"""
++"""
+ 自行车自平衡与路径跟踪控制系统
+ 
+ 包含：
+@@ -64,2 +64,14 @@
+         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
+                  math.tan(x) * ((l
++        
++        # Potential-based reward shaping for tracking improvement
++        # This encourages reducing tracking error over time while preserving optimal policy
++        if hasattr(self, 'prev_tracking_error'):
++            tracking_improvement = abs(self.prev_tracking_error) - abs(current_tracking_error)
++            gamma = 0.99
++            k_phi = 0.1  # Small weight to avoid dominating main reward
++            potential_reward = k_phi * (gamma * (-abs(current_tracking_error)) - (-abs(self.prev_tracking_error)))
++            # Add to main reward (assuming reward is computed elsewhere)
++            if hasattr(self, 'reward'):
++                self.reward += potential_reward
++        self.prev_tracking_error = current_tracking_error

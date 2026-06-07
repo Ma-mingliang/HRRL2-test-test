@@ -1,0 +1,11 @@
+--- a/env.py
++++ b/env.py
+@@ -1,1 +1,9 @@
++        # Potential-based reward shaping for tracking improvement
++        if hasattr(self, 'prev_tracking_error'):
++            tracking_improvement = abs(self.prev_tracking_error) - abs(tracking_error)
++            # Apply potential-based shaping: gamma * Phi(s_next) - Phi(s)
++            gamma = 0.99
++            potential_shaping = gamma * (-abs(tracking_error)) - (-abs(self.prev_tracking_error))
++            reward += 0.1 * potential_shaping
++        self.prev_tracking_error = tracking_error

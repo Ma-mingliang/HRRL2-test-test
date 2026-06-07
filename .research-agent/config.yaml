@@ -58,6 +58,11 @@ llm:
 project:
   path: D:\research-agent\HRRL2
 
+git:
+  auto_push: true
+  push_remote: test-test
+  push_branch: optimizer-run
+
 optimizer:
   active_categories:
     - A_potential_based_reward

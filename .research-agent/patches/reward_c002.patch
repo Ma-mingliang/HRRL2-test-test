@@ -1,0 +1,16 @@
+--- a/env.py
++++ b/env.py
+@@ -1,0 +1,13 @@
++    # Add potential-based reward shaping for path tracking
++    # This encourages improvement in tracking error over time
++    if hasattr(self, 'prev_tracking_error') and self.prev_tracking_error is not None:
++        # Calculate improvement in tracking error
++        tracking_improvement = abs(self.prev_tracking_error) - abs(tracking_error)
++        # Apply potential-based shaping: gamma * Phi(s_next) - Phi(s)
++        # Using negative tracking error as potential function
++        gamma = 0.99
++        potential_shaping = gamma * (-abs(tracking_error)) - (-abs(self.prev_tracking_error))
++        # Add shaping term to reward (small weight to avoid dominating)
++        reward += 0.1 * potential_shaping
++    # Store current error for next step
++    self.prev_tracking_error = tracking_error

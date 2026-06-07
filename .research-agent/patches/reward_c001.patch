@@ -1,15 +1,13 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,5 +954,11 @@
-                     gamma = 0.99  # Discount factor from research
- 
-                     # Conservative potential: higher alpha when near unsafe boundaries
-                     # This creates risk-aware potentials that penalize unsafe states more heavily
--                    alpha = 2.0  # Base scaling
-+                    # Adaptive alpha: increase penalty as error grows (safety-aware)
-+                    if current_error > 0.3:
-+                        alpha = 4.0  # Strong penalty for large errors
-+                    elif current_error > 0.1:
-+                        alpha = 3.0  # Moderate penalty
-+                    else:
-+                        alpha = 2.0  # Base scaling for small errors
+@@ -64,2 +64,10 @@
+         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + 
+                  math.tan(x) * ((l
++        
++        # Potential-based reward shaping for tracking improvement
++        if hasattr(self, 'prev_tracking_error'):
++            gamma = 0.99
++            tracking_improvement = abs(self.prev_tracking_error) - abs(current_tracking_error)
++            potential_reward = gamma * (-abs(current_tracking_error)) - (-abs(self.prev_tracking_error))
++            reward += 0.1 * potential_reward
++        self.prev_tracking_error = current_tracking_error
