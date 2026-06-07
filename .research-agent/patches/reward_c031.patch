@@ -1,14 +1,19 @@
 --- a/env.py
 +++ b/env.py
-@@ -28,7 +28,9 @@
-                 progress = self.prev_lateral_error - abs(self.lateral_error)
-                 # Scale by safety factor to gate against unsafe behavior
--                stage_weight = 10.0  # beta_stage
--                reward += stage_weight * progress * safety_factor
-+                # Dynamic stage weight based on current error magnitude
-+                current_error = abs(self.lateral_error)
-+                stage_weight = 15.0 if current_error > 0.1 else 10.0  # beta_stage
-+                reward += stage_weight * progress * safety_factor
-                 # Small constant reward for maintaining low error
-                 if abs(self.lateral_error) < 0.05:  # ~5cm threshold
-                     reward += 0.1 * safety_factor
+@@ -954,16 +954,15 @@
+         # 4. Curriculum subgoal reward for angular velocity reduction
+         # Stage 1: Focus on reducing angular velocity before precise tracking
+         angular_velocity_subgoal = 1.0  # Target angular velocity threshold
+         # Dynamic curriculum stages based on tracking error
+         if current_error < 0.01:
+             stage = 3  # High precision stage
+             stage_weight = 0.5
+         elif current_error < 0.05:
+             stage = 2  # Medium precision stage
+             stage_weight = 0.3
+         else:
+             stage = 1  # Initial stabilization stage
+             stage_weight = 0.2
+         # Only apply subgoal reward when tracking error is above threshold
+         # This prevents reward hacking where agent ignores tracking to reduce velocity
+-        if current_error

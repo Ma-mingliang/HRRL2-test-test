@@ -1,11 +1,23 @@
 --- a/env.py
 +++ b/env.py
-@@ -35,4 +35,7 @@
-                 if abs(self.lateral_error) < 0.05:  # ~5cm threshold
-                     reward += 0.1 * safety_factor
-                 # Additional small reward for very low error to encourage stability
--                if abs(
-+                if abs(self.lateral_error) < 0.02:  # ~2cm threshold
-+                    reward += 0.2 * safety_factor
-+                # Additional small reward for very low error to encourage stability
-+                if abs(
+@@ -954,10 +954,19 @@
+         # 4. 改进奖励
+         improvement_reward = 0.0
+         error_reduction = abs(state_last_raw[0]) - current_error
+         if error_reduction > 0:
+             improvement_reward = 0.3 * error_reduction
+         
++        # 5. 课程学习子目标奖励
++        subgoal_reward = 0.0
++        if current_error < 0.05:
++            subgoal_reward = 0.4  # 接近目标时给予额外奖励
++        elif current_error < 0.1:
++            subgoal_reward = 0.2
++        elif current_error < 0.2:
++            subgoal_reward = 0.1
++        
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+         
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + subgoal_reward + action_penalty

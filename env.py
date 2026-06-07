@@ -951,66 +951,25 @@ class Attitude_control_stage1(gym.Env):
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
-        # 4. Curriculum subgoal reward for angular velocity reduction
-        # Stage 1: Focus on reducing angular velocity before precise tracking
-        angular_velocity_subgoal = 1.0  # Target angular velocity threshold
-        # Dynamic curriculum stages based on tracking error
-        if current_error < 0.01:
-            stage = 3  # High precision stage
-            stage_weight = 0.5
-        elif current_error < 0.05:
-            stage = 2  # Medium precision stage
-            stage_weight = 0.3
-        else:
-            stage = 1  # Initial stabilization stage
-            stage_weight = 0.2
-        # Only apply subgoal reward when tracking error is above threshold
-        # This prevents reward hacking where agent ignores tracking to reduce velocity
-        if current_error > 0.05 and stage == 1:  # Gate: only when tracking is poor and in stage 1
-            if angular_velocity > angular_velocity_subgoal:
-                # Reward progress toward reducing angular velocity
-                prev_angular_velocity = abs(state_last_raw[2])
-                angular_velocity_progress = prev_angular_velocity - angular_velocity
-                subgoal_reward = stage_weight * angular_velocity_progress
-            else:
-                subgoal_reward = 0.0
-        else:
-            subgoal_reward = 0.0
-        
-        safety_penalty = 0.0
-        max_safe_angular_velocity = 2.0  # 安全阈值
-        violation = max(0, angular_velocity - max_safe_angular_velocity)
-        if violation > 0:
-            # Explicit safety constraint penalty with proper scaling
-            safety_penalty = -1.0 * violation**2 - 0.2 * violation
-            # Safety gate: reduce task reward when violating safety constraints
-            # More gradual gating based on violation severity
-            gate_factor = max(0.1, 1.0 - 0.5 * violation)
-            tracking_reward *= gate_factor
-            bonus_reward *= gate_factor
-            # Additional penalty for excessive angular velocity
-            safety_penalty -= 0.1 * angular_velocity
-            safety_penalty -= 0.1 * angular_velocity
-        else:
-            safety_penalty = 0.0
-        
         # 4. 改进奖励
         improvement_reward = 0.0
         error_reduction = abs(state_last_raw[0]) - current_error
-        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty + residual_penalty
         if error_reduction > 0:
             improvement_reward = 0.3 * error_reduction
+        
+        # 5. 课程学习子目标奖励
+        subgoal_reward = 0.0
+        if current_error < 0.05:
+            subgoal_reward = 0.4  # 接近目标时给予额外奖励
+        elif current_error < 0.1:
+            subgoal_reward = 0.2
+        elif current_error < 0.2:
+            subgoal_reward = 0.1
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
-        # 6. 残差动作惩罚（基于研究想法F_residual_aware_reward）
-        residual_penalty = 0.0
-        if hasattr(self, 'prev_residual') and self.prev_residual is not None:
-            residual_penalty = -0.1 * (target_handle_angle - self.prev_residual)**2
-        self.prev_residual = target_handle_angle
-        
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + subgoal_reward + action_penalty
         
         return reward
 

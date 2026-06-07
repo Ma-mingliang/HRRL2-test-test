@@ -3477,3 +3477,60 @@ c_curriculum_subgoal_reward_openreview_mhratccbtk, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T10:53:36.324212+00:00] v0502 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c030`
+**Description:** Added a curriculum stage progression system with dynamic thresholds and stage weights to better guide learning through subgoals (rationale: The current curriculum subgoal reward is only applied when tracking error > 0.05, which may not provide sufficient guidance as the agent improves. By introducing dynamic curriculum stages with different weights, we can: 1) Provide more structured learning progression, 2) Adjust reward magnitude based on current performance level, 3) Better align subgoals with the agent's current capabilities. This should improve learning efficiency while maintaining the gating mechanism to prevent reward hacking.)
+
+### Reward Formula / Change
+```
+Added a curriculum stage progression system with dynamic thresholds and stage weights to better guide learning through subgoals (rationale: The current curriculum subgoal reward is only applied when tracking error > 0.05, which may not provide sufficient guidance as the agent improves. By introducing dynamic curriculum stages with different weights, we can: 1) Provide more structured learning progression, 2) Adjust reward magnitude based on current performance level, 3) Better align subgoals with the agent's current capabilities. This should improve learning efficiency while maintaining the gating mechanism to prevent reward hacking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 947.1593 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_openreview_dju2kvsdts
+
+---
+
+## [2026-06-07T10:53:50.064242+00:00] v0503 - ✗ REJECTED
+
+**Candidate ID:** `reward_c031`
+**Description:** Add progress-based subgoal reward for angular velocity reduction with proper gating (rationale: The current code is incomplete (line 969 cuts off). I'm completing the curriculum subgoal reward implementation with proper gating. The subgoal reward should only apply when tracking error is above a threshold (e.g., 0.05) to prevent reward hacking. This encourages the agent to first stabilize angular velocity before pursuing precise tracking, which should improve convergence and reduce oscillations in the early training stages.)
+
+### Reward Formula / Change
+```
+Add progress-based subgoal reward for angular velocity reduction with proper gating (rationale: The current code is incomplete (line 969 cuts off). I'm completing the curriculum subgoal reward implementation with proper gating. The subgoal reward should only apply when tracking error is above a threshold (e.g., 0.05) to prevent reward hacking. This encourages the agent to first stabilize angular velocity before pursuing precise tracking, which should improve convergence and reduce oscillations in the early training stages.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 976
+    else:
+    ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_hz9gu1io12, c_curriculum_subgoal_reward_openreview_rgvqh3gjea
+
+---
+
