@@ -952,13 +952,15 @@ class Attitude_control_stage1(gym.Env):
         # Safety gate: limit bonus if angular velocity is too high
         if angular_velocity > 0.5:
             bonus_reward *= max(0.1, 1.0 - (angular_velocity - 0.5) * 2.0)
+        elif angular_velocity > 0.3:
+            bonus_reward *= max(0.5, 1.0 - (angular_velocity - 0.3) * 2.5)
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
         # 3.5. Additional oscillation penalty for high angular velocity
         oscillation_penalty = 0.0
-        if angular_velocity > 0.3:
-            oscillation_penalty = -0.1 * (angular_velocity - 0.3)
+        if angular_velocity > 0.2:
+            oscillation_penalty = -0.15 * (angular_velocity - 0.2)
         
         # 4. 改进奖励
         improvement_reward = 0.0

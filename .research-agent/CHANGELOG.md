@@ -3730,3 +3730,31 @@ g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-07T11:42:55.291712+00:00] v0511 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c039`
+**Description:** Added a small penalty for large angular velocity to discourage oscillations and improve smoothness (rationale: The current reward function already has a smoothness penalty, but adding an additional oscillation penalty for angular velocity > 0.3 will more strongly discourage rapid oscillations. This should help reduce lateral error (currently 0.0041) by encouraging smoother control actions, which is particularly important for precision tracking tasks. The penalty is small and only activates above a threshold to avoid over-constraining the agent.)
+
+### Reward Formula / Change
+```
+Added a small penalty for large angular velocity to discourage oscillations and improve smoothness (rationale: The current reward function already has a smoothness penalty, but adding an additional oscillation penalty for angular velocity > 0.3 will more strongly discourage rapid oscillations. This should help reduce lateral error (currently 0.0041) by encouraging smoother control actions, which is particularly important for precision tracking tasks. The penalty is small and only activates above a threshold to avoid over-constraining the agent.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 935.1014 (std: 0.0000)
+- **lateral_error:** 0.0031 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+g_llm_reward_generation_openreview_obpqdcwlfd, g_llm_reward_generation_openreview_tdfrn1tbgh
+
+---
+
