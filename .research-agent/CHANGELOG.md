@@ -3562,3 +3562,31 @@ c_curriculum_subgoal_reward_openreview_v3kavlfvrd, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T11:06:15.108627+00:00] v0505 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c033`
+**Description:** Added curriculum-based subgoal progress reward that rewards error reduction relative to subgoal thresholds, implementing the research idea C_curriculum_subgoal_reward (rationale: The current subgoal reward only gives static bonuses based on error thresholds. By adding progress-based rewards (error reduction relative to subgoal thresholds), we implement the curriculum subgoal reward research idea. This encourages the agent to actively reduce error toward each subgoal threshold, not just reach it. The progress multiplier (5.0) provides stronger incentive for error reduction, which should improve convergence speed and final precision. The existing baseline already shows good completion (1.0) and low error (0.0041), so this refinement should help maintain performance while potentially improving robustness.)
+
+### Reward Formula / Change
+```
+Added curriculum-based subgoal progress reward that rewards error reduction relative to subgoal thresholds, implementing the research idea C_curriculum_subgoal_reward (rationale: The current subgoal reward only gives static bonuses based on error thresholds. By adding progress-based rewards (error reduction relative to subgoal thresholds), we implement the curriculum subgoal reward research idea. This encourages the agent to actively reduce error toward each subgoal threshold, not just reach it. The progress multiplier (5.0) provides stronger incentive for error reduction, which should improve convergence speed and final precision. The existing baseline already shows good completion (1.0) and low error (0.0041), so this refinement should help maintain performance while potentially improving robustness.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 950.4794 (std: 0.0000)
+- **lateral_error:** 0.0027 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_leed5is4oi, c_curriculum_subgoal_reward_openreview_obpqdcwlfd
+
+---
+
