@@ -1,28 +1,25 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,11 +960,17 @@
-         # 5. 课程学习子目标奖励
+@@ -968,17 +968,8 @@
+         # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)
+         # Reward progress toward intermediate waypoints to encourage exploration
          subgoal_reward = 0.0
-         subgoal_thresholds = [0.05, 0.1, 0.2]
--        # Dynamic stage weights based on current error magnitude with progress scaling
--        # More aggressive weighting for precision phase to encourage fine-tuning
--        if current_error < 0.005:
--            subgoal_weights = [1.5, 0.8, 0.4]  # Very high weights for ultra-precision
--        elif current_error < 0.01:
--            subgoal_weights = [1.0, 0.6, 0.3]  # High weights for precision phase
+-        # Initialize subgoal tracking if not present
+-        if not hasattr(self, 'prev_subgoal_error'):
+-            self.prev_subgoal_error = current_error
+-        # Reward progress toward current subgoal with adaptive scaling
+-        subgoal_progress = self.prev_subgoal_error - current_error
+-        # Adaptive scaling: reduce subgoal weight when close to target to prevent reward hacking
+-        # and increase when far to encourage exploration
+-        if current_error > 0.1:
+-            subgoal_weight = 0.5  # Stronger encouragement for exploration when far
 -        else:
--            subgoal_weights = [0.5, 0.3, 0.15]  # Origin
-+        # Dynamic stage progression based on error magnitude
-+        if current_error < 0.005:
-+            current_stage = 0  # Ultra-precision stage
-+            subgoal_weights = [1.5, 0.8, 0.4]
-+        elif current_error < 0.01:
-+            current_stage = 1  # Precision stage
-+            subgoal_weights = [1.0, 0.6, 0.3]
-+        else:
-+            current_stage = 2  # Coarse stage
-+            subgoal_weights = [0.5, 0.3, 0.15]
-+        
-+        # Calculate progress to current stage subgoal
-+        progress_to_subgoal = max(0, abs(state_last_raw[0]) - current_error)
-+        subgoal_reward = subgoal_weights[current_stage] * progress_to_subgoal
+-            subgoal_weight = 0.1  # Weaker when close to prevent gaming
+-        subgoal_reward = subgoal_weight * subgoal_progress
+-        self.prev_subgoal_error = current_error
+-        self.prev_subgoal_error = current_error
++        # Simple progress reward toward target
++        if hasattr(self, 'prev_subgoal_error'):
++            subgoal_progress = self.prev_subgoal_error - current_error
++            subgoal_reward = 0.3 * subgoal_progress
++        self.prev_subgoal_error = current_error

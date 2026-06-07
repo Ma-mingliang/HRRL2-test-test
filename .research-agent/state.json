@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c035",
+    "candidate_id": "reward_c036",
     "optimizer": "reward",
-    "description": "Simplify the curriculum subgoal reward by removing the complex beta_stage scaling and using a fixed, smaller weight to prevent reward hacking and improve stability (rationale: The current curriculum scaling is overly complex and may cause reward instability. With completion_rate already at 1.0 and lateral_error at 0.0041, the agent is performing well. Simplifying to a fixed weight (0.3) reduces variance in the reward signal while still encouraging progress. This prevents potential reward hacking from the adaptive scaling and makes training more stable, which could further reduce the already low lateral error.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -970,16 +970,9 @@\n         subgoal_reward = 0.0\n         # Initialize subgoal tracking if not present\n         if not hasattr(self, 'prev_subgoal_error'):\n             self.prev_subgoal_error = current_error\n         # Reward progress toward current subgoal with adaptive scaling\n         subgoal_progress = self.prev_subgoal_error - current_error\n-        # Curriculum scaling: early training emphasizes progress, later emphasizes precision\n-        # Use episode count ",
-    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_b6awzauzpv\", \"c_curriculum_subgoal_reward_openreview_pyq8rtmwtm\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:b6AwZauZPV\", \"openreview:pyQ8RtMwTM\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Add adaptive subgoal scaling based on current error magnitude to prevent reward hacking and improve curriculum effectiveness (rationale: The current fixed subgoal weight (0.3) may cause reward hacking where the agent focuses on small progress increments rather than achieving the full task. By making the weight adaptive - stronger when error is large (encouraging exploration) and weaker when error is small (preventing gaming) - we align with the curriculum subgoal research idea while maintaining safety. This should improve completion rate and reduce lateral error by preventing the agent from getting stuck in local optima of small progress rewards.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -970,10 +970,15 @@\n         subgoal_reward = 0.0\n         # Initialize subgoal tracking if not present\n         if not hasattr(self, 'prev_subgoal_error'):\n             self.prev_subgoal_error = current_error\n         # Reward progress toward current subgoal with adaptive scaling\n         subgoal_progress = self.prev_subgoal_error - current_error\n-        # Use fixed small weight to prevent reward hacking\n-        subgoal_reward = 0.3 * subgoal_progress\n+        # Ad",
+    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_r7ppkxmovk\", \"c_curriculum_subgoal_reward_arxiv_2104_06410\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:r7PpkXMoVk\", \"arxiv:2104.06410\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-07T14:54:41.518477+00:00"
+    "timestamp": "2026-06-07T15:00:31.439772+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 36,
-    "full_evals_run": 33
+    "candidates_proposed": 37,
+    "full_evals_run": 34
   },
   "stop_reason": null,
   "progress": null,
@@ -221,6 +221,10 @@
     {
       "candidate_id": "reward_c036",
       "applied_at": "2026-06-07T14:54:56.731365+00:00"
+    },
+    {
+      "candidate_id": "reward_c037",
+      "applied_at": "2026-06-07T15:00:53.523395+00:00"
     }
   ],
   "baseline_fair_eval": {

@@ -4884,3 +4884,31 @@ c_curriculum_subgoal_reward_openreview_b6awzauzpv, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T15:00:31.439772+00:00] v0555 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c036`
+**Description:** Add adaptive subgoal scaling based on current error magnitude to prevent reward hacking and improve curriculum effectiveness (rationale: The current fixed subgoal weight (0.3) may cause reward hacking where the agent focuses on small progress increments rather than achieving the full task. By making the weight adaptive - stronger when error is large (encouraging exploration) and weaker when error is small (preventing gaming) - we align with the curriculum subgoal research idea while maintaining safety. This should improve completion rate and reduce lateral error by preventing the agent from getting stuck in local optima of small progress rewards.)
+
+### Reward Formula / Change
+```
+Add adaptive subgoal scaling based on current error magnitude to prevent reward hacking and improve curriculum effectiveness (rationale: The current fixed subgoal weight (0.3) may cause reward hacking where the agent focuses on small progress increments rather than achieving the full task. By making the weight adaptive - stronger when error is large (encouraging exploration) and weaker when error is small (preventing gaming) - we align with the curriculum subgoal research idea while maintaining safety. This should improve completion rate and reduce lateral error by preventing the agent from getting stuck in local optima of small progress rewards.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2176.5027
+- **lateral_error:** 0.0061
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_r7ppkxmovk, c_curriculum_subgoal_reward_arxiv_2104_06410
+
+---
+
