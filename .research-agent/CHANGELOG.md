@@ -4694,3 +4694,55 @@ c_curriculum_subgoal_reward_openreview_hqwhxvzcmj, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T14:26:41.456265+00:00] v0548 - ✗ REJECTED
+
+**Candidate ID:** `reward_c029`
+**Description:** Fixed the broken reward function by removing unreachable code and properly integrating the subgoal reward that was already partially implemented but never added to the final reward calculation. (rationale: The current reward function has critical bugs: (1) It references undefined variables (angular_penalty, residual_penalty, residual_smoothness_penalty, safety_penalty) causing runtime errors, (2) The subgoal_reward from the curriculum research idea is computed but never added to the reward, (3) There's unreachable code after the first return statement. This fix properly integrates the subgoal reward which encourages exploration through intermediate waypoints, and removes the broken references to undefined variables. The subgoal reward will help the agent learn stage-by-stage progress, improving exploration and potentially reducing lateral error further.)
+
+### Reward Formula / Change
+```
+Fixed the broken reward function by removing unreachable code and properly integrating the subgoal reward that was already partially implemented but never added to the final reward calculation. (rationale: The current reward function has critical bugs: (1) It references undefined variables (angular_penalty, residual_penalty, residual_smoothness_penalty, safety_penalty) causing runtime errors, (2) The subgoal_reward from the curriculum research idea is computed but never added to the reward, (3) There's unreachable code after the first return statement. This fix properly integrates the subgoal reward which encourages exploration through intermediate waypoints, and removes the broken references to undefined variables. The subgoal reward will help the agent learn stage-by-stage progress, improving exploration and potentially reducing lateral error further.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_mhratccbtk, c_curriculum_subgoal_reward_openreview_tjhhb6cscw
+
+---
+
+## [2026-06-07T14:29:39.692900+00:00] v0549 - ✗ REJECTED
+
+**Candidate ID:** `reward_c030`
+**Description:** No-op candidate (LLM unavailable)
+
+### Reward Formula / Change
+```
+No-op candidate (LLM unavailable)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty_patch
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_openreview_dju2kvsdts
+
+---
+

@@ -1,19 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,16 +954,15 @@
-         # 4. Curriculum subgoal reward for angular velocity reduction
-         # Stage 1: Focus on reducing angular velocity before precise tracking
-         angular_velocity_subgoal = 1.0  # Target angular velocity threshold
-         # Dynamic curriculum stages based on tracking error
-         if current_error < 0.01:
-             stage = 3  # High precision stage
-             stage_weight = 0.5
-         elif current_error < 0.05:
-             stage = 2  # Medium precision stage
-             stage_weight = 0.3
-         else:
-             stage = 1  # Initial stabilization stage
-             stage_weight = 0.2
-         # Only apply subgoal reward when tracking error is above threshold
-         # This prevents reward hacking where agent ignores tracking to reduce velocity
--        if current_error
+@@ -1017,7 +1017,9 @@
+         reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty
+         
+         # 7. Small bonus for maintaining very low tracking error
+-        if current_error < 0.01:  # Very precise tracking
+-            reward += 0.5  # Small bonus for precision
++        if current_error < 0.005:  # Very precise tracking
++            reward += 1.0  # Increased bonus for precision
++        elif current_error < 0.01:  # Good tracking
++            reward += 0.3  # Smaller bonus for good tracking
+         
+         return reward
