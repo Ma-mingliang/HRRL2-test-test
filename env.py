@@ -963,8 +963,13 @@ class Attitude_control_stage1(gym.Env):
             velocity_penalty = -0.1 * (angular_velocity - 0.1)
         
         # 3.3. Smoothness bonus for low angular velocity when tracking well
-        smoothness_bonus = 0.0
         if current_error < 0.02 and angular_velocity < 0.1:
+            smoothness_bonus = 0.05 * (0.1 - angular_velocity) / 0.1
+        
+        # 3.4. Additional penalty for high angular velocity when tracking well
+        high_velocity_penalty = 0.0
+        if current_error < 0.01 and angular_velocity > 0.2:
+            high_velocity_penalty = -0.1 * (angular_velocity - 0.2)
             smoothness_bonus = 0.05 * (0.1 - angular_velocity) / 0.1
         
         # 3.5. Additional oscillation penalty for high angular velocity

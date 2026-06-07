@@ -1,12 +1,10 @@
 --- a/env.py
 +++ b/env.py
-@@ -64,2 +64,9 @@
-         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
-                  math.tan(x) * ((l
+@@ -966,2 +966,7 @@
+         if current_error < 0.02 and angular_velocity < 0.1:
+             smoothness_bonus = 0.05 * (0.1 - angular_velocity) / 0.1
 +        
-+        # Add steering angle penalty to encourage smoother control
-+        steering_penalty = 0.0
-+        if abs(x) > 0.1:  # Penalize large steering angles
-+            steering_penalty = -0.1 * (abs(x) - 0.1)
-+        
-+        return steering_penalty
++        # 3.4. Additional penalty for high angular velocity when tracking well
++        high_velocity_penalty = 0.0
++        if current_error < 0.01 and angular_velocity > 0.2:
++            high_velocity_penalty = -0.1 * (angular_velocity - 0.2)

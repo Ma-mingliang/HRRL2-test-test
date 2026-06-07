@@ -3814,3 +3814,31 @@ g_llm_reward_generation_openreview_g9ylcfd8bq, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-07T12:00:32.014537+00:00] v0514 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c042`
+**Description:** Added a small positive reward for maintaining low angular velocity when tracking error is small, to encourage smoother control near the target (rationale: The current reward function heavily penalizes angular velocity but doesn't reward smooth control when tracking is good. Adding a small bonus for maintaining low angular velocity when the tracking error is small (current_error < 0.02) encourages the agent to settle into stable, smooth control near the target. This should reduce oscillations and improve the lateral_error metric (currently 0.0041) by promoting steadier control when close to the target. The bonus is small (max 0.05) to avoid dominating the reward signal while still providing positive reinforcement for good behavior.)
+
+### Reward Formula / Change
+```
+Added a small positive reward for maintaining low angular velocity when tracking error is small, to encourage smoother control near the target (rationale: The current reward function heavily penalizes angular velocity but doesn't reward smooth control when tracking is good. Adding a small bonus for maintaining low angular velocity when the tracking error is small (current_error < 0.02) encourages the agent to settle into stable, smooth control near the target. This should reduce oscillations and improve the lateral_error metric (currently 0.0041) by promoting steadier control when close to the target. The bonus is small (max 0.05) to avoid dominating the reward signal while still providing positive reinforcement for good behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 940.6645 (std: 0.0000)
+- **lateral_error:** 0.0031 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+g_llm_reward_generation_openreview_q01nzxiwlt, g_llm_reward_generation_openreview_bm6mwnd9uh
+
+---
+
