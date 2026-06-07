@@ -1,21 +1,13 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,14 +954,16 @@
-         # 3.5 安全约束惩罚：防止过度振荡
-         safety_penalty = 0.0
-         max_safe_angular_velocity = 2.0  # 安全阈值
-         violation = max(0, angular_velocity - max_safe_angular_velocity)
-         if violation > 0:
-             # Explicit safety constraint penalty with proper scaling
-             safety_penalty = -1.0 * violation**2 - 0.2 * violation
-             # Safety gate: reduce task reward when violating safety constraints
--            tracking_reward *= 0.5
--            bonus_reward *= 0.5
-+            # More gradual gating based on violation severity
-+            gate_factor = max(0.1, 1.0 - 0.4 * violation)
-+            tracking_reward *= gate_factor
-+            bonus_reward *= gate_factor
-             # Additional penalty for excessive angular velocity
-             safety_penalty -= 0.1 * angular_velocity
+@@ -960,8 +960,8 @@
+             safety_gate_penalty = -5.0 * heading_violation  # Additional penalty to gate task reward
+             # Apply safety gate to the final reward calculation
+             # This implements B_safety_constraint_reward: reward -= lambda_violation * max(0, constraint_value)
+-            reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_gate_penalty
++            reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_gate_penalty + safety_penalty
          else:
-             safety_penalty = 0.0
+-            reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty
++            reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_penalty
+         velocity = abs(state_raw[3])  # v is velocity
+         velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed

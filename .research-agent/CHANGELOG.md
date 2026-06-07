@@ -4564,3 +4564,29 @@ b_safety_constraint_reward_arxiv_2306_03220, b_safety_constraint_reward_arxiv_26
 
 ---
 
+## [2026-06-07T14:21:46.747095+00:00] v0543 - ✗ REJECTED
+
+**Candidate ID:** `reward_c024`
+**Description:** Fixed the reward function to properly handle safety gate penalty and removed duplicate code that was causing inconsistent reward calculations (rationale: The current code has a critical bug: when heading_violation > 0, it calculates reward with safety_gate_penalty but then immediately overwrites it with a different calculation that doesn't include safety_gate_penalty. This makes the safety gate penalty ineffective. By adding an else clause, we ensure the safety gate penalty is properly applied when heading errors exceed the threshold, which should improve safety and reduce oscillations while maintaining good tracking performance.)
+
+### Reward Formula / Change
+```
+Fixed the reward function to properly handle safety gate penalty and removed duplicate code that was causing inconsistent reward calculations (rationale: The current code has a critical bug: when heading_violation > 0, it calculates reward with safety_gate_penalty but then immediately overwrites it with a different calculation that doesn't include safety_gate_penalty. This makes the safety gate penalty ineffective. By adding an else clause, we ensure the safety gate penalty is properly applied when heading errors exceed the threshold, which should improve safety and reduce oscillations while maintaining good tracking performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_7lfmnvnmfj, b_safety_constraint_reward_openreview_dhtoyebvmt
+
+---
+
