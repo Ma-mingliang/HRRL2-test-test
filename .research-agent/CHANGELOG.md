@@ -3418,3 +3418,34 @@ b_safety_constraint_reward_openreview_qcz3g6mh3l, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T10:51:49.248334+00:00] v0500 - ✗ REJECTED
+
+**Candidate ID:** `reward_c028`
+**Description:** Added curriculum-based subgoal reward for stage progress tracking, focusing on reducing angular velocity as a subgoal before full tracking optimization (rationale: The baseline shows perfect completion rate (1.0) but with lateral error of 0.0041, suggesting the agent achieves the goal but may not be optimizing for smoothness. Adding a curriculum subgoal reward that incentivizes reducing angular velocity before focusing on precise tracking should improve smoothness metrics. This aligns with the research idea of rewarding stage progress before exposing full task objectives. The subgoal reward is gated to only apply when angular velocity is above threshold, preventing reward hacking and maintaining safety constraints.)
+
+### Reward Formula / Change
+```
+Added curriculum-based subgoal reward for stage progress tracking, focusing on reducing angular velocity as a subgoal before full tracking optimization (rationale: The baseline shows perfect completion rate (1.0) but with lateral error of 0.0041, suggesting the agent achieves the goal but may not be optimizing for smoothness. Adding a curriculum subgoal reward that incentivizes reducing angular velocity before focusing on precise tracking should improve smoothness metrics. This aligns with the research idea of rewarding stage progress before exposing full task objectives. The subgoal reward is gated to only apply when angular velocity is above threshold, preventing reward hacking and maintaining safety constraints.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 897.5800 (std: 0.0000)
+- **lateral_error:** 0.0042 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.0192 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_hqwhxvzcmj, c_curriculum_subgoal_reward_openreview_dpkak1oh3x
+
+---
+
