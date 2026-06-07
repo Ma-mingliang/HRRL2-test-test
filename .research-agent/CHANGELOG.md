@@ -1155,3 +1155,26 @@ a_potential_based_reward_arxiv_2012_08824, a_potential_based_reward_openreview_3
 
 ---
 
+## [2026-06-07T07:54:16.180135+00:00] v0454 - ✗ REJECTED
+
+**Candidate ID:** `reward_c007`
+**Description:** Added a safety gate to the potential-based reward shaping to prevent reward hacking when tracking error is large, and improved the potential function to be more stable (rationale: The original potential-based reward shaping could lead to reward hacking when tracking error is large (e.g., during initial learning or recovery from large deviations). By adding a safety gate that only applies shaping when errors are below a threshold (2.0), we prevent the agent from receiving misleading rewards during extreme states. Reducing k_phi from 0.1 to 0.05 further stabilizes the reward signal. This modification preserves the policy-invariant property of potential-based shaping while making it more robust to edge cases, which should improve training stability and prevent the agent from exploiting the shaping reward at the expense of actual task performance.)
+
+### Reward Formula / Change
+```
+Added a safety gate to the potential-based reward shaping to prevent reward hacking when tracking error is large, and improved the potential function to be more stable (rationale: The original potential-based reward shaping could lead to reward hacking when tracking error is large (e.g., during initial learning or recovery from large deviations). By adding a safety gate that only applies shaping when errors are below a threshold (2.0), we prevent the agent from receiving misleading rewards during extreme states. Reducing k_phi from 0.1 to 0.05 further stabilizes the reward signal. This modification preserves the policy-invariant property of potential-based shaping while making it more robust to edge cases, which should improve training stability and prevent the agent from exploiting the shaping reward at the expense of actual task performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_snxieztsff, a_potential_based_reward_arxiv_2109_05022
+
+---
+
