@@ -32,6 +32,17 @@
             residual_norm = np.linalg.norm(self.residual_action)
             lambda_res = 0.1  # Weight for residual action magnitude
             
+            # Calculate action smoothness penalty (difference from previous residual)
+            if hasattr(self, 'prev_residual_action'):
+                action_diff = np.linalg.norm(self.residual_action - self.prev_residual_action)
+                lambda_smooth = 0.05  # Weight for action smoothness
+                self.reward -= lambda_res * residual_norm**2 + lambda_smooth * action_diff
+            else:
+                self.reward -= lambda_res * residual_norm**2
+            # Calculate residual action magnitude penalty
+            residual_norm = np.linalg.norm(self.residual_action)
+            lambda_res = 0.1  # Weight for residual action magnitude
+            
             # Calculate residual action smoothness penalty
             if hasattr(self, 'prev_residual_action'):
                 action_diff = np.linalg.norm(self.residual_action - self.prev_residual_action)

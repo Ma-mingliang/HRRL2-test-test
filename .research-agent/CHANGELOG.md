@@ -1362,3 +1362,26 @@ f_residual_aware_reward_openreview_pech3gfc9d, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T07:56:58.348453+00:00] v0463 - ✗ REJECTED
+
+**Candidate ID:** `reward_c016`
+**Description:** Added residual action penalty to the reward function to discourage excessive residual control effort and improve action smoothness (rationale: This modification implements the residual-aware reward idea from the research suggestions. By penalizing both the magnitude of residual actions (||u_residual||^2) and the roughness of action changes (||u_residual - prev_u_residual||), we encourage the RL agent to use minimal and smooth residual corrections. This should improve tracking performance while preventing excessive control effort that could destabilize the system. The small weights (lambda_res=0.1, lambda_smooth=0.05) ensure the penalties don't dominate the task reward but still provide meaningful regularization.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to the reward function to discourage excessive residual control effort and improve action smoothness (rationale: This modification implements the residual-aware reward idea from the research suggestions. By penalizing both the magnitude of residual actions (||u_residual||^2) and the roughness of action changes (||u_residual - prev_u_residual||), we encourage the RL agent to use minimal and smooth residual corrections. This should improve tracking performance while preventing excessive control effort that could destabilize the system. The small weights (lambda_res=0.1, lambda_smooth=0.05) ensure the penalties don't dominate the task reward but still provide meaningful regularization.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_dzmd1pbtc5, f_residual_aware_reward_openreview_mjarxzke30
+
+---
+
