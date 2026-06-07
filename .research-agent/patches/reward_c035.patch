@@ -1,23 +1,21 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,12 +960,15 @@
-         # 5. 课程学习子目标奖励
+@@ -970,16 +970,9 @@
          subgoal_reward = 0.0
-         subgoal_thresholds = [0.05, 0.1, 0.2]
--        # Dynamic stage weights based on current error magnitude
--        if current_error < 0.01:
--            subgoal_weights = [0.8, 0.4, 0.2]  # Higher weights for precision phase
+         # Initialize subgoal tracking if not present
+         if not hasattr(self, 'prev_subgoal_error'):
+             self.prev_subgoal_error = current_error
+         # Reward progress toward current subgoal with adaptive scaling
+         subgoal_progress = self.prev_subgoal_error - current_error
+-        # Curriculum scaling: early training emphasizes progress, later emphasizes precision
+-        # Use episode count if available, otherwise use error magnitude as proxy
+-        if hasattr(self, 'episode_count'):
+-            # Linear curriculum: start with high beta, decrease over episodes
+-            beta_stage = max(0.1, 1.0 - (self.episode_count / 1000.0))  # 1.0 -> 0.1 over 1000 episodes
 -        else:
--            subgoal_weights = [0.4, 0.2, 0.1]  # Original weights for exploration phase
-+        # Dynamic stage weights based on current error magnitude with progress scaling
-+        if current_error < 0.01:
-+            subgoal_weights = [1.0, 0.6, 0.3]  # Higher weights for precision phase
-+        else:
-+            subgoal_weights = [0.5, 0.3, 0.15]  # Original weights for exploration phase
-         
-         for i, threshold in enumerate(subgoal_thresholds):
-             if current_error < threshold:
-                 # Reward progress toward this subgoal
-+                prev_error = abs(state_last_raw[0])
-+                progress = max(0, prev_error - current_error)
-+                subgoal_reward += subgoal_weights[i] * progress
+-            # Fallback: scale based on error magnitude
+-            beta_stage = 0.5 * (1.0 + min(current_error, 1.0))  # 0.5 to 1.0 scaling
+-        subgoal_reward = beta_stage * subgoal_progress
++        # Use fixed small weight to prevent reward hacking
++        subgoal_reward = 0.3 * subgoal_progress
+         self.prev_subgoal_error = current_error

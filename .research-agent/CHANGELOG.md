@@ -4828,3 +4828,31 @@ c_curriculum_subgoal_reward_openreview_leed5is4oi, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T14:48:53.334538+00:00] v0553 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c034`
+**Description:** Added a curriculum-based subgoal reward that scales with training progress to encourage exploration before precise tracking (rationale: The current subgoal reward uses error magnitude scaling which may not properly implement curriculum learning. By adding episode-based curriculum scaling, we ensure that early training emphasizes progress (exploration) while later training emphasizes precision (exploitation). This should improve exploration in early stages while maintaining final performance. The fallback to error-based scaling ensures robustness if episode count isn't tracked.)
+
+### Reward Formula / Change
+```
+Added a curriculum-based subgoal reward that scales with training progress to encourage exploration before precise tracking (rationale: The current subgoal reward uses error magnitude scaling which may not properly implement curriculum learning. By adding episode-based curriculum scaling, we ensure that early training emphasizes progress (exploration) while later training emphasizes precision (exploitation). This should improve exploration in early stages while maintaining final performance. The fallback to error-based scaling ensures robustness if episode count isn't tracked.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2221.7881
+- **lateral_error:** 0.0050
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_pmkwnv6azi, c_curriculum_subgoal_reward_openreview_uv9aa45wym
+
+---
+

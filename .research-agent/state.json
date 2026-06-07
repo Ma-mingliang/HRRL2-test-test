@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c033",
+    "candidate_id": "reward_c034",
     "optimizer": "reward",
-    "description": "Enhanced curriculum subgoal reward with proper initialization and scaling to encourage exploration and reduce oscillations (rationale: The current subgoal reward implementation has two issues: 1) It requires 'subgoal_stage' attribute which may not exist, causing the reward to always be 0. 2) The fixed beta_stage=0.3 may be too small to encourage exploration. By initializing prev_subgoal_error when missing and using adaptive scaling (0.5-1.0 based on error magnitude), we ensure the curriculum reward is always active and provides stronger incentives for progress when errors are large. This should improve exploration and reduce oscillations while maintaining the safety constraints.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -968,11 +968,15 @@\n         # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)\n         # Reward progress toward intermediate waypoints to encourage exploration\n         # before focusing on precise final target tracking\n         subgoal_reward = 0.0\n-        if hasattr(self, 'subgoal_stage') and hasattr(self, 'prev_subgoal_error'):\n-            # Reward progress toward current subgoal\n-            subgoal_progress = self.prev_subgoal_err",
-    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_leed5is4oi\", \"c_curriculum_subgoal_reward_openreview_obpqdcwlfd\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:LEed5Is4oi\", \"openreview:OBpQdCWLfd\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added a curriculum-based subgoal reward that scales with training progress to encourage exploration before precise tracking (rationale: The current subgoal reward uses error magnitude scaling which may not properly implement curriculum learning. By adding episode-based curriculum scaling, we ensure that early training emphasizes progress (exploration) while later training emphasizes precision (exploitation). This should improve exploration in early stages while maintaining final performance. The fallback to error-based scaling ensures robustness if episode count isn't tracked.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -968,13 +968,19 @@\n         # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)\n         # Reward progress toward intermediate waypoints to encourage exploration\n         # before focusing on precise final target tracking\n         subgoal_reward = 0.0\n         # Initialize subgoal tracking if not present\n         if not hasattr(self, 'prev_subgoal_error'):\n             self.prev_subgoal_error = current_error\n         # Reward progress towa",
+    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_pmkwnv6azi\", \"c_curriculum_subgoal_reward_openreview_uv9aa45wym\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:PMKwnV6Azi\", \"openreview:UV9aa45wyM\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-07T14:42:13.681712+00:00"
+    "timestamp": "2026-06-07T14:48:53.334538+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 34,
-    "full_evals_run": 31
+    "candidates_proposed": 35,
+    "full_evals_run": 32
   },
   "stop_reason": null,
   "progress": null,
@@ -213,6 +213,10 @@
     {
       "candidate_id": "reward_c034",
       "applied_at": "2026-06-07T14:42:32.172356+00:00"
+    },
+    {
+      "candidate_id": "reward_c035",
+      "applied_at": "2026-06-07T14:49:07.190486+00:00"
     }
   ],
   "baseline_fair_eval": {

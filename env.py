@@ -967,22 +967,15 @@ class Attitude_control_stage1(gym.Env):
         
         # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)
         # Reward progress toward intermediate waypoints to encourage exploration
-        # before focusing on precise final target tracking
         subgoal_reward = 0.0
         # Initialize subgoal tracking if not present
         if not hasattr(self, 'prev_subgoal_error'):
             self.prev_subgoal_error = current_error
         # Reward progress toward current subgoal with adaptive scaling
         subgoal_progress = self.prev_subgoal_error - current_error
-        # Curriculum scaling: early training emphasizes progress, later emphasizes precision
-        # Use episode count if available, otherwise use error magnitude as proxy
-        if hasattr(self, 'episode_count'):
-            # Linear curriculum: start with high beta, decrease over episodes
-            beta_stage = max(0.1, 1.0 - (self.episode_count / 1000.0))  # 1.0 -> 0.1 over 1000 episodes
-        else:
-            # Fallback: scale based on error magnitude
-            beta_stage = 0.5 * (1.0 + min(current_error, 1.0))  # 0.5 to 1.0 scaling
-        subgoal_reward = beta_stage * subgoal_progress
+        # Use fixed small weight to prevent reward hacking
+        subgoal_reward = 0.3 * subgoal_progress
+        self.prev_subgoal_error = current_error
         self.prev_subgoal_error = current_error
         
         reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + subgoal_reward
