@@ -2382,3 +2382,31 @@ a_potential_based_reward_arxiv_2012_08824, a_potential_based_reward_openreview_3
 
 ---
 
+## [2026-06-07T09:44:33.648066+00:00] v0498 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c029`
+**Description:** Added a small constant reward for maintaining low lateral error to encourage stable path tracking (rationale: The current reward only incentivizes progress (reducing error) but not maintaining low error. Adding a small constant reward when lateral error is below a threshold (0.05m) encourages the agent to not only reduce error but also stay in a stable low-error state. This should improve completion_rate and reduce lateral_error variance while keeping the reward structure minimal and safety-gated.)
+
+### Reward Formula / Change
+```
+Added a small constant reward for maintaining low lateral error to encourage stable path tracking (rationale: The current reward only incentivizes progress (reducing error) but not maintaining low error. Adding a small constant reward when lateral error is below a threshold (0.05m) encourages the agent to not only reduce error but also stay in a stable low-error state. This should improve completion_rate and reduce lateral_error variance while keeping the reward structure minimal and safety-gated.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 946.9401 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_mhratccbtk, c_curriculum_subgoal_reward_openreview_tjhhb6cscw
+
+---
+
