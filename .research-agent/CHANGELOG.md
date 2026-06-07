@@ -4968,3 +4968,31 @@ g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-07T15:19:09.459766+00:00] v0558 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c039`
+**Description:** Simplify the adaptive scaling in potential-based reward shaping to reduce complexity and potential instability (rationale: The current adaptive scaling (error_scale = 1.0 + 2.0 * min(current_error, 1.0)) creates non-linear scaling that can cause instability when errors are large. With baseline metrics showing excellent performance (lateral_error: 0.0041, completion_rate: 1.0000), the system is already performing well. Simplifying to constant scaling (k_phi = base_k_phi) reduces potential reward hacking risks from the adaptive component while maintaining the core potential-based shaping that preserves optimal policy. This aligns with the research idea's warning about avoiding proxy metrics that dominate task success.)
+
+### Reward Formula / Change
+```
+Simplify the adaptive scaling in potential-based reward shaping to reduce complexity and potential instability (rationale: The current adaptive scaling (error_scale = 1.0 + 2.0 * min(current_error, 1.0)) creates non-linear scaling that can cause instability when errors are large. With baseline metrics showing excellent performance (lateral_error: 0.0041, completion_rate: 1.0000), the system is already performing well. Simplifying to constant scaling (k_phi = base_k_phi) reduces potential reward hacking risks from the adaptive component while maintaining the core potential-based shaping that preserves optimal policy. This aligns with the research idea's warning about avoiding proxy metrics that dominate task success.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2378.5344
+- **lateral_error:** 0.0030
+
+### Source Methods
+g_llm_reward_generation_openreview_obpqdcwlfd, g_llm_reward_generation_openreview_tdfrn1tbgh
+
+---
+

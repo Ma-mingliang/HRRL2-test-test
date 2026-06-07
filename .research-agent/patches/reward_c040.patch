@@ -1,17 +1,11 @@
 --- a/env.py
 +++ b/env.py
-@@ -952,10 +952,12 @@
-         # Safety gate: limit bonus if angular velocity is too high
-         if angular_velocity > 0.5:
-             bonus_reward *= max(0.1, 1.0 - (angular_velocity - 0.5) * 2.0)
-+        elif angular_velocity > 0.3:
-+            bonus_reward *= max(0.5, 1.0 - (angular_velocity - 0.3) * 2.5)
-         # 3. 平顺性惩罚
-         smoothness_penalty = -0.05 * angular_velocity
-         
-         # 3.5. Additional oscillation penalty for high angular velocity
-         oscillation_penalty = 0.0
--        if angular_velocity > 0.3:
--            oscillation_penalty = -0.1 * (angular_velocity - 0.3)
-+        if angular_velocity > 0.2:
-+            oscillation_penalty = -0.15 * (angular_velocity - 0.2)
+@@ -943,4 +943,7 @@
+         # Adaptive scaling: increase shaping magnitude when error is large
+         base_k_phi = 2.0
+-        k_phi = base_k_phi
++        # Scale up shaping when error is large to encourage faster convergence
++        # Scale down when error is small to avoid overshooting
++        error_scale = min(3.0, 1.0 + 2.0 * current_error)
++        k_phi = base_k_phi * error_scale
+         potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
