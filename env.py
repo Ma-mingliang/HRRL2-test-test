@@ -954,10 +954,16 @@ class Attitude_control_stage1(gym.Env):
         velocity = abs(state_raw[3])  # v is velocity
         velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed
         
-        # 6. Angular velocity penalty to reduce steering oscillations
         angular_velocity = abs(state_raw[2])  # w0 is angular velocity
         angular_penalty = -0.05 * angular_velocity**2
         
+        # 8. Residual action penalty (from research idea F_residual_aware_reward)
+        # Penalize large residual actions to encourage smooth corrections
+        residual_penalty = 0.0
+        if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
+            residual_penalty = -0.1 * np.sum(self.last_residual_action**2)
+        
+        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty
         reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty
         
         # 7. Small bonus for maintaining very low tracking error

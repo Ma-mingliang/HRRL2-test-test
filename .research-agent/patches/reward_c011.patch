@@ -1,14 +1,13 @@
 --- a/env.py
 +++ b/env.py
-@@ -1016,2 +1016,11 @@
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-         action_penalty = -0.02 * abs(target_handle_angle)
+@@ -957,4 +957,10 @@
+         angular_velocity = abs(state_raw[2])  # w0 is angular velocity
+         angular_penalty = -0.05 * angular_velocity**2
+         
++        # 8. Residual action penalty (from research idea F_residual_aware_reward)
++        # Penalize large residual actions to encourage smooth corrections
++        residual_penalty = 0.0
++        if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
++            residual_penalty = -0.1 * np.sum(self.last_residual_action**2)
 +        
-+        # 6. 残差动作惩罚：鼓励残差控制器输出平顺且幅度小
-+        # 假设残差动作是target_handle_angle与基础控制器输出的差值
-+        # 这里用target_handle_angle的平方作为残差幅度的代理
-+        residual_penalty = -0.01 * target_handle_angle**2
-+        
-+        # 7. 残差动作平滑性惩罚：惩罚残差动作的剧烈变化
-+        # 使用角速度作为残差变化率的代理
-+        residual_smoothness = -0.005 * angular_velocity**2
+         reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty

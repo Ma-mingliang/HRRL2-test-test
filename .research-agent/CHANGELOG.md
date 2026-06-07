@@ -4200,3 +4200,29 @@ a_potential_based_reward_arxiv_2605_01787, a_potential_based_reward_openreview_0
 
 ---
 
+## [2026-06-07T14:13:27.177455+00:00] v0529 - ✗ REJECTED
+
+**Candidate ID:** `reward_c010`
+**Description:** Added adaptive scaling to the potential-based reward shaping term to increase its influence when tracking error is large, while preserving the policy-invariant property. (rationale: The current potential shaping uses a fixed coefficient (k_phi=2.0), which may be too conservative when tracking error is large. By adaptively scaling k_phi based on current error magnitude, we provide stronger guidance when the agent is far from the target (error > 0.5) while maintaining the same shaping when error is small. This should help the agent learn faster in early training while preserving the policy-invariant property of potential-based shaping. The scaling is bounded (max 3x) to prevent reward hacking and ensure stability.)
+
+### Reward Formula / Change
+```
+Added adaptive scaling to the potential-based reward shaping term to increase its influence when tracking error is large, while preserving the policy-invariant property. (rationale: The current potential shaping uses a fixed coefficient (k_phi=2.0), which may be too conservative when tracking error is large. By adaptively scaling k_phi based on current error magnitude, we provide stronger guidance when the agent is far from the target (error > 0.5) while maintaining the same shaping when error is small. This should help the agent learn faster in early training while preserving the policy-invariant property of potential-based shaping. The scaling is bounded (max 3x) to prevent reward hacking and ensure stability.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_tdomx6s4f5, a_potential_based_reward_arxiv_1902_06239
+
+---
+
