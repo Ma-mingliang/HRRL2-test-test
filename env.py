@@ -15,8 +15,11 @@
             gamma = 0.99
             k_phi = 0.05  # Weight for tracking improvement
             k_heading = 0.02  # Weight for heading improvement
-            potential_reward = k_phi * (gamma * (-abs(current_tracking_error)) - (-abs(self.prev_tracking_error))) + \
-                              k_heading * (gamma * (-abs(current_heading_error)) - (-abs(self.prev_heading_error)))
+            # Potential-based shaping: gamma * Phi(s') - Phi(s)
+            # where Phi(s) = -|error| (negative error as potential)
+            potential_tracking = gamma * (-abs(current_tracking_error)) - (-abs(self.prev_tracking_error))
+            potential_heading = gamma * (-abs(current_heading_error)) - (-abs(self.prev_heading_error))
+            potential_reward = k_phi * potential_tracking + k_heading * potential_heading
             # Add to main reward (assuming reward is computed elsewhere)
             if hasattr(self, 'reward'):
                 self.reward += potential_reward

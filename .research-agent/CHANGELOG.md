@@ -1201,3 +1201,26 @@ a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_2
 
 ---
 
+## [2026-06-07T07:55:03.448085+00:00] v0456 - ✗ REJECTED
+
+**Candidate ID:** `reward_c009`
+**Description:** Simplify the potential-based reward shaping by removing the safety gate and using a cleaner potential function formulation (rationale: The safety gate (checking if errors < 2.0) creates a discontinuous reward signal that can destabilize learning. Removing it provides a smoother gradient signal while maintaining the potential-based shaping that encourages error reduction. The weights (k_phi, k_heading) already control the magnitude, making the gate unnecessary. This should improve learning stability and convergence speed.)
+
+### Reward Formula / Change
+```
+Simplify the potential-based reward shaping by removing the safety gate and using a cleaner potential function formulation (rationale: The safety gate (checking if errors < 2.0) creates a discontinuous reward signal that can destabilize learning. Removing it provides a smoother gradient signal while maintaining the potential-based shaping that encourages error reduction. The weights (k_phi, k_heading) already control the magnitude, making the gate unnecessary. This should improve learning stability and convergence speed.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2605_01787, a_potential_based_reward_openreview_0iouiel5nm
+
+---
+
