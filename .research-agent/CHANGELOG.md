@@ -3170,3 +3170,29 @@ b_safety_constraint_reward_openreview_hqwhxvzcmj, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T10:45:35.443986+00:00] v0491 - ✗ REJECTED
+
+**Candidate ID:** `reward_c019`
+**Description:** Added a safety gate that reduces task reward when angular velocity exceeds safe threshold, implementing the safety constraint reward idea (rationale: The current safety penalty only adds a negative term but doesn't gate the task reward. By reducing tracking and bonus rewards when angular velocity exceeds safe thresholds, we implement a proper safety gate that discourages unsafe behavior while maintaining task performance. This should reduce oscillations and improve smoothness without sacrificing completion rate, as the baseline already shows excellent tracking (lateral_error: 0.0041). The modification is minimal and directly implements the research idea's 'safety_gate' layer.)
+
+### Reward Formula / Change
+```
+Added a safety gate that reduces task reward when angular velocity exceeds safe threshold, implementing the safety constraint reward idea (rationale: The current safety penalty only adds a negative term but doesn't gate the task reward. By reducing tracking and bonus rewards when angular velocity exceeds safe thresholds, we implement a proper safety gate that discourages unsafe behavior while maintaining task performance. This should reduce oscillations and improve smoothness without sacrificing completion rate, as the baseline already shows excellent tracking (lateral_error: 0.0041). The modification is minimal and directly implements the research idea's 'safety_gate' layer.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_dju2kvsdts, b_safety_constraint_reward_openreview_rgvqh3gjea
+
+---
+
