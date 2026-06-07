@@ -4800,3 +4800,31 @@ c_curriculum_subgoal_reward_openreview_v3kavlfvrd, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T14:42:13.681712+00:00] v0552 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c033`
+**Description:** Enhanced curriculum subgoal reward with proper initialization and scaling to encourage exploration and reduce oscillations (rationale: The current subgoal reward implementation has two issues: 1) It requires 'subgoal_stage' attribute which may not exist, causing the reward to always be 0. 2) The fixed beta_stage=0.3 may be too small to encourage exploration. By initializing prev_subgoal_error when missing and using adaptive scaling (0.5-1.0 based on error magnitude), we ensure the curriculum reward is always active and provides stronger incentives for progress when errors are large. This should improve exploration and reduce oscillations while maintaining the safety constraints.)
+
+### Reward Formula / Change
+```
+Enhanced curriculum subgoal reward with proper initialization and scaling to encourage exploration and reduce oscillations (rationale: The current subgoal reward implementation has two issues: 1) It requires 'subgoal_stage' attribute which may not exist, causing the reward to always be 0. 2) The fixed beta_stage=0.3 may be too small to encourage exploration. By initializing prev_subgoal_error when missing and using adaptive scaling (0.5-1.0 based on error magnitude), we ensure the curriculum reward is always active and provides stronger incentives for progress when errors are large. This should improve exploration and reduce oscillations while maintaining the safety constraints.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2221.7881
+- **lateral_error:** 0.0050
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_leed5is4oi, c_curriculum_subgoal_reward_openreview_obpqdcwlfd
+
+---
+
