@@ -1178,3 +1178,26 @@ a_potential_based_reward_openreview_snxieztsff, a_potential_based_reward_arxiv_2
 
 ---
 
+## [2026-06-07T07:54:41.160398+00:00] v0455 - ✗ REJECTED
+
+**Candidate ID:** `reward_c008`
+**Description:** Added heading error to the potential-based reward shaping to improve both tracking and orientation stability (rationale: The current reward shaping only considers lateral tracking error improvement. Adding heading error improvement encourages the agent to not only reduce position error but also improve orientation alignment with the path. This addresses both metrics mentioned in the research ideas (tracking_error, heading_error) and should lead to more stable path following, especially during turns. The safety gate remains in place to prevent reward hacking when errors are large.)
+
+### Reward Formula / Change
+```
+Added heading error to the potential-based reward shaping to improve both tracking and orientation stability (rationale: The current reward shaping only considers lateral tracking error improvement. Adding heading error improvement encourages the agent to not only reduce position error but also improve orientation alignment with the path. This addresses both metrics mentioned in the research ideas (tracking_error, heading_error) and should lead to more stable path following, especially during turns. The safety gate remains in place to prevent reward hacking when errors are large.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_23703
+
+---
+
