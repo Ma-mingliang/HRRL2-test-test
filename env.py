@@ -987,8 +987,17 @@ class Attitude_control_stage1(gym.Env):
         if error_reduction > 0:
             improvement_reward = 0.3 * error_reduction
         
+        # 4.1 Potential-based reward shaping (preserves optimal policy)
+        # Phi(s) = -k * |error|, so gamma*Phi(s') - Phi(s) = k*(|e_t| - gamma*|e_t+1|)
+        gamma = 0.99
+        k_phi = 0.5
+        potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
+        # Gate against unsafe behavior: only apply when angular velocity is reasonable
+        if angular_velocity > 0.3:
+            potential_shaping *= max(0.2, 1.0 - (angular_velocity - 0.3) * 2.0)
+        
         # 5. 课程学习子目标奖励
-        subgoal_reward = 0.0
+
         subgoal_thresholds = [0.05, 0.1, 0.2]
         # Dynamic stage progression based on error magnitude
         if current_error < 0.005:
