@@ -2612,3 +2612,31 @@ a_potential_based_reward_openreview_tdomx6s4f5, a_potential_based_reward_arxiv_1
 
 ---
 
+## [2026-06-07T10:11:31.839645+00:00] v0502 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c033`
+**Description:** Added a small constant reward for maintaining very low lateral error to encourage stability and precision, with a safety gate. (rationale: The baseline shows excellent performance (lateral_error: 0.0041, completion_rate: 1.0000), but the reward function could be refined to encourage even tighter tracking. Adding a small additional reward for very low error (<2cm) provides a stronger incentive for precision while maintaining the safety gate. This should help reduce the already low lateral error further without compromising stability, as the safety_factor ensures the reward is only active when the bike is in a safe state.)
+
+### Reward Formula / Change
+```
+Added a small constant reward for maintaining very low lateral error to encourage stability and precision, with a safety gate. (rationale: The baseline shows excellent performance (lateral_error: 0.0041, completion_rate: 1.0000), but the reward function could be refined to encourage even tighter tracking. Adding a small additional reward for very low error (<2cm) provides a stronger incentive for precision while maintaining the safety gate. This should help reduce the already low lateral error further without compromising stability, as the safety_factor ensures the reward is only active when the bike is in a safe state.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 947.1593 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_leed5is4oi, c_curriculum_subgoal_reward_openreview_obpqdcwlfd
+
+---
+
