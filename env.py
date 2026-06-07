@@ -27,6 +27,13 @@
             normalized_prev_tracking = safe_prev_tracking / max_tracking_error
             normalized_heading = safe_heading / max_heading_error
             normalized_prev_heading = safe_prev_heading / max_heading_error
+            
+            # Potential-based shaping: gamma * Phi(s_next) - Phi(s)
+            # Phi(s) = -k_phi * normalized_tracking - k_heading * normalized_heading
+            potential_current = -k_phi * normalized_tracking - k_heading * normalized_heading
+            potential_prev = -k_phi * normalized_prev_tracking - k_heading * normalized_prev_heading
+            shaping_reward = gamma * potential_current - potential_prev
+            reward += shaping_reward
             # Apply potential-based shaping: gamma * Phi(s_next) - Phi(s)
             # Phi(s) = -k_phi * normalized_tracking_error - k_heading * normalized_heading_error
             potential_current = -k_phi * normalized_tracking - k_heading * normalized_heading

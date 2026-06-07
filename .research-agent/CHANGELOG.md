@@ -1408,3 +1408,34 @@ f_residual_aware_reward_openreview_tcz7uwkrtt, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T08:54:43.263981+00:00] v0470 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Add potential-based reward shaping term using tracking error improvement with proper normalization and safety gating (rationale: The current code calculates tracking improvement but doesn't actually add it to the reward. This modification implements proper potential-based reward shaping using the formula gamma * Phi(s_next) - Phi(s), which preserves optimal policies while providing denser learning signals. The normalized errors and safety gating prevent reward hacking and unsafe behavior. This should improve tracking performance by providing immediate feedback on error reduction, potentially reducing lateral error from the current 0.0041 while maintaining the 100% completion rate.)
+
+### Reward Formula / Change
+```
+Add potential-based reward shaping term using tracking error improvement with proper normalization and safety gating (rationale: The current code calculates tracking improvement but doesn't actually add it to the reward. This modification implements proper potential-based reward shaping using the formula gamma * Phi(s_next) - Phi(s), which preserves optimal policies while providing denser learning signals. The normalized errors and safety gating prevent reward hacking and unsafe behavior. This should improve tracking performance by providing immediate feedback on error reduction, potentially reducing lateral error from the current 0.0041 while maintaining the 100% completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 930.8458 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openreview_6lm1jxxlxb
+
+---
+
