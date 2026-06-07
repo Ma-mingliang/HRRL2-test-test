@@ -1132,3 +1132,26 @@ a_potential_based_reward_openreview_hu7hujemiw, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T07:53:41.035866+00:00] v0453 - ✗ REJECTED
+
+**Candidate ID:** `reward_c006`
+**Description:** Added potential-based reward shaping to the path tracking reward component to encourage tracking error improvement over time (rationale: This modification adds potential-based reward shaping to encourage the agent to improve its tracking performance over time. By using the difference in tracking error between consecutive steps (gamma * Phi(s_next) - Phi(s)), we provide a learning signal that rewards improvement while preserving the optimal policy. The small weight (k_phi=0.1) ensures this doesn't dominate the main reward, and the implementation assumes tracking error is available in the environment. This should help the agent learn faster path tracking behaviors without reward hacking since the potential function is directly tied to the task objective.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping to the path tracking reward component to encourage tracking error improvement over time (rationale: This modification adds potential-based reward shaping to encourage the agent to improve its tracking performance over time. By using the difference in tracking error between consecutive steps (gamma * Phi(s_next) - Phi(s)), we provide a learning signal that rewards improvement while preserving the optimal policy. The small weight (k_phi=0.1) ensures this doesn't dominate the main reward, and the implementation assumes tracking error is available in the environment. This should help the agent learn faster path tracking behaviors without reward hacking since the potential function is directly tied to the task objective.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2012_08824, a_potential_based_reward_openreview_3napba3fn3
+
+---
+

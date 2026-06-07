@@ -10,8 +10,12 @@
         if hasattr(self, 'prev_tracking_error'):
             tracking_improvement = abs(self.prev_tracking_error) - abs(current_tracking_error)
             gamma = 0.99
-            k_phi = 0.1  # Small weight to avoid dominating main reward
-            potential_reward = k_phi * (gamma * (-abs(current_tracking_error)) - (-abs(self.prev_tracking_error)))
+            k_phi = 0.05  # Reduced weight for stability
+            # Safety gate: only apply shaping when error is reasonable
+            if abs(current_tracking_error) < 2.0 and abs(self.prev_tracking_error) < 2.0:
+                potential_reward = k_phi * (gamma * (-abs(current_tracking_error)) - (-abs(self.prev_tracking_error)))
+            else:
+                potential_reward = 0.0
             # Add to main reward (assuming reward is computed elsewhere)
             if hasattr(self, 'reward'):
                 self.reward += potential_reward
