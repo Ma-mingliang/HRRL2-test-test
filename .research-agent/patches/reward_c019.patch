@@ -1,17 +1,15 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,11 +954,14 @@
-         # 3.5 安全约束惩罚：防止过度振荡
-         safety_penalty = 0.0
-         max_safe_angular_velocity = 2.0  # 安全阈值
-         if angular_velocity > max_safe_angular_velocity:
-             violation = angular_velocity - max_safe_angular_velocity
-             safety_penalty = -0.5 * violation**2
-+            # Safety gate: reduce task reward when violating safety constraints
-+            tracking_reward *= 0.5
-+            bonus_reward *= 0.5
+@@ -960,6 +960,11 @@
+         # Safety constraint: penalize excessive angular velocity that could cause instability
+         angular_velocity_limit = 2.0  # Safe angular velocity threshold
+         angular_violation = max(0, angular_velocity - angular_velocity_limit)
+-        safety_penalty = -0.5 * angular_violation**2 if angular_violation > 0 else 0.0
++        safety_penalty = 0.0
++        if angular_violation > 0:
++            # Gate task reward with explicit penalty for safety violation
++            # This implements B_safety_constraint_reward: reward -= lambda_violation * max(0, constraint_value)
++            lambda_violation = 2.0  # Strong penalty to discourage unsafe behavior
++            safety_penalty = -lambda_violation * angular_violation**2
          
-         # 4. 改进奖励
-         improvement_reward = 0.0
-         error_reduction = abs(state_last_raw[0]) - current_error
-         reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty + residual_penalty
+         # 8. Residual action penalty (from research idea F_residual_aware_reward)

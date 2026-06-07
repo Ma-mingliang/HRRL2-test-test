@@ -960,7 +960,12 @@ class Attitude_control_stage1(gym.Env):
         # Safety constraint: penalize excessive angular velocity that could cause instability
         angular_velocity_limit = 2.0  # Safe angular velocity threshold
         angular_violation = max(0, angular_velocity - angular_velocity_limit)
-        safety_penalty = -0.5 * angular_violation**2 if angular_violation > 0 else 0.0
+        safety_penalty = 0.0
+        if angular_violation > 0:
+            # Gate task reward with explicit penalty for safety violation
+            # This implements B_safety_constraint_reward: reward -= lambda_violation * max(0, constraint_value)
+            lambda_violation = 2.0  # Strong penalty to discourage unsafe behavior
+            safety_penalty = -lambda_violation * angular_violation**2
         
         # 8. Residual action penalty (from research idea F_residual_aware_reward)
         # Penalize large residual actions to encourage smooth corrections
