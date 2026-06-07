@@ -3924,3 +3924,29 @@ a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T13:27:08.112891+00:00] v0518 - ✗ REJECTED
+
+**Candidate ID:** `reward_c002`
+**Description:** Simplify the subgoal reward calculation to remove redundant code and fix the double-counting bug in the loop (rationale: The current code has a bug where it calculates progress twice and overwrites the subgoal_reward variable, losing the earlier progress calculation. This creates inconsistent reward signals. By simplifying to use the already-calculated progress_to_subgoal variable, we get a cleaner, more stable reward signal that should improve training consistency while maintaining the curriculum learning structure.)
+
+### Reward Formula / Change
+```
+Simplify the subgoal reward calculation to remove redundant code and fix the double-counting bug in the loop (rationale: The current code has a bug where it calculates progress twice and overwrites the subgoal_reward variable, losing the earlier progress calculation. This creates inconsistent reward signals. By simplifying to use the already-calculated progress_to_subgoal variable, we get a cleaner, more stable reward signal that should improve training consistency while maintaining the curriculum learning structure.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_tjhhb6cscw, a_potential_based_reward_openreview_hz9gu1io12
+
+---
+

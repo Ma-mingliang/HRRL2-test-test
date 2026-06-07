@@ -1,17 +1,3 @@
-metrics:
-  primary:
-    - name: reward
-      direction: maximize
-    - name: lateral_error
-      direction: minimize
-  safety:
-    - name: completion_rate
-      direction: maximize
-  metric_regex:
-    reward: "reward\\s*=\\s*([\\d.-]+)"
-    lateral_error: "lateral_error\\s*=\\s*([\\d.-]+)"
-    completion_rate: "completion_rate\\s*=\\s*([\\d.-]+)"
-
 execution:
   max_steps: 50000
   train_command: E:/Anaconda/envs/RL2/python.exe .research-agent/train.py {seed}
@@ -43,7 +29,7 @@ evaluation:
   llm_weight: 0.2
 
 budget:
-  wall_clock_hours: 8
+  wall_clock_hours: 12
 
 llm:
   provider: openai_compatible
@@ -61,7 +47,7 @@ project:
 git:
   auto_push: true
   push_remote: test-test
-  push_branch: optimizer-run
+  push_branch: optimizer-run-v2
 
 optimizer:
   active_categories:
