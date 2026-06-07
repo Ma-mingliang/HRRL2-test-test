@@ -4538,3 +4538,29 @@ b_safety_constraint_reward_openreview_dbuuzrhoqp, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T14:21:27.001546+00:00] v0542 - ✗ REJECTED
+
+**Candidate ID:** `reward_c023`
+**Description:** Added a safety gate to the reward function that penalizes the agent when heading error exceeds a safe threshold, implementing the B_safety_constraint_reward research idea. This gates the task reward with explicit penalties for safety violations. (rationale: The current reward function already penalizes heading errors but doesn't gate the overall task reward when safety is compromised. By adding a safety gate penalty that reduces the total reward when heading error exceeds the safe threshold, we implement the B_safety_constraint_reward research idea. This creates a stronger incentive to maintain safe heading angles, which should reduce oscillations and improve stability. The penalty is applied only when heading_violation > 0, ensuring it doesn't affect normal operation. This modification should help maintain the high completion rate while potentially reducing lateral error further by encouraging safer heading control.)
+
+### Reward Formula / Change
+```
+Added a safety gate to the reward function that penalizes the agent when heading error exceeds a safe threshold, implementing the B_safety_constraint_reward research idea. This gates the task reward with explicit penalties for safety violations. (rationale: The current reward function already penalizes heading errors but doesn't gate the overall task reward when safety is compromised. By adding a safety gate penalty that reduces the total reward when heading error exceeds the safe threshold, we implement the B_safety_constraint_reward research idea. This creates a stronger incentive to maintain safe heading angles, which should reduce oscillations and improve stability. The penalty is applied only when heading_violation > 0, ensuring it doesn't affect normal operation. This modification should help maintain the high completion rate while potentially reducing lateral error further by encouraging safer heading control.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_arxiv_2306_03220, b_safety_constraint_reward_arxiv_2605_01787
+
+---
+

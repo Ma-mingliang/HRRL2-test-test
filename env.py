@@ -960,9 +960,8 @@ class Attitude_control_stage1(gym.Env):
             safety_gate_penalty = -5.0 * heading_violation  # Additional penalty to gate task reward
             # Apply safety gate to the final reward calculation
             reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_gate_penalty
-        
-        # 5. Velocity reward to encourage smooth motion
-        # 5. Velocity reward to encourage smooth motion
+        else:
+            reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty
         velocity = abs(state_raw[3])  # v is velocity
         velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed
         
