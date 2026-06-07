@@ -8,13 +8,17 @@
         # Safety constraint: penalize excessive roll angle
         roll_angle = abs(self.bike_roll)
         safe_roll_limit = 0.3  # ~17 degrees
+        safety_factor = 1.0
         if roll_angle > safe_roll_limit:
             violation = roll_angle - safe_roll_limit
             lambda_violation = 50.0
             reward -= lambda_violation * violation
+            # Scale down task reward when in unsafe condition
+            safety_factor = max(0.0, 1.0 - (violation / 0.2))
             # Additional penalty for near-fall condition
             if roll_angle > 0.5:  # ~28 degrees
                 reward -= 100.0
+                safety_factor = 0.0
         
         # 横向误差惩罚
         if self.lateral_error is not None:

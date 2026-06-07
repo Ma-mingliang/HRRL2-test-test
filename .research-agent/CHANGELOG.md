@@ -2199,3 +2199,34 @@ a_potential_based_reward_openreview_ubnujziy2o, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T09:24:05.964639+00:00] v0495 - ✗ REJECTED
+
+**Candidate ID:** `reward_c026`
+**Description:** Added safety constraint penalty for excessive roll angle to prevent unsafe tilting behavior (rationale: The baseline shows perfect completion (1.0) and very low lateral error (0.0041), but the reward (930.85) could be improved by adding safety constraints. Excessive roll angle indicates unsafe riding behavior that could lead to falls. By penalizing roll angles beyond a safe limit, we encourage the agent to maintain stable balance while tracking the path. This gates task reward with safety constraints as suggested by the research idea, preventing reward hacking where the agent might achieve low lateral error through unsafe tilting maneuvers. The penalty is scaled to be significant enough to influence behavior without overwhelming the primary task reward.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive roll angle to prevent unsafe tilting behavior (rationale: The baseline shows perfect completion (1.0) and very low lateral error (0.0041), but the reward (930.85) could be improved by adding safety constraints. Excessive roll angle indicates unsafe riding behavior that could lead to falls. By penalizing roll angles beyond a safe limit, we encourage the agent to maintain stable balance while tracking the path. This gates task reward with safety constraints as suggested by the research idea, preventing reward hacking where the agent might achieve low lateral error through unsafe tilting maneuvers. The penalty is scaled to be significant enough to influence behavior without overwhelming the primary task reward.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 930.8458 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_cawunem1je, b_safety_constraint_reward_openreview_pnhypbc4z7
+
+---
+
