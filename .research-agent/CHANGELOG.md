@@ -4668,3 +4668,29 @@ b_safety_constraint_reward_openreview_qcz3g6mh3l, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T14:26:19.445808+00:00] v0547 - ✗ REJECTED
+
+**Candidate ID:** `reward_c028`
+**Description:** Added curriculum-based subgoal reward to encourage progressive learning by rewarding movement toward intermediate waypoints before focusing on final target tracking (rationale: The baseline metrics show perfect completion (1.0) but very low lateral error (0.0041), suggesting the agent may be over-optimizing for precision at the expense of exploration. Adding a curriculum subgoal reward encourages the agent to first learn to reach intermediate waypoints before focusing on precise tracking. This can improve learning efficiency by providing denser early rewards and preventing premature convergence to local optima. The subgoal progress reward (0.3 * (prev_error - current_error)) provides positive feedback for any improvement, which is especially valuable during early training when the agent is still learning basic navigation skills.)
+
+### Reward Formula / Change
+```
+Added curriculum-based subgoal reward to encourage progressive learning by rewarding movement toward intermediate waypoints before focusing on final target tracking (rationale: The baseline metrics show perfect completion (1.0) but very low lateral error (0.0041), suggesting the agent may be over-optimizing for precision at the expense of exploration. Adding a curriculum subgoal reward encourages the agent to first learn to reach intermediate waypoints before focusing on precise tracking. This can improve learning efficiency by providing denser early rewards and preventing premature convergence to local optima. The subgoal progress reward (0.3 * (prev_error - current_error)) provides positive feedback for any improvement, which is especially valuable during early training when the agent is still learning basic navigation skills.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_hqwhxvzcmj, c_curriculum_subgoal_reward_openreview_dpkak1oh3x
+
+---
+

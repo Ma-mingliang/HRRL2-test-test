@@ -975,18 +975,12 @@ class Attitude_control_stage1(gym.Env):
             subgoal_reward = 0.3 * subgoal_progress  # beta_stage = 0.3
             self.prev_subgoal_error = current_error
         
-        reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_penalty
+        reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + subgoal_reward
         
         # 7. Small bonus for maintaining very low tracking error
         if current_error < 0.01:  # Very precise tracking
             self.prev_residual_action = self.last_residual_action.copy()
         
-        # 7. Small bonus for maintaining very low tracking error
-        if current_error < 0.01:  # Very precise tracking
-            reward += 0.5  # Small bonus for precision
-        
-        return reward
-        angular_penalty = -0.05 * angular_velocity**2
         
         # Safety constraint: penalize excessive angular velocity that could cause instability
         angular_velocity_limit = 2.0  # Safe angular velocity threshold

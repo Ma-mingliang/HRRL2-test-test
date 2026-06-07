@@ -1,25 +1,19 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,10 +954,15 @@
-         # 4. Curriculum subgoal reward for angular velocity reduction
-         # Stage 1: Focus on reducing angular velocity before precise tracking
-         angular_velocity_subgoal = 1.0  # Target angular velocity threshold
--        if angular_velocity > angular_velocity_subgoal:
--            # Reward progress toward reducing angular velocity
--            prev_angular_velocity = abs(state_last_raw[2])
--            angular_velocity_progress = prev_angular_velocity - angular_velocity
--            subgoal_reward = 0.3 * angular_velocity_progress
--        else:
--            subgoal_reward = 0.0
-+        # Only apply subgoal reward when tracking error is above threshold
-+        # This prevents reward hacking where agent ignores tracking to reduce velocity
-+        if current_error > 0.05:  # Gate: only when tracking is poor
-+            if angular_velocity > angular_velocity_subgoal:
-+                # Reward progress toward reducing angular velocity
-+                prev_angular_velocity = abs(state_last_raw[2])
-+                angular_velocity_progress = prev_angular_velocity - angular_velocity
-+                subgoal_reward = 0.3 * angular_velocity_progress
-+            else:
-+                subgoal_reward = 0.0
-+        else:
-+            subgoal_reward = 0.0  # No subgoal reward when tracking is good
+@@ -975,15 +975,9 @@
+             subgoal_reward = 0.3 * subgoal_progress  # beta_stage = 0.3
+             self.prev_subgoal_error = current_error
+         
+-        reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_penalty
++        reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + subgoal_reward
+         
+         # 7. Small bonus for maintaining very low tracking error
+         if current_error < 0.01:  # Very precise tracking
+             self.prev_residual_action = self.last_residual_action.copy()
+         
+-        # 7. Small bonus for maintaining very low tracking error
+-        if current_error < 0.01:  # Very precise tracking
+-            reward += 0.5  # Small bonus for precision
+-        
+-        return reward
+-        angular_penalty = -0.05 * angular_velocity**2
