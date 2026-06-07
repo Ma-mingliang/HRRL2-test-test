@@ -1019,6 +1019,16 @@ class Attitude_control_stage1(gym.Env):
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle)
         
+        # 6. 残差动作惩罚（基于研究想法）
+        # 鼓励残差动作平滑且幅度小
+        residual_penalty = 0.0
+        if hasattr(self, 'prev_residual_action'):
+            # 惩罚残差动作幅度
+            residual_penalty -= 0.01 * (target_handle_angle ** 2)
+            # 惩罚残差动作变化（平滑性）
+            residual_penalty -= 0.005 * abs(target_handle_angle - self.prev_residual_action)
+        self.prev_residual_action = target_handle_angle
+        
         # 6. 残差动作惩罚：鼓励残差控制器输出平顺且幅度小
         # 假设残差动作是target_handle_angle与基础控制器输出的差值
         # 这里用target_handle_angle的平方作为残差幅度的代理

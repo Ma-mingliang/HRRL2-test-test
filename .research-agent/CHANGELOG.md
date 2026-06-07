@@ -2640,3 +2640,31 @@ c_curriculum_subgoal_reward_openreview_leed5is4oi, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T10:13:29.632522+00:00] v0483 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c011`
+**Description:** Added residual action penalty to discourage excessive residual control actions while maintaining tracking performance (rationale: The current reward function focuses on tracking error but doesn't explicitly penalize residual control actions. By adding residual action penalties (magnitude and smoothness), we encourage the residual controller to produce smaller, smoother corrections. This should reduce control effort while maintaining the excellent tracking performance (lateral_error: 0.0041). The penalties are small (0.01 and 0.005 coefficients) to avoid dominating the task reward while still providing regularization. This addresses the research idea of penalizing residual action magnitude and roughness to prevent reward hacking.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to discourage excessive residual control actions while maintaining tracking performance (rationale: The current reward function focuses on tracking error but doesn't explicitly penalize residual control actions. By adding residual action penalties (magnitude and smoothness), we encourage the residual controller to produce smaller, smoother corrections. This should reduce control effort while maintaining the excellent tracking performance (lateral_error: 0.0041). The penalties are small (0.01 and 0.005 coefficients) to avoid dominating the task reward while still providing regularization. This addresses the research idea of penalizing residual action magnitude and roughness to prevent reward hacking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 947.1593 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+f_residual_aware_reward_openreview_dpkak1oh3x, f_residual_aware_reward_openreview_isxdqzvhox
+
+---
+
