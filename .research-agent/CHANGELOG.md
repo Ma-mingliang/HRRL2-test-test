@@ -1270,3 +1270,26 @@ f_residual_aware_reward_openreview_dpkak1oh3x, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T07:55:55.797232+00:00] v0459 - ✗ REJECTED
+
+**Candidate ID:** `reward_c012`
+**Description:** Fixed the incomplete residual action penalty section by adding proper reward subtraction and smoothing penalty calculation (rationale: The original code had an incomplete residual action penalty section that was cut off. This fix completes the implementation by calculating the smoothness penalty and properly subtracting both magnitude and smoothness penalties from the reward. This aligns with the research idea to penalize residual action magnitude and roughness, which should encourage the RL policy to make smaller, smoother adjustments to the classical controller, improving stability and reducing excessive control effort.)
+
+### Reward Formula / Change
+```
+Fixed the incomplete residual action penalty section by adding proper reward subtraction and smoothing penalty calculation (rationale: The original code had an incomplete residual action penalty section that was cut off. This fix completes the implementation by calculating the smoothness penalty and properly subtracting both magnitude and smoothness penalties from the reward. This aligns with the research idea to penalize residual action magnitude and roughness, which should encourage the RL policy to make smaller, smoother adjustments to the classical controller, improving stability and reducing excessive control effort.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_1dgp543ohn, f_residual_aware_reward_openreview_82vbpvhegr
+
+---
+

@@ -17,7 +17,10 @@
             k_heading = 0.02  # Weight for heading improvement
             # Potential-based shaping: gamma * Phi(s') - Phi(s)
             # where Phi(s) = -|error| (negative error as potential)
+            # Potential-based shaping: gamma * Phi(s') - Phi(s)
+            # where Phi(s) = -|error| (negative error as potential)
             potential_heading = gamma * (-abs(current_heading_error)) - (-abs(self.prev_heading_error))
+            potential_tracking = gamma * (-abs(current_tracking_error)) - (-abs(self.prev_tracking_error))
             potential_reward = k_phi * potential_tracking + k_heading * potential_heading
             # Add to main reward (assuming reward is computed elsewhere)
             if hasattr(self, 'reward'):
@@ -28,9 +31,6 @@
             lambda_res = 0.01  # Weight for residual magnitude penalty
             lambda_smooth = 0.005  # Weight for action smoothness penalty
             residual_norm = np.dot(self.residual_action, self.residual_action)
-            smoothness_norm = np.dot(self.residual_action - self.prev_residual_action, 
-                                    self.residual_action - self.prev_residual_action)
-            residual_penalty = lambda_res * residual_norm + lambda_smooth * smoothness_norm
             
             # Subtract from main reward
             if hasattr(self, 'reward'):
