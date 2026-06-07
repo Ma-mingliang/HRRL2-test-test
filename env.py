@@ -957,8 +957,9 @@ class Attitude_control_stage1(gym.Env):
         
         reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty
         
-        return reward
-        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty
+        # 7. Small bonus for maintaining very low tracking error
+        if current_error < 0.01:  # Very precise tracking
+            reward += 0.5  # Small bonus for precision
         
         return reward
 

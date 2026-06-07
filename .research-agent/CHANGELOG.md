@@ -4096,3 +4096,29 @@ a_potential_based_reward_openreview_hu7hujemiw, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T14:11:36.539701+00:00] v0525 - ✗ REJECTED
+
+**Candidate ID:** `reward_c006`
+**Description:** Added a velocity-based reward component to encourage smooth motion and reduce oscillations, while maintaining the existing potential-based shaping structure. (rationale: The current reward function has excellent tracking performance (lateral_error: 0.0041) but may still have room for improvement in motion smoothness. Adding a small velocity reward encourages the vehicle to maintain forward progress, while the angular velocity penalty directly targets steering oscillations. This should reduce unnecessary steering movements while maintaining the excellent tracking performance. The potential-based shaping is preserved to maintain policy invariance, and the new terms are small enough to not dominate the core tracking objective.)
+
+### Reward Formula / Change
+```
+Added a velocity-based reward component to encourage smooth motion and reduce oscillations, while maintaining the existing potential-based shaping structure. (rationale: The current reward function has excellent tracking performance (lateral_error: 0.0041) but may still have room for improvement in motion smoothness. Adding a small velocity reward encourages the vehicle to maintain forward progress, while the angular velocity penalty directly targets steering oscillations. This should reduce unnecessary steering movements while maintaining the excellent tracking performance. The potential-based shaping is preserved to maintain policy invariance, and the new terms are small enough to not dominate the core tracking objective.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2012_08824, a_potential_based_reward_openreview_3napba3fn3
+
+---
+
