@@ -4382,3 +4382,29 @@ f_residual_aware_reward_openreview_dzmd1pbtc5, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T14:16:42.080816+00:00] v0536 - ✗ REJECTED
+
+**Candidate ID:** `reward_c017`
+**Description:** Added a scaling factor to the residual penalty based on tracking error magnitude, making the penalty more aggressive when tracking is poor and less aggressive when tracking is good. (rationale: The current residual penalty uses a fixed scaling factor that doesn't adapt well to different tracking error magnitudes. By adding an additional scaling factor based on error magnitude (error_magnitude_scale), the penalty becomes more aggressive when tracking is poor (large errors) and less aggressive when tracking is good (small errors). This should help the agent learn to use residual actions more effectively - allowing larger corrections when needed but encouraging smooth, minimal corrections when tracking is already good. This addresses the risk of reward hacking mentioned in the research ideas by ensuring the penalty doesn't dominate task success when tracking is already precise.)
+
+### Reward Formula / Change
+```
+Added a scaling factor to the residual penalty based on tracking error magnitude, making the penalty more aggressive when tracking is poor and less aggressive when tracking is good. (rationale: The current residual penalty uses a fixed scaling factor that doesn't adapt well to different tracking error magnitudes. By adding an additional scaling factor based on error magnitude (error_magnitude_scale), the penalty becomes more aggressive when tracking is poor (large errors) and less aggressive when tracking is good (small errors). This should help the agent learn to use residual actions more effectively - allowing larger corrections when needed but encouraging smooth, minimal corrections when tracking is already good. This addresses the risk of reward hacking mentioned in the research ideas by ensuring the penalty doesn't dominate task success when tracking is already precise.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_tcz7uwkrtt, f_residual_aware_reward_openreview_vk9j25hi1o
+
+---
+
