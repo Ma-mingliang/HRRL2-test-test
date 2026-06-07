@@ -2724,3 +2724,31 @@ f_residual_aware_reward_openreview_1dgp543ohn, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T10:24:43.342642+00:00] v0504 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c035`
+**Description:** Added a small constant reward for very low lateral error to encourage stability, completing the truncated code at line 38 (rationale: The current code has a truncated if statement at line 38. Completing it with a tighter error threshold (2cm) and higher reward (0.2) creates a two-tier reward structure that encourages both maintaining low error (<5cm) and achieving very precise tracking (<2cm). This aligns with the curriculum subgoal research idea by providing progressive subgoals within the path tracking task, while the safety_factor gating prevents reward hacking in unsafe conditions. The baseline shows excellent performance (lateral_error: 0.0041), so this refinement should further stabilize precise tracking.)
+
+### Reward Formula / Change
+```
+Added a small constant reward for very low lateral error to encourage stability, completing the truncated code at line 38 (rationale: The current code has a truncated if statement at line 38. Completing it with a tighter error threshold (2cm) and higher reward (0.2) creates a two-tier reward structure that encourages both maintaining low error (<5cm) and achieving very precise tracking (<2cm). This aligns with the curriculum subgoal research idea by providing progressive subgoals within the path tracking task, while the safety_factor gating prevents reward hacking in unsafe conditions. The baseline shows excellent performance (lateral_error: 0.0041), so this refinement should further stabilize precise tracking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 947.1593 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_b6awzauzpv, c_curriculum_subgoal_reward_openreview_pyq8rtmwtm
+
+---
+

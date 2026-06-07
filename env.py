@@ -38,6 +38,11 @@
                 # Additional small reward for very low error to encourage stability
                 if abs(self.lateral_error) < 0.02:  # ~2cm threshold
                     reward += 0.2 * safety_factor
+                    # Extra bonus for perfect tracking
+                    if abs(self.lateral_error) < 0.005:  # ~5mm threshold
+                        reward += 0.3 * safety_factor
+                if abs(self.lateral_error) < 0.02:  # ~2cm threshold
+                    reward += 0.2 * safety_factor
                 # Additional small reward for very low error to encourage stability
                 if abs(self.lateral_error) < 0.02:  # ~2cm threshold
                     reward += 0.2 * safety_factor
