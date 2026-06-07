@@ -3950,3 +3950,31 @@ a_potential_based_reward_openreview_tjhhb6cscw, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T13:46:54.208139+00:00] v0520 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Simplify and strengthen the potential-based reward shaping by removing the angular velocity gating and increasing the shaping coefficient to better incentivize error reduction (rationale: The current potential shaping coefficient (k_phi=0.5) is too conservative and the angular velocity gating reduces its effectiveness. By increasing k_phi to 1.0 and removing the gating, we provide stronger incentive for error reduction while preserving the theoretical guarantees of potential-based shaping. This should help the agent learn faster convergence to the target, potentially reducing the lateral error from 0.0041 to even smaller values while maintaining the 100% completion rate.)
+
+### Reward Formula / Change
+```
+Simplify and strengthen the potential-based reward shaping by removing the angular velocity gating and increasing the shaping coefficient to better incentivize error reduction (rationale: The current potential shaping coefficient (k_phi=0.5) is too conservative and the angular velocity gating reduces its effectiveness. By increasing k_phi to 1.0 and removing the gating, we provide stronger incentive for error reduction while preserving the theoretical guarantees of potential-based shaping. This should help the agent learn faster convergence to the target, potentially reducing the lateral error from 0.0041 to even smaller values while maintaining the 100% completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2398.3485
+- **lateral_error:** 0.0029
+
+### Source Methods
+a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openreview_6lm1jxxlxb
+
+---
+
