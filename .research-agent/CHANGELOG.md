@@ -3758,3 +3758,31 @@ g_llm_reward_generation_openreview_obpqdcwlfd, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-07T11:48:37.462214+00:00] v0512 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c040`
+**Description:** Added a small velocity penalty to discourage excessive angular velocity even when tracking is good, and adjusted the safety gate to be more lenient for moderate velocities (rationale: The current reward function shows excellent tracking (lateral_error: 0.0041) but may be allowing excessive angular velocity. By adding a moderate velocity penalty threshold (0.2 instead of 0.3) and making the safety gate more gradual, we encourage smoother control while maintaining high tracking performance. This should reduce oscillations and improve control stability without sacrificing the already excellent completion rate.)
+
+### Reward Formula / Change
+```
+Added a small velocity penalty to discourage excessive angular velocity even when tracking is good, and adjusted the safety gate to be more lenient for moderate velocities (rationale: The current reward function shows excellent tracking (lateral_error: 0.0041) but may be allowing excessive angular velocity. By adding a moderate velocity penalty threshold (0.2 instead of 0.3) and making the safety gate more gradual, we encourage smoother control while maintaining high tracking performance. This should reduce oscillations and improve control stability without sacrificing the already excellent completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 940.6645 (std: 0.0000)
+- **lateral_error:** 0.0031 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openreview_gbwovfgek8
+
+---
+

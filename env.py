@@ -957,6 +957,11 @@ class Attitude_control_stage1(gym.Env):
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
+        # 3.2. Velocity penalty for excessive angular velocity
+        velocity_penalty = 0.0
+        if angular_velocity > 0.1:
+            velocity_penalty = -0.1 * (angular_velocity - 0.1)
+        
         # 3.5. Additional oscillation penalty for high angular velocity
         oscillation_penalty = 0.0
         if angular_velocity > 0.2:

@@ -1,16 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,5 +954,10 @@
-                     gamma = 0.99
--                    alpha = 2.0
--                    if current_error > 0.5:
--                        alpha = 4.0
-+                    alpha = 3.0
-                     potential_current = -alpha * current_error
-+                    
-+                    # Add steering angle penalty to reduce oscillations
-+                    steering_penalty = 0.0
-+                    if abs(action[0]) > 0.1:  # action[0] is steering angle
-+                        steering_penalty = -0.1 * (abs(action[0]) - 0.1)
-+                    
-+                    reward = potential_current + steering_penalty
+@@ -957,6 +957,11 @@
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
+         
++        # 3.2. Velocity penalty for excessive angular velocity
++        velocity_penalty = 0.0
++        if angular_velocity > 0.1:
++            velocity_penalty = -0.1 * (angular_velocity - 0.1)
++        
+         # 3.5. Additional oscillation penalty for high angular velocity
+         oscillation_penalty = 0.0
+         if angular_velocity > 0.2:
