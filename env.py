@@ -964,7 +964,11 @@ class Attitude_control_stage1(gym.Env):
         if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
             # Scale penalty based on tracking error - more penalty when error is large
             # Use exponential scaling to make penalty more aggressive for large errors
+            # Add additional scaling based on error magnitude for better gradient signal
             error_scale = 1.0 + 3.0 * (1.0 - np.exp(-5.0 * current_error))
+            # Add additional scaling based on error magnitude for better gradient signal
+            error_magnitude_scale = 1.0 + 2.0 * min(current_error, 1.0)
+            residual_penalty = -0.2 * error_scale * error_magnitude_scale * np.sum(self.last_residual_action**2)
             # Add additional scaling based on error magnitude for better gradient signal
             error_magnitude_scale = 1.0 + 2.0 * min(current_error, 1.0)
             residual_penalty = -0.2 * error_scale * error_magnitude_scale * np.sum(self.last_residual_action**2)
