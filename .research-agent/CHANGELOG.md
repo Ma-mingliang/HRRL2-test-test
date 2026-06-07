@@ -4006,3 +4006,31 @@ a_potential_based_reward_openreview_tjhhb6cscw, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T13:58:35.794953+00:00] v0522 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c003`
+**Description:** Simplify the reward function by removing redundant components and focusing on potential-based shaping with clearer structure (rationale: The current reward function has redundant components: both 'improvement_reward' and 'potential_shaping' are based on error reduction, but 'improvement_reward' only rewards positive reductions while 'potential_shaping' properly implements the potential-based formula. Removing 'improvement_reward' simplifies the reward structure while maintaining the theoretically sound potential-based shaping. This reduces reward component conflicts and makes the learning signal clearer, which should improve training stability and final performance metrics.)
+
+### Reward Formula / Change
+```
+Simplify the reward function by removing redundant components and focusing on potential-based shaping with clearer structure (rationale: The current reward function has redundant components: both 'improvement_reward' and 'potential_shaping' are based on error reduction, but 'improvement_reward' only rewards positive reductions while 'potential_shaping' properly implements the potential-based formula. Removing 'improvement_reward' simplifies the reward structure while maintaining the theoretically sound potential-based shaping. This reduces reward component conflicts and makes the learning signal clearer, which should improve training stability and final performance metrics.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2376.7653
+- **lateral_error:** 0.0028
+
+### Source Methods
+a_potential_based_reward_openreview_ubnujziy2o, a_potential_based_reward_openreview_v3kavlfvrd
+
+---
+
