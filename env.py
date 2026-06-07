@@ -26,7 +26,6 @@
             normalized_tracking = safe_tracking / max_tracking_error
             normalized_prev_tracking = safe_prev_tracking / max_tracking_error
             normalized_heading = safe_heading / max_heading_error
-            normalized_prev_heading = safe_prev_heading / max_heading_error
             # Apply potential-based shaping: gamma * Phi(s') - Phi(s)
             tracking_shaping = gamma * normalized_tracking - normalized_prev_tracking
             heading_shaping = gamma * normalized_heading - normalized_prev_heading
@@ -1083,10 +1082,10 @@ class Attitude_control_stage1(gym.Env):
         smoothness_penalty = -0.05 * angular_velocity
         
         # 4. 改进奖励
-        improvement_reward = 0.0
-        error_reduction = abs(state_last_raw[0]) - current_error
-        if error_reduction > 0:
-            improvement_reward = 0.3 * error_reduction
+        gamma = 0.99
+        potential_current = -current_error
+        potential_last = -abs(state_last_raw[0])
+        improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)

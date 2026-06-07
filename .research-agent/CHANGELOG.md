@@ -1470,3 +1470,34 @@ a_potential_based_reward_openreview_tjhhb6cscw, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T09:06:23.540664+00:00] v0472 - ✗ REJECTED
+
+**Candidate ID:** `reward_c003`
+**Description:** Added potential-based reward shaping using tracking error improvement with proper normalization and safety gating (rationale: The current code computes improvement metrics but doesn't apply them to the reward. Adding potential-based shaping using normalized errors will provide denser learning signals for reducing tracking and heading errors while preserving optimal policy. The normalization prevents reward magnitude issues, and the safety gating ensures shaping only applies within safe bounds. This should improve lateral error (currently 0.0041) by providing more direct feedback on error reduction.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping using tracking error improvement with proper normalization and safety gating (rationale: The current code computes improvement metrics but doesn't apply them to the reward. Adding potential-based shaping using normalized errors will provide denser learning signals for reducing tracking and heading errors while preserving optimal policy. The normalization prevents reward magnitude issues, and the safety gating ensures shaping only applies within safe bounds. This should improve lateral error (currently 0.0041) by providing more direct feedback on error reduction.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 930.8458 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_ubnujziy2o, a_potential_based_reward_openreview_v3kavlfvrd
+
+---
+
