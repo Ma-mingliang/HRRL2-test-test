@@ -963,8 +963,7 @@ class Attitude_control_stage1(gym.Env):
         if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
             residual_penalty = -0.1 * np.sum(self.last_residual_action**2)
         
-        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty
-        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty
+        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty + residual_penalty
         
         # 7. Small bonus for maintaining very low tracking error
         if current_error < 0.01:  # Very precise tracking

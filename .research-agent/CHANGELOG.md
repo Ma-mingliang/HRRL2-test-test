@@ -4226,3 +4226,29 @@ a_potential_based_reward_openreview_tdomx6s4f5, a_potential_based_reward_arxiv_1
 
 ---
 
+## [2026-06-07T14:13:49.135521+00:00] v0530 - ✗ REJECTED
+
+**Candidate ID:** `reward_c011`
+**Description:** Added residual action penalty to discourage large residual corrections from the classical controller (rationale: The baseline already achieves perfect completion (1.0) and very low lateral error (0.0041), but the reward is extremely high (930.85) with zero variance, suggesting potential overfitting or reward hacking. Adding a residual action penalty encourages the RL policy to make smaller, smoother corrections rather than large residual adjustments. This should improve action smoothness and reduce potential oscillations while maintaining the excellent tracking performance. The penalty is gated by checking if residual actions exist, making it safe for environments without residual control.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to discourage large residual corrections from the classical controller (rationale: The baseline already achieves perfect completion (1.0) and very low lateral error (0.0041), but the reward is extremely high (930.85) with zero variance, suggesting potential overfitting or reward hacking. Adding a residual action penalty encourages the RL policy to make smaller, smoother corrections rather than large residual adjustments. This should improve action smoothness and reduce potential oscillations while maintaining the excellent tracking performance. The penalty is gated by checking if residual actions exist, making it safe for environments without residual control.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_dpkak1oh3x, f_residual_aware_reward_openreview_isxdqzvhox
+
+---
+
