@@ -15,11 +15,18 @@
             gamma = 0.99
             k_phi = 0.05  # Weight for tracking improvement
             k_heading = 0.02  # Weight for heading improvement
+            # Normalize errors to prevent reward magnitude issues
+            max_tracking_error = 2.0  # Expected maximum tracking error
+            max_heading_error = 1.0   # Expected maximum heading error
+            normalized_tracking = abs(current_tracking_error) / max_tracking_error
+            normalized_prev_tracking = abs(self.prev_tracking_error) / max_tracking_error
+            normalized_heading = abs(current_heading_error) / max_heading_error
+            normalized_prev_heading = abs(self.prev_heading_error) / max_heading_error
             # Potential-based shaping: gamma * Phi(s') - Phi(s)
             # where Phi(s) = -|error| (negative error as potential)
-            # Potential-based shaping: gamma * Phi(s') - Phi(s)
-            # where Phi(s) = -|error| (negative error as potential)
-            potential_heading = gamma * (-abs(current_heading_error)) - (-abs(self.prev_heading_error))
+            potential_heading = gamma * (-normalized_heading) - (-normalized_prev_heading)
+            potential_tracking = gamma * (-normalized_tracking) - (-normalized_prev_tracking)
+            potential_reward = k_phi * potential_tracking + k_heading * potential_heading
             potential_tracking = gamma * (-abs(current_tracking_error)) - (-abs(self.prev_tracking_error))
             potential_reward = k_phi * potential_tracking + k_heading * potential_heading
             # Add to main reward (assuming reward is computed elsewhere)
