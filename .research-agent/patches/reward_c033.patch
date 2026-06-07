@@ -1,10 +1,23 @@
 --- a/env.py
 +++ b/env.py
-@@ -37,1 +37,7 @@
-                 if abs(
-+                # Additional small reward for very low error to encourage stability
-+                if abs(self.lateral_error) < 0.02:  # ~2cm threshold
-+                    reward += 0.2 * safety_factor
-+                # Small constant reward for maintaining low error
-+                if abs(self.lateral_error) < 0.05:  # ~5cm threshold
-+                    reward += 0.1 * safety_factor
+@@ -960,10 +960,14 @@
+         # 5. 课程学习子目标奖励
+         subgoal_reward = 0.0
+-        if current_error < 0.05:
+-            subgoal_reward = 0.4  # 接近目标时给予额外奖励
+-        elif current_error < 0.1:
+-            subgoal_reward = 0.2
+-        elif current_error < 0.2:
+-            subgoal_reward = 0.1
++        subgoal_thresholds = [0.05, 0.1, 0.2]
++        subgoal_weights = [0.4, 0.2, 0.1]
++        
++        for i, threshold in enumerate(subgoal_thresholds):
++            if current_error < threshold:
++                # Reward progress toward this subgoal
++                prev_error = abs(state_last_raw[0])
++                progress = max(0, prev_error - current_error)
++                subgoal_reward = subgoal_weights[i] * (1.0 + 5.0 * progress)
++                break
+         
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角

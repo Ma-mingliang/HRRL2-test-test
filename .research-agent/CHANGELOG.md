@@ -3534,3 +3534,31 @@ c_curriculum_subgoal_reward_openreview_hz9gu1io12, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T10:59:59.297764+00:00] v0504 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c032`
+**Description:** Added curriculum-based subgoal reward that rewards progress toward smaller error thresholds, with stage weights that decrease as the agent improves (rationale: The current reward function already achieves perfect completion rate and low lateral error (0.0041). Adding curriculum-based subgoal rewards will provide additional learning signal for maintaining precision at different error thresholds. This encourages the agent to progressively master smaller error ranges, which should help reduce the lateral error further while maintaining completion rate. The subgoal rewards are gated against unsafe behavior by only applying when error is already small (<0.2), preventing reward hacking.)
+
+### Reward Formula / Change
+```
+Added curriculum-based subgoal reward that rewards progress toward smaller error thresholds, with stage weights that decrease as the agent improves (rationale: The current reward function already achieves perfect completion rate and low lateral error (0.0041). Adding curriculum-based subgoal rewards will provide additional learning signal for maintaining precision at different error thresholds. This encourages the agent to progressively master smaller error ranges, which should help reduce the lateral error further while maintaining completion rate. The subgoal rewards are gated against unsafe behavior by only applying when error is already small (<0.2), preventing reward hacking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 942.6429 (std: 0.0000)
+- **lateral_error:** 0.0029 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_v3kavlfvrd, c_curriculum_subgoal_reward_openreview_5t1vmqldr8
+
+---
+
