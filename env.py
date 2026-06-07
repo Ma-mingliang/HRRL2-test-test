@@ -942,8 +942,7 @@ class Attitude_control_stage1(gym.Env):
         gamma = 0.99
         # Adaptive scaling: increase shaping magnitude when error is large
         base_k_phi = 2.0
-        error_scale = 1.0 + 2.0 * min(current_error, 1.0)  # Scale up to 3x when error > 0.5
-        k_phi = base_k_phi * error_scale
+        k_phi = base_k_phi
         potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
         
         # 4. Heading error penalty to reduce oscillations

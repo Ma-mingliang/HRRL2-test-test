@@ -4940,3 +4940,31 @@ c_curriculum_subgoal_reward_openreview_dhoxjoy1sp, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T15:13:09.648712+00:00] v0557 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c038`
+**Description:** Added a smooth precision bonus with exponential scaling to encourage finer tracking when error is small, while maintaining the existing safety constraints (rationale: The current precision bonus uses discrete thresholds (0.005 and 0.01) which creates a step function that may not provide smooth gradient signals for learning. By replacing it with an exponential scaling function, the agent receives a continuous reward signal that increases smoothly as tracking error decreases. This should encourage finer precision while maintaining the existing safety constraints. The exponential function provides stronger gradients near zero error, which should help the agent learn to achieve and maintain very precise tracking. The baseline already shows excellent performance (lateral_error: 0.0041), so this refinement should help push toward even better precision.)
+
+### Reward Formula / Change
+```
+Added a smooth precision bonus with exponential scaling to encourage finer tracking when error is small, while maintaining the existing safety constraints (rationale: The current precision bonus uses discrete thresholds (0.005 and 0.01) which creates a step function that may not provide smooth gradient signals for learning. By replacing it with an exponential scaling function, the agent receives a continuous reward signal that increases smoothly as tracking error decreases. This should encourage finer precision while maintaining the existing safety constraints. The exponential function provides stronger gradients near zero error, which should help the agent learn to achieve and maintain very precise tracking. The baseline already shows excellent performance (lateral_error: 0.0041), so this refinement should help push toward even better precision.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2364.3363
+- **lateral_error:** 0.0045
+
+### Source Methods
+g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openreview_ieduruo55f
+
+---
+

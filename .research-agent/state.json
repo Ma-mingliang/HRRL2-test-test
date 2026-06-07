@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c037",
+    "candidate_id": "reward_c038",
     "optimizer": "reward",
-    "description": "Simplify the subgoal reward to focus on progress toward the target with a fixed weight, removing the adaptive scaling that may cause inconsistent learning signals (rationale: The current subgoal reward has several issues: 1) Duplicate assignment of prev_subgoal_error (line 983-984), 2) Adaptive scaling may create inconsistent learning signals, 3) The weight difference (0.5 vs 0.1) is too large. Simplifying to a fixed weight of 0.3 provides consistent progress incentives while avoiding reward hacking. The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), so we want to maintain stability while potentially improving convergence speed. This change removes complexity that could cause training instability.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -968,17 +968,8 @@\n         # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)\n         # Reward progress toward intermediate waypoints to encourage exploration\n         subgoal_reward = 0.0\n-        # Initialize subgoal tracking if not present\n-        if not hasattr(self, 'prev_subgoal_error'):\n-            self.prev_subgoal_error = current_error\n-        # Reward progress toward current subgoal with adaptive scaling\n-        subgoal_pro",
-    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_dhoxjoy1sp\", \"c_curriculum_subgoal_reward_openreview_n4x7a4gg7t\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:DHOxjoy1sP\", \"openreview:n4X7a4gG7T\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added a smooth precision bonus with exponential scaling to encourage finer tracking when error is small, while maintaining the existing safety constraints (rationale: The current precision bonus uses discrete thresholds (0.005 and 0.01) which creates a step function that may not provide smooth gradient signals for learning. By replacing it with an exponential scaling function, the agent receives a continuous reward signal that increases smoothly as tracking error decreases. This should encourage finer precision while maintaining the existing safety constraints. The exponential function provides stronger gradients near zero error, which should help the agent learn to achieve and maintain very precise tracking. The baseline already shows excellent performance (lateral_error: 0.0041), so this refinement should help push toward even better precision.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -985,7 +985,12 @@\n         # Precision bonus\n-        if current_error < 0.005:\n-            reward += 1.0\n-        elif current_error < 0.01:\n-            reward += 0.3\n+        # Smooth exponential precision bonus for fine tracking\n+        precision_threshold = 0.02  # Start rewarding at 2cm error\n+        if current_error < precision_threshold:\n+            # Exponential scaling: stronger bonus as error approaches zero\n+            precision_bonus = 2.0 * np.exp(",
+    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_dbuuzrhoqp\", \"g_llm_reward_generation_openreview_ieduruo55f\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:DbUuZrhOqp\", \"openreview:IEduRUO55F\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-07T15:06:32.718132+00:00"
+    "timestamp": "2026-06-07T15:13:09.648712+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 38,
-    "full_evals_run": 35
+    "candidates_proposed": 39,
+    "full_evals_run": 36
   },
   "stop_reason": null,
   "progress": null,
@@ -229,6 +229,10 @@
     {
       "candidate_id": "reward_c038",
       "applied_at": "2026-06-07T15:06:47.269905+00:00"
+    },
+    {
+      "candidate_id": "reward_c039",
+      "applied_at": "2026-06-07T15:13:22.971146+00:00"
     }
   ],
   "baseline_fair_eval": {
