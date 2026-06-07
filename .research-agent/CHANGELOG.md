@@ -3590,3 +3590,31 @@ c_curriculum_subgoal_reward_openreview_leed5is4oi, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T11:12:04.101179+00:00] v0506 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c034`
+**Description:** Added dynamic stage weighting to the curriculum subgoal reward based on error magnitude, making the reward more adaptive to different learning phases (rationale: The current baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but the reward function uses static weights for curriculum subgoals. By making the weights dynamic based on current error magnitude, we can better adapt the learning process: when the agent is already performing well (error < 0.01), we increase the reward weights to encourage even finer precision. This should help maintain high performance while potentially reducing the small remaining lateral error. The modification is minimal and maintains the existing curriculum structure while adding adaptive behavior.)
+
+### Reward Formula / Change
+```
+Added dynamic stage weighting to the curriculum subgoal reward based on error magnitude, making the reward more adaptive to different learning phases (rationale: The current baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but the reward function uses static weights for curriculum subgoals. By making the weights dynamic based on current error magnitude, we can better adapt the learning process: when the agent is already performing well (error < 0.01), we increase the reward weights to encourage even finer precision. This should help maintain high performance while potentially reducing the small remaining lateral error. The modification is minimal and maintains the existing curriculum structure while adding adaptive behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 948.3301 (std: 0.0000)
+- **lateral_error:** 0.0032 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_pmkwnv6azi, c_curriculum_subgoal_reward_openreview_uv9aa45wym
+
+---
+
