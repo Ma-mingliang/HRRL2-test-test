@@ -4642,3 +4642,29 @@ b_safety_constraint_reward_openreview_cawunem1je, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T14:25:52.462832+00:00] v0546 - ✗ REJECTED
+
+**Candidate ID:** `reward_c027`
+**Description:** Fixed the reward calculation logic by removing duplicate code and ensuring safety penalties are properly applied in all cases. The current code has multiple conflicting reward calculations and safety penalties are only applied in the heading violation branch, not consistently. (rationale: The current reward function has several critical issues: 1) Multiple conflicting reward calculations (lines 963-965, 997, 1003), 2) Safety penalties are only applied in the heading violation branch but not consistently, 3) The 'action_penalty' variable is referenced but never defined, 4) The safety_gate_penalty is added to the reward in the heading violation branch but not elsewhere. This creates inconsistent reward signals that confuse the learning algorithm. By consolidating the reward calculation and ensuring safety penalties are always included, we provide a consistent, well-structured reward signal that properly implements the B_safety_constraint_reward research idea. This should improve training stability and ensure the agent learns to respect safety constraints consistently.)
+
+### Reward Formula / Change
+```
+Fixed the reward calculation logic by removing duplicate code and ensuring safety penalties are properly applied in all cases. The current code has multiple conflicting reward calculations and safety penalties are only applied in the heading violation branch, not consistently. (rationale: The current reward function has several critical issues: 1) Multiple conflicting reward calculations (lines 963-965, 997, 1003), 2) Safety penalties are only applied in the heading violation branch but not consistently, 3) The 'action_penalty' variable is referenced but never defined, 4) The safety_gate_penalty is added to the reward in the heading violation branch but not elsewhere. This creates inconsistent reward signals that confuse the learning algorithm. By consolidating the reward calculation and ensuring safety penalties are always included, we provide a consistent, well-structured reward signal that properly implements the B_safety_constraint_reward research idea. This should improve training stability and ensure the agent learns to respect safety constraints consistently.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_qcz3g6mh3l, b_safety_constraint_reward_openreview_raoaicihbs
+
+---
+

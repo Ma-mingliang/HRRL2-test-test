@@ -1,20 +1,18 @@
 --- a/env.py
 +++ b/env.py
-@@ -950,6 +950,17 @@
-         
-         # 3. 平顺性惩罚
-         smoothness_penalty = -0.05 * angular_velocity
+@@ -964,5 +964,15 @@
+         velocity = abs(state_raw[3])  # v is velocity
+         velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed
+         angular_velocity = abs(state_raw[2])  # w0 is angular velocity
 +        
-+        # 4. Curriculum subgoal reward for angular velocity reduction
-+        # Stage 1: Focus on reducing angular velocity before precise tracking
-+        angular_velocity_subgoal = 1.0  # Target angular velocity threshold
-+        if angular_velocity > angular_velocity_subgoal:
-+            # Reward progress toward reducing angular velocity
-+            prev_angular_velocity = abs(state_last_raw[2])
-+            angular_velocity_progress = prev_angular_velocity - angular_velocity
-+            subgoal_reward = 0.3 * angular_velocity_progress
-+        else:
-+            subgoal_reward = 0.0
++        # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)
++        # Reward progress toward intermediate waypoints to encourage exploration
++        # before focusing on precise final target tracking
++        subgoal_reward = 0.0
++        if hasattr(self, 'subgoal_stage') and hasattr(self, 'prev_subgoal_error'):
++            # Reward progress toward current subgoal
++            subgoal_progress = self.prev_subgoal_error - current_error
++            subgoal_reward = 0.3 * subgoal_progress  # beta_stage = 0.3
++            self.prev_subgoal_error = current_error
          
-         safety_penalty = 0.0
-         max_safe_angular_velocity = 2.0  # 安全阈值
+         reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_penalty

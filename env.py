@@ -965,6 +965,16 @@ class Attitude_control_stage1(gym.Env):
         velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed
         angular_velocity = abs(state_raw[2])  # w0 is angular velocity
         
+        # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)
+        # Reward progress toward intermediate waypoints to encourage exploration
+        # before focusing on precise final target tracking
+        subgoal_reward = 0.0
+        if hasattr(self, 'subgoal_stage') and hasattr(self, 'prev_subgoal_error'):
+            # Reward progress toward current subgoal
+            subgoal_progress = self.prev_subgoal_error - current_error
+            subgoal_reward = 0.3 * subgoal_progress  # beta_stage = 0.3
+            self.prev_subgoal_error = current_error
+        
         reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_penalty
         
         # 7. Small bonus for maintaining very low tracking error
