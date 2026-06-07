@@ -951,6 +951,17 @@ class Attitude_control_stage1(gym.Env):
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
+        # 4. Curriculum subgoal reward for angular velocity reduction
+        # Stage 1: Focus on reducing angular velocity before precise tracking
+        angular_velocity_subgoal = 1.0  # Target angular velocity threshold
+        if angular_velocity > angular_velocity_subgoal:
+            # Reward progress toward reducing angular velocity
+            prev_angular_velocity = abs(state_last_raw[2])
+            angular_velocity_progress = prev_angular_velocity - angular_velocity
+            subgoal_reward = 0.3 * angular_velocity_progress
+        else:
+            subgoal_reward = 0.0
+        
         safety_penalty = 0.0
         max_safe_angular_velocity = 2.0  # 安全阈值
         violation = max(0, angular_velocity - max_safe_angular_velocity)

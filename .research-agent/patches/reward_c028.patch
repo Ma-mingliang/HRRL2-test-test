@@ -1,16 +1,20 @@
 --- a/env.py
 +++ b/env.py
-@@ -23,3 +23,14 @@
-         # 横向误差惩罚
-         if self.lateral_error is not None:
-+            # Curriculum subgoal reward for path tracking progress
-+            if hasattr(self, 'prev_lateral_error') and self.prev_lateral_error is not None:
-+                # Reward progress toward reducing lateral error
-+                progress = self.prev_lateral_error - abs(self.lateral_error)
-+                # Scale by safety factor to gate against unsafe behavior
-+                stage_weight = 10.0  # beta_stage
-+                reward += stage_weight * progress * safety_factor
-+                # Update previous error for next step
-+                self.prev_lateral_error = abs(self.lateral_error)
-+            else:
-+                self.prev_lateral_error = abs(self.lateral_error)
+@@ -950,6 +950,17 @@
+         
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
++        
++        # 4. Curriculum subgoal reward for angular velocity reduction
++        # Stage 1: Focus on reducing angular velocity before precise tracking
++        angular_velocity_subgoal = 1.0  # Target angular velocity threshold
++        if angular_velocity > angular_velocity_subgoal:
++            # Reward progress toward reducing angular velocity
++            prev_angular_velocity = abs(state_last_raw[2])
++            angular_velocity_progress = prev_angular_velocity - angular_velocity
++            subgoal_reward = 0.3 * angular_velocity_progress
++        else:
++            subgoal_reward = 0.0
+         
+         safety_penalty = 0.0
+         max_safe_angular_velocity = 2.0  # 安全阈值

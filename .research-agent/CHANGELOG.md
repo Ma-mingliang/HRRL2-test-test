@@ -3390,3 +3390,31 @@ b_safety_constraint_reward_openreview_cawunem1je, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T10:50:41.326342+00:00] v0499 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c027`
+**Description:** Added a safety gate that reduces tracking reward when angular velocity exceeds safe threshold, with a more gradual penalty scaling (rationale: The current safety gate is too lenient (minimum 0.3) and doesn't penalize violations strongly enough. By increasing the penalty scaling from 0.3 to 0.5 and reducing the minimum gate factor from 0.3 to 0.1, we create a stronger safety constraint that more aggressively reduces task rewards when angular velocity exceeds safe limits. This should discourage unsafe behavior more effectively while maintaining the gradual gating approach to avoid reward hacking.)
+
+### Reward Formula / Change
+```
+Added a safety gate that reduces tracking reward when angular velocity exceeds safe threshold, with a more gradual penalty scaling (rationale: The current safety gate is too lenient (minimum 0.3) and doesn't penalize violations strongly enough. By increasing the penalty scaling from 0.3 to 0.5 and reducing the minimum gate factor from 0.3 to 0.1, we create a stronger safety constraint that more aggressively reduces task rewards when angular velocity exceeds safe limits. This should discourage unsafe behavior more effectively while maintaining the gradual gating approach to avoid reward hacking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 936.2140 (std: 0.0000)
+- **lateral_error:** 0.0032 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+b_safety_constraint_reward_openreview_qcz3g6mh3l, b_safety_constraint_reward_openreview_raoaicihbs
+
+---
+
