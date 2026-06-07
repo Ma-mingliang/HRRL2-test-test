@@ -2556,3 +2556,59 @@ a_potential_based_reward_arxiv_2605_01787, a_potential_based_reward_openreview_0
 
 ---
 
+## [2026-06-07T10:05:24.745597+00:00] v0501 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c032`
+**Description:** Added a small constant reward for maintaining very low lateral error to encourage stability and precision (rationale: The baseline shows excellent completion rate (1.0) and very low lateral error (0.0041), but the reward is high (930.85) with zero std, suggesting the agent has learned a stable policy. Adding a small additional reward for maintaining extremely low error (<2cm) will encourage even finer precision without disrupting the current stable behavior. This aligns with the curriculum subgoal reward idea by providing a micro-subgoal for precision, and the safety_factor gating ensures it only applies when safe. The minimal change maintains the existing reward structure while adding a precision incentive.)
+
+### Reward Formula / Change
+```
+Added a small constant reward for maintaining very low lateral error to encourage stability and precision (rationale: The baseline shows excellent completion rate (1.0) and very low lateral error (0.0041), but the reward is high (930.85) with zero std, suggesting the agent has learned a stable policy. Adding a small additional reward for maintaining extremely low error (<2cm) will encourage even finer precision without disrupting the current stable behavior. This aligns with the curriculum subgoal reward idea by providing a micro-subgoal for precision, and the safety_factor gating ensures it only applies when safe. The minimal change maintains the existing reward structure while adding a precision incentive.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 922.6499 (std: 0.0000)
+- **lateral_error:** 0.0031 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_v3kavlfvrd, c_curriculum_subgoal_reward_openreview_5t1vmqldr8
+
+---
+
+## [2026-06-07T10:06:59.040943+00:00] v0482 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c010`
+**Description:** Added potential-based reward shaping using tracking error improvement to encourage faster convergence while preserving optimal policy (rationale: The current reward function has a lateral error of 0.0041 which is already good, but adding potential-based shaping will encourage faster error reduction by rewarding improvement in tracking error. This preserves the optimal policy (potential-based shaping doesn't change optimal policies) while providing denser learning signal. The gamma=0.99 ensures future improvements are valued, and k_phi=0.5 provides moderate shaping without dominating the original reward structure. This should help reduce lateral error further and potentially improve completion rate consistency.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping using tracking error improvement to encourage faster convergence while preserving optimal policy (rationale: The current reward function has a lateral error of 0.0041 which is already good, but adding potential-based shaping will encourage faster error reduction by rewarding improvement in tracking error. This preserves the optimal policy (potential-based shaping doesn't change optimal policies) while providing denser learning signal. The gamma=0.99 ensures future improvements are valued, and k_phi=0.5 provides moderate shaping without dominating the original reward structure. This should help reduce lateral error further and potentially improve completion rate consistency.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 947.1593 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+a_potential_based_reward_openreview_tdomx6s4f5, a_potential_based_reward_arxiv_1902_06239
+
+---
+

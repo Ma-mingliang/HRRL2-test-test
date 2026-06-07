@@ -34,7 +34,13 @@
                 # Small constant reward for maintaining low error
                 if abs(self.lateral_error) < 0.05:  # ~5cm threshold
                     reward += 0.1 * safety_factor
+                if abs(
                 # Additional small reward for very low error to encourage stability
+                if abs(self.lateral_error) < 0.02:  # ~2cm threshold
+                    reward += 0.2 * safety_factor
+                # Small constant reward for maintaining low error
+                if abs(self.lateral_error) < 0.05:  # ~5cm threshold
+                    reward += 0.1 * safety_factor
                 if abs(self.lateral_error) < 0.02:  # ~2cm threshold
                     reward += 0.2 * safety_factor
                 # Additional small reward for very low error to encourage stability
@@ -1008,7 +1014,16 @@ class Attitude_control_stage1(gym.Env):
         potential_shaping = k_phi * (last_error - gamma * current_error_val)
         improvement_reward = potential_shaping
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+        action_penalty = -0.02 * abs(target_handle_angle)
+        
+        # 6. 残差动作惩罚：鼓励残差控制器输出平顺且幅度小
+        # 假设残差动作是target_handle_angle与基础控制器输出的差值
+        # 这里用target_handle_angle的平方作为残差幅度的代理
+        residual_penalty = -0.01 * target_handle_angle**2
+        
+        # 7. 残差动作平滑性惩罚：惩罚残差动作的剧烈变化
+        # 使用角速度作为残差变化率的代理
+        residual_smoothness = -0.005 * angular_velocity**2
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
