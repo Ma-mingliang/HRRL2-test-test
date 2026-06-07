@@ -943,13 +943,21 @@ class Attitude_control_stage1(gym.Env):
         k_phi = 2.0
         potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
         
-        # 3. Action penalty for smooth control
-        action_penalty = -0.01 * abs(target_handle_angle)
-        
         # 4. Heading error penalty to reduce oscillations
         heading_error = abs(state_raw[1])  # theta0 is heading error
         heading_penalty = -0.5 * heading_error**2
         
+        # 5. Velocity reward to encourage smooth motion
+        velocity = abs(state_raw[3])  # v is velocity
+        velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed
+        
+        # 6. Angular velocity penalty to reduce steering oscillations
+        angular_velocity = abs(state_raw[2])  # w0 is angular velocity
+        angular_penalty = -0.05 * angular_velocity**2
+        
+        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty
+        
+        return reward
         reward = tracking_reward + potential_shaping + action_penalty + heading_penalty
         
         return reward

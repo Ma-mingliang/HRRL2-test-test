@@ -4065,3 +4065,34 @@ a_potential_based_reward_arxiv_2502_01307, a_potential_based_reward_openreview_a
 
 ---
 
+## [2026-06-07T14:11:15.334913+00:00] v0524 - ✗ REJECTED
+
+**Candidate ID:** `reward_c005`
+**Description:** Added a heading error penalty to the reward function to encourage smoother tracking behavior and reduce oscillations (rationale: The current reward function focuses primarily on lateral error tracking but doesn't explicitly penalize heading errors. Adding a heading error penalty (theta0 from the state) will encourage the controller to maintain smoother trajectories with less oscillation. This should reduce lateral error (currently 0.0041) by preventing aggressive steering corrections that cause overshoot. The quadratic penalty is scaled appropriately to balance with existing reward components while maintaining the potential-based shaping structure.)
+
+### Reward Formula / Change
+```
+Added a heading error penalty to the reward function to encourage smoother tracking behavior and reduce oscillations (rationale: The current reward function focuses primarily on lateral error tracking but doesn't explicitly penalize heading errors. Adding a heading error penalty (theta0 from the state) will encourage the controller to maintain smoother trajectories with less oscillation. This should reduce lateral error (currently 0.0041) by preventing aggressive steering corrections that cause overshoot. The quadratic penalty is scaled appropriately to balance with existing reward components while maintaining the potential-based shaping structure.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 1399.4658
+- **lateral_error:** 0.0154
+
+### Rejection Reason
+Score -0.3498 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_hu7hujemiw, a_potential_based_reward_openreview_lxfl2g3yxb
+
+---
+
