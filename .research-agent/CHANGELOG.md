@@ -3222,3 +3222,29 @@ b_safety_constraint_reward_openreview_umvicbadkk, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T10:46:32.510371+00:00] v0493 - ✗ REJECTED
+
+**Candidate ID:** `reward_c021`
+**Description:** Added a safety gate that reduces tracking reward when angular velocity exceeds safe threshold, and added explicit penalty for constraint violation (rationale: The current safety penalty only applies quadratic penalty for large violations. Adding a linear penalty term (-0.1 * violation) provides a stronger gradient signal for smaller violations, encouraging the agent to stay well within safe limits. This aligns with the research idea of gating task reward with explicit penalties for safety violations, which should reduce constraint violations while maintaining task performance.)
+
+### Reward Formula / Change
+```
+Added a safety gate that reduces tracking reward when angular velocity exceeds safe threshold, and added explicit penalty for constraint violation (rationale: The current safety penalty only applies quadratic penalty for large violations. Adding a linear penalty term (-0.1 * violation) provides a stronger gradient signal for smaller violations, encouraging the agent to stay well within safe limits. This aligns with the research idea of gating task reward with explicit penalties for safety violations, which should reduce constraint violations while maintaining task performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_3zar4hakpw, b_safety_constraint_reward_openreview_imlpdfbvin
+
+---
+

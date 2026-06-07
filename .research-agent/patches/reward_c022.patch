@@ -1,18 +1,16 @@
 --- a/env.py
 +++ b/env.py
-@@ -60,6 +60,15 @@
-         for i in range(20):
-             f = math.tan(x) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) - \
-                 ((l / v)**2) * g * math.tan(theta)
-+        
-+        # Safety constraint: penalize excessive lean angle
-+        lean_angle = abs(theta)
-+        max_safe_lean = 0.5  # ~28.6 degrees
-+        if lean_angle > max_safe_lean:
-+            violation = lean_angle - max_safe_lean
-+            safety_penalty = 10.0 * violation**2
-+        else:
-+            safety_penalty = 0.0
-         
-         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
-                  math.tan(x) * ((l
+@@ -954,11 +954,12 @@
+         # 3.5 安全约束惩罚：防止过度振荡
+         safety_penalty = 0.0
+         max_safe_angular_velocity = 2.0  # 安全阈值
+         violation = max(0, angular_velocity - max_safe_angular_velocity)
+         if violation > 0:
+-            safety_penalty = -0.5 * violation**2 - 0.1 * violation
++            # Explicit safety constraint penalty with proper scaling
++            safety_penalty = -1.0 * violation**2 - 0.2 * violation
+             # Safety gate: reduce task reward when violating safety constraints
+             tracking_reward *= 0.5
+             bonus_reward *= 0.5
+         else:
+             safety_penalty = 0.0
