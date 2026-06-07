@@ -973,8 +973,13 @@ class Attitude_control_stage1(gym.Env):
             self.prev_subgoal_error = current_error
         # Reward progress toward current subgoal with adaptive scaling
         subgoal_progress = self.prev_subgoal_error - current_error
-        # Use fixed small weight to prevent reward hacking
-        subgoal_reward = 0.3 * subgoal_progress
+        # Adaptive scaling: reduce subgoal weight when close to target to prevent reward hacking
+        # and increase when far to encourage exploration
+        if current_error > 0.1:
+            subgoal_weight = 0.5  # Stronger encouragement for exploration when far
+        else:
+            subgoal_weight = 0.1  # Weaker when close to prevent gaming
+        subgoal_reward = subgoal_weight * subgoal_progress
         self.prev_subgoal_error = current_error
         self.prev_subgoal_error = current_error
         

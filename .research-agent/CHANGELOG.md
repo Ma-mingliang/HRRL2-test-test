@@ -4856,3 +4856,31 @@ c_curriculum_subgoal_reward_openreview_pmkwnv6azi, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T14:54:41.518477+00:00] v0554 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c035`
+**Description:** Simplify the curriculum subgoal reward by removing the complex beta_stage scaling and using a fixed, smaller weight to prevent reward hacking and improve stability (rationale: The current curriculum scaling is overly complex and may cause reward instability. With completion_rate already at 1.0 and lateral_error at 0.0041, the agent is performing well. Simplifying to a fixed weight (0.3) reduces variance in the reward signal while still encouraging progress. This prevents potential reward hacking from the adaptive scaling and makes training more stable, which could further reduce the already low lateral error.)
+
+### Reward Formula / Change
+```
+Simplify the curriculum subgoal reward by removing the complex beta_stage scaling and using a fixed, smaller weight to prevent reward hacking and improve stability (rationale: The current curriculum scaling is overly complex and may cause reward instability. With completion_rate already at 1.0 and lateral_error at 0.0041, the agent is performing well. Simplifying to a fixed weight (0.3) reduces variance in the reward signal while still encouraging progress. This prevents potential reward hacking from the adaptive scaling and makes training more stable, which could further reduce the already low lateral error.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2177.9342
+- **lateral_error:** 0.0057
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_b6awzauzpv, c_curriculum_subgoal_reward_openreview_pyq8rtmwtm
+
+---
+

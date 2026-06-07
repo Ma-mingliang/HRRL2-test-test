@@ -1,21 +1,20 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,10 +960,13 @@
-         # 5. 课程学习子目标奖励
+@@ -970,10 +970,15 @@
          subgoal_reward = 0.0
-         subgoal_thresholds = [0.05, 0.1, 0.2]
--        # Dynamic stage weights based on current error magnitude with progress scaling
--        if current_error < 0.01:
--            subgoal_weights = [1.0, 0.6, 0.3]  # Higher weights for precision phase
--        else:
--            subgoal_weights = [0.5, 0.3, 0.15]  # Original weights for exploration phase
-+        # Dynamic stage weights based on current error magnitude with progress scaling
-+        # More aggressive weighting for precision phase to encourage fine-tuning
-+        if current_error < 0.005:
-+            subgoal_weights = [1.5, 0.8, 0.4]  # Very high weights for ultra-precision
-+        elif current_error < 0.01:
-+            subgoal_weights = [1.0, 0.6, 0.3]  # High weights for precision phase
+         # Initialize subgoal tracking if not present
+         if not hasattr(self, 'prev_subgoal_error'):
+             self.prev_subgoal_error = current_error
+         # Reward progress toward current subgoal with adaptive scaling
+         subgoal_progress = self.prev_subgoal_error - current_error
+-        # Use fixed small weight to prevent reward hacking
+-        subgoal_reward = 0.3 * subgoal_progress
++        # Adaptive scaling: reduce subgoal weight when close to target to prevent reward hacking
++        # and increase when far to encourage exploration
++        if current_error > 0.1:
++            subgoal_weight = 0.5  # Stronger encouragement for exploration when far
 +        else:
-+            subgoal_weights = [0.5, 0.3, 0.15]  # Original weights for exploration phase
-         
-         for i, threshold in enumerate(subgoal_thresholds):
++            subgoal_weight = 0.1  # Weaker when close to prevent gaming
++        subgoal_reward = subgoal_weight * subgoal_progress
+         self.prev_subgoal_error = current_error
+         self.prev_subgoal_error = current_error
