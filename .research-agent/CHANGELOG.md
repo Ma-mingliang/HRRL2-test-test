@@ -5052,3 +5052,31 @@ g_llm_reward_generation_openreview_g9ylcfd8bq, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-07T15:36:27.786397+00:00] v0561 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c042`
+**Description:** Simplify the adaptive scaling in potential-based reward shaping to reduce complexity and improve stability (rationale: The current adaptive scaling uses a complex min(3.0, 1.0 + 2.0 * current_error) formula that may create unnecessary non-linearities. Simplifying to 1.0 + min(2.0, current_error) maintains the adaptive behavior (scaling up with error magnitude) while being more stable and easier to tune. This should reduce potential reward hacking from overly complex scaling while preserving the core benefit of stronger shaping when error is large. Given the excellent baseline metrics (completion_rate: 1.0000, lateral_error: 0.0041), this simplification should maintain performance while improving training stability.)
+
+### Reward Formula / Change
+```
+Simplify the adaptive scaling in potential-based reward shaping to reduce complexity and improve stability (rationale: The current adaptive scaling uses a complex min(3.0, 1.0 + 2.0 * current_error) formula that may create unnecessary non-linearities. Simplifying to 1.0 + min(2.0, current_error) maintains the adaptive behavior (scaling up with error magnitude) while being more stable and easier to tune. This should reduce potential reward hacking from overly complex scaling while preserving the core benefit of stronger shaping when error is large. Given the excellent baseline metrics (completion_rate: 1.0000, lateral_error: 0.0041), this simplification should maintain performance while improving training stability.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2349.1149
+- **lateral_error:** 0.0035
+
+### Source Methods
+g_llm_reward_generation_openreview_q01nzxiwlt, g_llm_reward_generation_openreview_bm6mwnd9uh
+
+---
+
