@@ -2230,3 +2230,34 @@ b_safety_constraint_reward_openreview_cawunem1je, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T09:26:02.321721+00:00] v0476 - ✗ REJECTED
+
+**Candidate ID:** `reward_c004`
+**Description:** Added potential-based reward shaping using error improvement with proper gamma discounting (rationale: The current improvement reward only gives positive reward when error decreases, which can lead to suboptimal policies. Using potential-based shaping (γΦ(s') - Φ(s)) with Φ(s) = -|error| provides theoretically optimal shaping that preserves the optimal policy while accelerating learning. This should improve tracking performance and reduce lateral error while maintaining completion rate.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping using error improvement with proper gamma discounting (rationale: The current improvement reward only gives positive reward when error decreases, which can lead to suboptimal policies. Using potential-based shaping (γΦ(s') - Φ(s)) with Φ(s) = -|error| provides theoretically optimal shaping that preserves the optimal policy while accelerating learning. This should improve tracking performance and reduce lateral error while maintaining completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 868.8525 (std: 0.0000)
+- **lateral_error:** 0.0057 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.1047 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2502_01307, a_potential_based_reward_openreview_anosgmzrdv
+
+---
+
