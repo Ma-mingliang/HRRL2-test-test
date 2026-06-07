@@ -4746,3 +4746,29 @@ c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T14:30:00.760801+00:00] v0550 - ✗ REJECTED
+
+**Candidate ID:** `reward_c031`
+**Description:** Added a small bonus reward for maintaining very low tracking error to encourage precision (rationale: The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but the reward function has redundant code and inconsistent bonus structure. By tightening the precision threshold from 0.01 to 0.005 and adding a tiered bonus system, we encourage even better precision while maintaining the current good performance. The increased bonus (1.0 vs 0.5) for very precise tracking provides stronger gradient signal for the agent to maintain sub-0.005 error, which aligns with the observed 0.0041 lateral error. This modification is minimal, targets the precision bonus section, and should help maintain or improve the already excellent tracking performance.)
+
+### Reward Formula / Change
+```
+Added a small bonus reward for maintaining very low tracking error to encourage precision (rationale: The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but the reward function has redundant code and inconsistent bonus structure. By tightening the precision threshold from 0.01 to 0.005 and adding a tiered bonus system, we encourage even better precision while maintaining the current good performance. The increased bonus (1.0 vs 0.5) for very precise tracking provides stronger gradient signal for the agent to maintain sub-0.005 error, which aligns with the observed 0.0041 lateral error. This modification is minimal, targets the precision bonus section, and should help maintain or improve the already excellent tracking performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_hz9gu1io12, c_curriculum_subgoal_reward_openreview_rgvqh3gjea
+
+---
+

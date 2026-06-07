@@ -1,23 +1,62 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,10 +954,19 @@
-         # 4. 改进奖励
-         improvement_reward = 0.0
-         error_reduction = abs(state_last_raw[0]) - current_error
-         if error_reduction > 0:
-             improvement_reward = 0.3 * error_reduction
+@@ -978,48 +978,15 @@
+         reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + subgoal_reward
          
-+        # 5. 课程学习子目标奖励
-+        subgoal_reward = 0.0
-+        if current_error < 0.05:
-+            subgoal_reward = 0.4  # 接近目标时给予额外奖励
-+        elif current_error < 0.1:
-+            subgoal_reward = 0.2
-+        elif current_error < 0.2:
-+            subgoal_reward = 0.1
+-        # 7. Small bonus for maintaining very low tracking error
+-        if current_error < 0.01:  # Very precise tracking
+-            self.prev_residual_action = self.last_residual_action.copy()
+-        
+-        
+-        # Safety constraint: penalize excessive angular velocity that could cause instability
+-        angular_velocity_limit = 2.0  # Safe angular velocity threshold
+-        angular_violation = max(0, angular_velocity - angular_velocity_limit)
+-        safety_penalty = 0.0
+-        if angular_violation > 0:
+-            # Gate task reward with explicit penalty for safety violation
+-            # This implements B_safety_constraint_reward: reward -= lambda_violation * max(0, constraint_value)
+-            lambda_violation = 2.0  # Strong penalty to discourage unsafe behavior
+-            safety_penalty = -lambda_violation * angular_violation**2
+-        
+-        # 8. Residual action penalty (from research idea F_residual_aware_reward)
+-        # Penalize large residual actions to encourage smooth corrections
+-        residual_penalty = 0.0
+-        residual_smoothness_penalty = 0.0
+-        if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
+-            # Scale penalty based on tracking error - more penalty when error is large
+-            # Use exponential scaling to make penalty more aggressive for large errors
+-            # Add additional scaling based on error magnitude for better gradient signal
+-            error_scale = 1.0 + 3.0 * (1.0 - np.exp(-5.0 * current_error))
+-            error_magnitude_scale = 1.0 + 2.0 * min(current_error, 1.0)
+-            residual_penalty = -0.2 * error_scale * error_magnitude_scale * np.sum(self.last_residual_action**2)
+-            # Add smoothness penalty for residual action changes
+-            if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
+-                residual_smoothness_penalty = -0.05 * np.sum((self.last_residual_action - self.prev_residual_action)**2)
+-            self.prev_residual_action = self.last_residual_action.copy()
+-        
+-        reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty
+-        
+-        # 7. Small bonus for maintaining very low tracking error
+-        if current_error < 0.01:  # Very precise tracking
+-            self.prev_residual_action = self.last_residual_action.copy()
+-        
+-        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty
+-        
+-        # 7. Small bonus for maintaining very low tracking error
+-        if current_error < 0.005:  # Very precise tracking
+-            reward += 1.0  # Increased bonus for precision
+-        elif current_error < 0.01:  # Good tracking
+-            reward += 0.3  # Smaller bonus for good tracking
++        # Safety constraint: penalize excessive angular velocity
++        angular_velocity_limit = 2.0
++        angular_violation = max(0, angular_velocity - angular_velocity_limit)
++        if angular_violation > 0:
++            reward -= 2.0 * angular_violation**2
 +        
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
++        # Precision bonus
++        if current_error < 0.005:
++            reward += 1.0
++        elif current_error < 0.01:
++            reward += 0.3
          
--        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
-+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + subgoal_reward + action_penalty
+         return reward
