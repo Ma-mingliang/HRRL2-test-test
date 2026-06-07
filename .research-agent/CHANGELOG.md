@@ -2323,3 +2323,34 @@ a_potential_based_reward_openreview_hu7hujemiw, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T09:37:59.376343+00:00] v0497 - ✗ REJECTED
+
+**Candidate ID:** `reward_c028`
+**Description:** Added curriculum-based subgoal reward for path tracking progress, gated by safety constraints (rationale: The baseline shows excellent completion (1.0) and low lateral error (0.0041), but reward is static (std=0.0). Adding a curriculum subgoal reward that incentivizes progress toward reducing lateral error will: 1) Provide denser learning signal for path tracking improvement, 2) Scale with safety_factor to maintain safety constraints, 3) Encourage continuous improvement even when already near-optimal, potentially reducing variance and improving sample efficiency. The progress-based formulation avoids reward hacking by only rewarding improvement, not absolute position.)
+
+### Reward Formula / Change
+```
+Added curriculum-based subgoal reward for path tracking progress, gated by safety constraints (rationale: The baseline shows excellent completion (1.0) and low lateral error (0.0041), but reward is static (std=0.0). Adding a curriculum subgoal reward that incentivizes progress toward reducing lateral error will: 1) Provide denser learning signal for path tracking improvement, 2) Scale with safety_factor to maintain safety constraints, 3) Encourage continuous improvement even when already near-optimal, potentially reducing variance and improving sample efficiency. The progress-based formulation avoids reward hacking by only rewarding improvement, not absolute position.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 868.8525 (std: 0.0000)
+- **lateral_error:** 0.0057 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.1047 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_hqwhxvzcmj, c_curriculum_subgoal_reward_openreview_dpkak1oh3x
+
+---
+
