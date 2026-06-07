@@ -1,23 +1,23 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,10 +960,14 @@
-         # 5. 课程学习子目标奖励
+@@ -968,11 +968,15 @@
+         # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)
+         # Reward progress toward intermediate waypoints to encourage exploration
+         # before focusing on precise final target tracking
          subgoal_reward = 0.0
--        if current_error < 0.05:
--            subgoal_reward = 0.4  # 接近目标时给予额外奖励
--        elif current_error < 0.1:
--            subgoal_reward = 0.2
--        elif current_error < 0.2:
--            subgoal_reward = 0.1
-+        subgoal_thresholds = [0.05, 0.1, 0.2]
-+        subgoal_weights = [0.4, 0.2, 0.1]
-+        
-+        for i, threshold in enumerate(subgoal_thresholds):
-+            if current_error < threshold:
-+                # Reward progress toward this subgoal
-+                prev_error = abs(state_last_raw[0])
-+                progress = max(0, prev_error - current_error)
-+                subgoal_reward = subgoal_weights[i] * (1.0 + 5.0 * progress)
-+                break
+-        if hasattr(self, 'subgoal_stage') and hasattr(self, 'prev_subgoal_error'):
+-            # Reward progress toward current subgoal
+-            subgoal_progress = self.prev_subgoal_error - current_error
+-            subgoal_reward = 0.3 * subgoal_progress  # beta_stage = 0.3
+-            self.prev_subgoal_error = current_error
++        # Initialize subgoal tracking if not present
++        if not hasattr(self, 'prev_subgoal_error'):
++            self.prev_subgoal_error = current_error
++        # Reward progress toward current subgoal with adaptive scaling
++        subgoal_progress = self.prev_subgoal_error - current_error
++        # Scale reward based on error magnitude - larger rewards for bigger improvements
++        beta_stage = 0.5 * (1.0 + min(current_error, 1.0))  # 0.5 to 1.0 scaling
++        subgoal_reward = beta_stage * subgoal_progress
++        self.prev_subgoal_error = current_error
          
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+         reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + subgoal_reward

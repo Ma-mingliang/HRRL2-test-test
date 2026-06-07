@@ -4772,3 +4772,31 @@ c_curriculum_subgoal_reward_openreview_hz9gu1io12, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T14:35:46.875689+00:00] v0551 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c032`
+**Description:** Simplify the reward function by removing redundant calculations and fixing the variable reference error (angular_penalty is undefined). Consolidate the multiple reward calculations into a single clean computation. (rationale: The current reward function has multiple bugs: 1) 'angular_penalty' and 'action_penalty' are referenced but never defined, causing runtime errors. 2) The reward is calculated multiple times with inconsistent terms. 3) The residual action penalty code is complex and may be causing instability. By simplifying to a single clean reward calculation with only the essential components (tracking, potential shaping, heading penalty, velocity reward, subgoal reward, angular velocity penalty, and precision bonus), we eliminate bugs and create a more stable learning signal. The baseline shows perfect completion but very low lateral error (0.0041), suggesting the agent is already performing well - simplification should maintain performance while improving training stability.)
+
+### Reward Formula / Change
+```
+Simplify the reward function by removing redundant calculations and fixing the variable reference error (angular_penalty is undefined). Consolidate the multiple reward calculations into a single clean computation. (rationale: The current reward function has multiple bugs: 1) 'angular_penalty' and 'action_penalty' are referenced but never defined, causing runtime errors. 2) The reward is calculated multiple times with inconsistent terms. 3) The residual action penalty code is complex and may be causing instability. By simplifying to a single clean reward calculation with only the essential components (tracking, potential shaping, heading penalty, velocity reward, subgoal reward, angular velocity penalty, and precision bonus), we eliminate bugs and create a more stable learning signal. The baseline shows perfect completion but very low lateral error (0.0041), suggesting the agent is already performing well - simplification should maintain performance while improving training stability.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2198.7394
+- **lateral_error:** 0.0048
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_v3kavlfvrd, c_curriculum_subgoal_reward_openreview_5t1vmqldr8
+
+---
+

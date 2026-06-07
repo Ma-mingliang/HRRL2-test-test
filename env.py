@@ -969,11 +969,15 @@ class Attitude_control_stage1(gym.Env):
         # Reward progress toward intermediate waypoints to encourage exploration
         # before focusing on precise final target tracking
         subgoal_reward = 0.0
-        if hasattr(self, 'subgoal_stage') and hasattr(self, 'prev_subgoal_error'):
-            # Reward progress toward current subgoal
-            subgoal_progress = self.prev_subgoal_error - current_error
-            subgoal_reward = 0.3 * subgoal_progress  # beta_stage = 0.3
+        # Initialize subgoal tracking if not present
+        if not hasattr(self, 'prev_subgoal_error'):
             self.prev_subgoal_error = current_error
+        # Reward progress toward current subgoal with adaptive scaling
+        subgoal_progress = self.prev_subgoal_error - current_error
+        # Scale reward based on error magnitude - larger rewards for bigger improvements
+        beta_stage = 0.5 * (1.0 + min(current_error, 1.0))  # 0.5 to 1.0 scaling
+        subgoal_reward = beta_stage * subgoal_progress
+        self.prev_subgoal_error = current_error
         
         reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + subgoal_reward
         
