@@ -1,14 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -1,0 +1,11 @@
-+    # Add residual action penalty for smoother control
-+    if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
-+        residual_norm = np.linalg.norm(residual_action)
-+        smoothness_penalty = np.linalg.norm(residual_action - self.prev_residual_action)
+@@ -960,4 +960,10 @@
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+         
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        # 6. 残差动作惩罚（基于研究想法F_residual_aware_reward）
++        residual_penalty = 0.0
++        if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
++            residual_penalty = -0.01 * (target_handle_angle ** 2 + (target_handle_angle - self.prev_residual_action) ** 2)
++        self.prev_residual_action = target_handle_angle
 +        
-+        # Penalize residual action magnitude and roughness
-+        lambda_res = 0.1
-+        lambda_smooth = 0.05
-+        reward -= lambda_res * residual_norm**2 + lambda_smooth * smoothness_penalty
-+    
-+    self.prev_residual_action = residual_action.copy()
++        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty

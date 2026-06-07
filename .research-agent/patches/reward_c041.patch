@@ -1,0 +1,16 @@
+--- a/env.py
++++ b/env.py
+@@ -954,5 +954,10 @@
+                     gamma = 0.99
+-                    alpha = 2.0
+-                    if current_error > 0.5:
+-                        alpha = 4.0
++                    alpha = 3.0
+                     potential_current = -alpha * current_error
++                    
++                    # Add steering angle penalty to reduce oscillations
++                    steering_penalty = 0.0
++                    if abs(action[0]) > 0.1:  # action[0] is steering angle
++                        steering_penalty = -0.1 * (abs(action[0]) - 0.1)
++                    
++                    reward = potential_current + steering_penalty

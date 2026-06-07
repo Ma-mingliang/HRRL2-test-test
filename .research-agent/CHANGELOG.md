@@ -2947,3 +2947,141 @@ g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-07T10:32:41.335320+00:00] v0510 - ✗ REJECTED
+
+**Candidate ID:** `reward_c041`
+**Description:** Added a small penalty for excessive steering angle to prevent oscillations and improve stability (rationale: The current reward function only penalizes lateral error but doesn't account for control effort. Adding a small penalty for excessive steering angles (when |steering| > 0.1 radians) will discourage oscillatory behavior and encourage smoother control inputs. This should improve stability and reduce overshooting while maintaining the excellent completion rate (1.0) and low lateral error (0.0041). The penalty is minimal to avoid significantly reducing the reward magnitude (930.85) while providing a regularization effect.)
+
+### Reward Formula / Change
+```
+Added a small penalty for excessive steering angle to prevent oscillations and improve stability (rationale: The current reward function only penalizes lateral error but doesn't account for control effort. Adding a small penalty for excessive steering angles (when |steering| > 0.1 radians) will discourage oscillatory behavior and encourage smoother control inputs. This should improve stability and reduce overshooting while maintaining the excellent completion rate (1.0) and low lateral error (0.0041). The penalty is minimal to avoid significantly reducing the reward magnitude (930.85) while providing a regularization effect.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 954))
+
+### Source Methods
+g_llm_reward_generation_openreview_g9ylcfd8bq, g_llm_reward_generation_openreview_iqnzibspz5
+
+---
+
+## [2026-06-07T10:32:53.368556+00:00] v0511 - ✗ REJECTED
+
+**Candidate ID:** `reward_c042`
+**Description:** Added a small penalty for excessive steering angle changes to encourage smoother control actions (rationale: The current reward function achieves excellent baseline metrics (930.85 reward, 1.0 completion rate, 0.0041 lateral error), but may be allowing jerky steering actions. Adding a small penalty for excessive steering angle changes encourages smoother control, which is more realistic for bicycle dynamics and could improve long-term stability. This modification is minimal (6 lines added) and targets only the steering control aspect without disrupting the existing successful path tracking performance.)
+
+### Reward Formula / Change
+```
+Added a small penalty for excessive steering angle changes to encourage smoother control actions (rationale: The current reward function achieves excellent baseline metrics (930.85 reward, 1.0 completion rate, 0.0041 lateral error), but may be allowing jerky steering actions. Adding a small penalty for excessive steering angle changes encourages smoother control, which is more realistic for bicycle dynamics and could improve long-term stability. This modification is minimal (6 lines added) and targets only the steering control aspect without disrupting the existing successful path tracking performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    if hasattr(self, 'prev_steering_angle'):
+                                           ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+g_llm_reward_generation_openreview_q01nzxiwlt, g_llm_reward_generation_openreview_bm6mwnd9uh
+
+---
+
+## [2026-06-07T10:32:54.258397+00:00] v0487 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c015`
+**Description:** Added residual action penalty to encourage smoother control outputs by penalizing large deviations from baseline control (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041), but adding a residual action penalty will encourage smoother control transitions. By penalizing the squared difference between consecutive actions (target_handle_angle), we promote action smoothness which should reduce oscillations and improve control stability. This aligns with the research idea of penalizing residual action roughness while maintaining the existing task reward structure. The small penalty weight (0.01) ensures it doesn't dominate the tracking objective but provides a gentle regularization toward smoother control.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to encourage smoother control outputs by penalizing large deviations from baseline control (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041), but adding a residual action penalty will encourage smoother control transitions. By penalizing the squared difference between consecutive actions (target_handle_angle), we promote action smoothness which should reduce oscillations and improve control stability. This aligns with the research idea of penalizing residual action roughness while maintaining the existing task reward structure. The small penalty weight (0.01) ensures it doesn't dominate the tracking objective but provides a gentle regularization toward smoother control.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 938.5172 (std: 0.0000)
+- **lateral_error:** 0.0036 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+f_residual_aware_reward_openreview_pech3gfc9d, f_residual_aware_reward_openreview_ar9uz1tmsz
+
+---
+
+## [2026-06-07T10:33:14.610284+00:00] v0512 - ✗ REJECTED
+
+**Candidate ID:** `reward_c043`
+**Description:** Added a small penalty for excessive steering angle to encourage smoother control and reduce oscillations (rationale: The current reward function focuses on path tracking but may allow excessive steering oscillations. Adding a small penalty for large steering angles encourages smoother control, which should reduce lateral error variance and improve completion rate stability. This is a minimal change that adds a regularization term without disrupting the core path tracking objective.)
+
+### Reward Formula / Change
+```
+Added a small penalty for excessive steering angle to encourage smoother control and reduce oscillations (rationale: The current reward function focuses on path tracking but may allow excessive steering oscillations. Adding a small penalty for large steering angles encourages smoother control, which should reduce lateral error variance and improve completion rate stability. This is a minimal change that adds a regularization term without disrupting the core path tracking objective.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    steering_penalty = 0.0
+    ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+g_llm_reward_generation_openreview_drp7qvunut, g_llm_reward_generation_openreview_svmcdiqo2i
+
+---
+
+## [2026-06-07T10:33:42.941959+00:00] v0513 - ✗ REJECTED
+
+**Candidate ID:** `reward_c044`
+**Description:** Added a small penalty for excessive steering angle to encourage smoother control and reduce oscillations (rationale: The current reward function achieves excellent completion rate and low lateral error, but may be allowing excessive steering oscillations. Adding a small penalty for steering angle magnitude encourages smoother control inputs, which can improve stability and reduce wear on the steering mechanism. This should maintain the high completion rate while potentially reducing control effort and improving overall system smoothness.)
+
+### Reward Formula / Change
+```
+Added a small penalty for excessive steering angle to encourage smoother control and reduce oscillations (rationale: The current reward function achieves excellent completion rate and low lateral error, but may be allowing excessive steering oscillations. Adding a small penalty for steering angle magnitude encourages smoother control inputs, which can improve stability and reduce wear on the steering mechanism. This should maintain the high completion rate while potentially reducing control effort and improving overall system smoothness.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 60))
+
+### Source Methods
+g_llm_reward_generation_openreview_u07fuaqgct
+
+---
+
