@@ -940,14 +940,18 @@ class Attitude_control_stage1(gym.Env):
         tracking_reward = -min(current_error**2, max_penalty)
         
         # 2. 高精度奖励
+        # 2. 高精度奖励
         bonus_reward = 0.0
         if current_error < 0.005:
-            bonus_reward = 1.0
+            bonus_reward = min(1.0, 0.5 + 0.5 * (0.005 - current_error) / 0.005)
         elif current_error < 0.01:
             bonus_reward = 0.5
         elif current_error < 0.02:
             bonus_reward = 0.2
         
+        # Safety gate: limit bonus if angular velocity is too high
+        if angular_velocity > 0.5:
+            bonus_reward *= max(0.1, 1.0 - (angular_velocity - 0.5) * 2.0)
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
