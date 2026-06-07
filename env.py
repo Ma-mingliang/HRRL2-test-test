@@ -993,18 +993,20 @@ class Attitude_control_stage1(gym.Env):
             stability_bonus = 0.3
         
         # 4. 改进奖励
+        # 4. 改进奖励
         improvement_reward = 0.0
         error_reduction = abs(state_last_raw[0]) - current_error
         gamma = 0.98
         # Use absolute error as potential for more direct improvement signal
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
-        # Scale improvement reward based on stability conditions
-        stability_scale = 1.0
+        # Scale improvement reward based on progress and stability
+        progress_scale = 1.0
+        if error_reduction > 0:  # Making progress
+            progress_scale = 1.2
         if current_error < 0.05 and angular_velocity < 0.2:
-            stability_scale = 1.5
-        improvement_reward = 0.5 * stability_scale * (gamma * potential_current - potential_last)
-        
+            progress_scale *= 1.3
+        improvement_reward = 0.5 * progress_scale * (gamma * potential_current - potential_last)
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         

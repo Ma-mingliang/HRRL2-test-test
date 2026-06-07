@@ -52,7 +52,7 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 29,
+    "candidates_proposed": 49,
     "full_evals_run": 23
   },
   "stop_reason": null,

@@ -2410,3 +2410,31 @@ c_curriculum_subgoal_reward_openreview_mhratccbtk, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T09:46:07.480273+00:00] v0479 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c007`
+**Description:** Enhanced potential-based reward shaping with better scaling and stability gating (rationale: The current potential-based reward uses squared error which may underweight small improvements near zero. Using linear potential (-error) provides more consistent gradient signal. Increasing gamma from 0.95 to 0.98 makes the agent more forward-looking. Adding stability scaling (1.5x when error < 0.05 and angular velocity < 0.2) encourages the agent to improve tracking when it's already performing well, which should reduce the small remaining lateral error (0.0041). The increased weight (0.3 → 0.5) makes improvement reward more influential, helping the agent prioritize error reduction over just maintaining low error.)
+
+### Reward Formula / Change
+```
+Enhanced potential-based reward shaping with better scaling and stability gating (rationale: The current potential-based reward uses squared error which may underweight small improvements near zero. Using linear potential (-error) provides more consistent gradient signal. Increasing gamma from 0.95 to 0.98 makes the agent more forward-looking. Adding stability scaling (1.5x when error < 0.05 and angular velocity < 0.2) encourages the agent to improve tracking when it's already performing well, which should reduce the small remaining lateral error (0.0041). The increased weight (0.3 → 0.5) makes improvement reward more influential, helping the agent prioritize error reduction over just maintaining low error.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 936.2140 (std: 0.0000)
+- **lateral_error:** 0.0032 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+a_potential_based_reward_openreview_snxieztsff, a_potential_based_reward_arxiv_2109_05022
+
+---
+

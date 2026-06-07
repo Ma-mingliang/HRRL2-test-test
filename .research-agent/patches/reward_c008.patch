@@ -1,23 +1,22 @@
 --- a/env.py
 +++ b/env.py
-@@ -1,2 +1,2 @@
--﻿"""
-+"""
-自行车自平衡与路径跟踪控制系统
- 
-包含：
-@@ -64,2 +64,14 @@
-         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
-                  math.tan(x) * ((l
-+
-+    # Potential-based reward shaping for tracking improvement
-+    def _compute_potential(self, error):
-+        """Compute potential function for potential-based reward shaping"""
-+        return -abs(error)  # Negative absolute error as potential
-+    
-+    def _compute_shaping_reward(self, current_error, previous_error):
-+        """Compute potential-based shaping reward"""
-+        gamma = 0.99
-+        potential_current = self._compute_potential(current_error)
-+        potential_previous = self._compute_potential(previous_error)
-+        return gamma * potential_current - potential_previous
+@@ -996,12 +996,14 @@
+         # 4. 改进奖励
+         improvement_reward = 0.0
+         error_reduction = abs(state_last_raw[0]) - current_error
+         gamma = 0.98
+         # Use absolute error as potential for more direct improvement signal
+         potential_current = -current_error
+         potential_last = -abs(state_last_raw[0])
+-        # Scale improvement reward based on stability conditions
+-        stability_scale = 1.0
+-        if current_error < 0.05 and angular_velocity < 0.2:
+-            stability_scale = 1.5
+-        improvement_reward = 0.5 * stability_scale * (gamma * potential_current - potential_last)
++        # Scale improvement reward based on progress and stability
++        progress_scale = 1.0
++        if error_reduction > 0:  # Making progress
++            progress_scale = 1.2
++        if current_error < 0.05 and angular_velocity < 0.2:
++            progress_scale *= 1.3
++        improvement_reward = 0.5 * progress_scale * (gamma * potential_current - potential_last)
