@@ -1,18 +1,19 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,5 +954,12 @@
-                     gamma = 0.99
--                    alpha = 2.0
--                    if current_error > 0.5:
--                        alpha = 4.0
-+                    alpha = 3.0
-                     potential_current = -alpha * current_error
-+                    
-+                    # Potential-based reward shaping for tracking improvement
-+                    if hasattr(self, 'prev_tracking_error'):
-+                        tracking_improvement = abs(self.prev_tracking_error) - abs(current_error)
-+                        k_phi = 0.5  # Shaping coefficient
-+                        reward += k_phi * tracking_improvement
-+                    
-+                    # Store current error for next step
-+                    self.prev_tracking_error = current_error
+@@ -992,7 +992,12 @@
+         # 4. 改进奖励
+         improvement_reward = 0.0
+         error_reduction = abs(state_last_raw[0]) - current_error
+-        gamma = 0.95
+-        potential_current = -current_error**2
+-        potential_last = -abs(state_last_raw[0])**2
+-        improvement_reward = 0.3 * (gamma * potential_current - potential_last)
++        gamma = 0.98
++        # Use absolute error as potential for more direct improvement signal
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        # Scale improvement reward based on stability conditions
++        stability_scale = 1.0
++        if current_error < 0.05 and angular_velocity < 0.2:
++            stability_scale = 1.5
++        improvement_reward = 0.5 * stability_scale * (gamma * potential_current - potential_last)

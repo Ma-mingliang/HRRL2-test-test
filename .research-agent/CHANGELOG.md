@@ -2354,3 +2354,31 @@ c_curriculum_subgoal_reward_openreview_hqwhxvzcmj, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T09:39:31.893014+00:00] v0478 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c006`
+**Description:** Fix the duplicate improvement_reward calculation and properly implement potential-based shaping with correct scaling (rationale: The current code has a duplicate calculation of improvement_reward (lines 995-996) where the second overwrites the first, and uses linear potential which may not provide sufficient shaping signal. By: 1) removing the duplicate, 2) using squared error for potential (more sensitive to large errors), 3) reducing gamma from 0.99 to 0.95 for faster credit assignment, and 4) scaling by 0.3 to balance with other reward components, we get a cleaner potential-based shaping term that should improve convergence while preserving optimal policy. The squared potential will provide stronger gradients for large errors, helping the agent learn faster initially.)
+
+### Reward Formula / Change
+```
+Fix the duplicate improvement_reward calculation and properly implement potential-based shaping with correct scaling (rationale: The current code has a duplicate calculation of improvement_reward (lines 995-996) where the second overwrites the first, and uses linear potential which may not provide sufficient shaping signal. By: 1) removing the duplicate, 2) using squared error for potential (more sensitive to large errors), 3) reducing gamma from 0.99 to 0.95 for faster credit assignment, and 4) scaling by 0.3 to balance with other reward components, we get a cleaner potential-based shaping term that should improve convergence while preserving optimal policy. The squared potential will provide stronger gradients for large errors, helping the agent learn faster initially.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 946.9401 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+a_potential_based_reward_arxiv_2012_08824, a_potential_based_reward_openreview_3napba3fn3
+
+---
+
