@@ -29,6 +29,21 @@
         # Residual action penalty to discourage excessive residual control effort
         if hasattr(self, 'prev_residual_action') and hasattr(self, 'residual_action'):
             # Calculate residual action magnitude penalty
+            lambda_res = 0.1  # Weight for residual action magnitude
+            lambda_smooth = 0.05  # Weight for action smoothness
+            
+            # Penalize residual action magnitude
+            residual_norm = np.linalg.norm(self.residual_action)
+            residual_penalty = lambda_res * residual_norm**2
+            
+            # Penalize action roughness (change in residual action)
+            action_diff = np.linalg.norm(self.residual_action - self.prev_residual_action)
+            smoothness_penalty = lambda_smooth * action_diff
+            
+            # Subtract penalties from reward
+            if hasattr(self, 'reward'):
+                self.reward -= (residual_penalty + smoothness_penalty)
+            # Calculate residual action magnitude penalty
             residual_norm = np.linalg.norm(self.residual_action)
             lambda_res = 0.1  # Weight for residual action magnitude
             
