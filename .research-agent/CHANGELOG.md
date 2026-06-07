@@ -2809,3 +2809,141 @@ f_residual_aware_reward_openreview_l8pjfrpuuq, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T10:31:37.175268+00:00] v0505 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c036`
+**Description:** Added a small constant reward for very low error to encourage stability, completing the incomplete line and adding a stability bonus for maintaining near-zero lateral error. (rationale: The current code has an incomplete line at line 37-38. Completing it and adding a tiered stability bonus for very low lateral errors (2cm and 5mm thresholds) will encourage the agent to maintain precise tracking once it achieves good performance. This aligns with the curriculum subgoal reward idea by providing additional positive feedback for achieving subgoals (low error thresholds), which should improve the already excellent lateral_error metric (0.0041) and potentially increase reward further. The safety_factor gating ensures this only applies during safe operation.)
+
+### Reward Formula / Change
+```
+Added a small constant reward for very low error to encourage stability, completing the incomplete line and adding a stability bonus for maintaining near-zero lateral error. (rationale: The current code has an incomplete line at line 37-38. Completing it and adding a tiered stability bonus for very low lateral errors (2cm and 5mm thresholds) will encourage the agent to maintain precise tracking once it achieves good performance. This aligns with the curriculum subgoal reward idea by providing additional positive feedback for achieving subgoals (low error thresholds), which should improve the already excellent lateral_error metric (0.0041) and potentially increase reward further. The safety_factor gating ensures this only applies during safe operation.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 947.1593 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_r7ppkxmovk, c_curriculum_subgoal_reward_arxiv_2104_06410
+
+---
+
+## [2026-06-07T10:31:50.164617+00:00] v0506 - ✗ REJECTED
+
+**Candidate ID:** `reward_c037`
+**Description:** Added a curriculum-based subgoal reward that rewards progress toward intermediate waypoints before the full path tracking objective, with stage-dependent weighting to encourage learning progression. (rationale: The baseline metrics show perfect completion (1.0) and very low lateral error (0.0041), but the reward (930.85) could be improved. Adding curriculum subgoal rewards encourages the agent to learn intermediate waypoints progressively, which can improve learning efficiency and final performance. The stage-dependent weighting prevents reward hacking by reducing the influence of proxy metrics as the agent progresses. This modification maintains the core path tracking objective while providing denser intermediate rewards that guide the agent through the task structure.)
+
+### Reward Formula / Change
+```
+Added a curriculum-based subgoal reward that rewards progress toward intermediate waypoints before the full path tracking objective, with stage-dependent weighting to encourage learning progression. (rationale: The baseline metrics show perfect completion (1.0) and very low lateral error (0.0041), but the reward (930.85) could be improved. Adding curriculum subgoal rewards encourages the agent to learn intermediate waypoints progressively, which can improve learning efficiency and final performance. The stage-dependent weighting prevents reward hacking by reducing the influence of proxy metrics as the agent progresses. This modification maintains the core path tracking objective while providing denser intermediate rewards that guide the agent through the task structure.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    if hasattr(self, 'current_stage') and hasattr(self, 'subgoal_positions'):
+                                                                            ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_dhoxjoy1sp, c_curriculum_subgoal_reward_openreview_n4x7a4gg7t
+
+---
+
+## [2026-06-07T10:32:14.881226+00:00] v0507 - ✗ REJECTED
+
+**Candidate ID:** `reward_c038`
+**Description:** Added a small penalty for excessive steering angle to encourage smoother control and reduce oscillations (rationale: The current reward function achieves excellent baseline metrics (930.85 reward, 1.0 completion rate, 0.0041 lateral error). Adding a small steering angle penalty will encourage smoother control inputs, which can improve stability and reduce oscillations. The velocity-dependent penalty ensures that steering is more conservative at higher speeds, which is physically realistic and can prevent dangerous maneuvers. This modification maintains the excellent path tracking performance while potentially improving control smoothness and safety.)
+
+### Reward Formula / Change
+```
+Added a small penalty for excessive steering angle to encourage smoother control and reduce oscillations (rationale: The current reward function achieves excellent baseline metrics (930.85 reward, 1.0 completion rate, 0.0041 lateral error). Adding a small steering angle penalty will encourage smoother control inputs, which can improve stability and reduce oscillations. The velocity-dependent penalty ensures that steering is more conservative at higher speeds, which is physically realistic and can prevent dangerous maneuvers. This modification maintains the excellent path tracking performance while potentially improving control smoothness and safety.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 60))
+
+### Source Methods
+g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openreview_ieduruo55f
+
+---
+
+## [2026-06-07T10:32:26.323821+00:00] v0508 - ✗ REJECTED
+
+**Candidate ID:** `reward_c039`
+**Description:** Added a small penalty for excessive steering angle to encourage smoother control and reduce oscillations (rationale: The current reward function achieves perfect completion but may allow jerky steering behavior. Adding a small penalty for steering angle magnitude encourages smoother control inputs, which can improve path tracking precision and reduce lateral error. This is a minimal change that adds a regularization term without disrupting the existing reward structure.)
+
+### Reward Formula / Change
+```
+Added a small penalty for excessive steering angle to encourage smoother control and reduce oscillations (rationale: The current reward function achieves perfect completion but may allow jerky steering behavior. Adding a small penalty for steering angle magnitude encourages smoother control inputs, which can improve path tracking precision and reduce lateral error. This is a minimal change that adds a regularization term without disrupting the existing reward structure.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    steering_penalty = -0.01 * abs(x)  # Small penalty for large steering angles
+    ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+g_llm_reward_generation_openreview_obpqdcwlfd, g_llm_reward_generation_openreview_tdfrn1tbgh
+
+---
+
+## [2026-06-07T10:32:31.643880+00:00] v0509 - ✗ REJECTED
+
+**Candidate ID:** `reward_c040`
+**Description:** No-op candidate (LLM unavailable)
+
+### Reward Formula / Change
+```
+No-op candidate (LLM unavailable)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty_patch
+
+### Source Methods
+g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openreview_gbwovfgek8
+
+---
+

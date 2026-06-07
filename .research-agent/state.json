@@ -52,8 +52,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 55,
-    "full_evals_run": 29
+    "candidates_proposed": 37,
+    "full_evals_run": 30
   },
   "stop_reason": null,
   "progress": null,

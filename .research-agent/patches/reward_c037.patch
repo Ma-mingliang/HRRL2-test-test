@@ -1,0 +1,16 @@
+--- a/env.py
++++ b/env.py
+@@ -64,2 +64,13 @@
+         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
+                  math.tan(x) * ((l
++        
++        # Curriculum subgoal reward: reward progress toward intermediate waypoints
++        if hasattr(self, 'current_stage') and hasattr(self, 'subgoal_positions'):
++            if self.current_stage < len(self.subgoal_positions):
++                subgoal = self.subgoal_positions[self.current_stage]
++                current_dist = np.linalg.norm(self.bike_position[:2] - subgoal[:2])
++                if hasattr(self, 'prev_subgoal_dist'):
++                    progress = self.prev_subgoal_dist - current_dist
++                    stage_weight = [1.0, 0.8, 0.6, 0.4]  # Decreasing weight as stages progress
++                    reward += stage_weight[min(self.current_stage, len(stage_weight)-1)] * progress * 10.0
++                self.prev_subgoal_dist = current_dist
