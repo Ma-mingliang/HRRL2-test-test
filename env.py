@@ -950,13 +950,18 @@ class Attitude_control_stage1(gym.Env):
         heading_error = abs(state_raw[1])  # theta0 is heading error
         heading_penalty = -0.5 * heading_error**2
         
-        # Safety constraint: penalize excessive heading error that could cause instability
         heading_error_limit = 0.5  # Safe heading error threshold (radians)
         heading_violation = max(0, heading_error - heading_error_limit)
         if heading_violation > 0:
             lambda_heading = 3.0  # Strong penalty for dangerous heading errors
             heading_penalty -= lambda_heading * heading_violation**2
+            # Safety gate: reduce overall reward when heading is unsafe
+            # This implements B_safety_constraint_reward: reward -= lambda_violation * max(0, constraint_value)
+            safety_gate_penalty = -5.0 * heading_violation  # Additional penalty to gate task reward
+            # Apply safety gate to the final reward calculation
+            reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_gate_penalty
         
+        # 5. Velocity reward to encourage smooth motion
         # 5. Velocity reward to encourage smooth motion
         velocity = abs(state_raw[3])  # v is velocity
         velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed

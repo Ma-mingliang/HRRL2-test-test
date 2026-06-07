@@ -4512,3 +4512,29 @@ b_safety_constraint_reward_openreview_3zar4hakpw, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T14:20:59.266012+00:00] v0541 - ✗ REJECTED
+
+**Candidate ID:** `reward_c022`
+**Description:** Added safety penalty for excessive heading error to prevent dangerous oscillations, implementing the B_safety_constraint_reward research idea (rationale: The current reward function already has safety penalties for angular velocity but lacks explicit penalties for excessive heading error. Large heading errors can lead to dangerous oscillations and instability. By adding a safety constraint that penalizes heading errors beyond a safe threshold (0.5 radians ≈ 28.6 degrees), we implement the B_safety_constraint_reward idea to gate task reward with explicit penalties for safety violations. This should reduce oscillations and improve stability while maintaining the excellent tracking performance (lateral_error: 0.0041). The penalty is gated (only applies when heading_error > 0.5) to avoid reward hacking and preserve optimal policy behavior.)
+
+### Reward Formula / Change
+```
+Added safety penalty for excessive heading error to prevent dangerous oscillations, implementing the B_safety_constraint_reward research idea (rationale: The current reward function already has safety penalties for angular velocity but lacks explicit penalties for excessive heading error. Large heading errors can lead to dangerous oscillations and instability. By adding a safety constraint that penalizes heading errors beyond a safe threshold (0.5 radians ≈ 28.6 degrees), we implement the B_safety_constraint_reward idea to gate task reward with explicit penalties for safety violations. This should reduce oscillations and improve stability while maintaining the excellent tracking performance (lateral_error: 0.0041). The penalty is gated (only applies when heading_error > 0.5) to avoid reward hacking and preserve optimal policy behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_dbuuzrhoqp, b_safety_constraint_reward_openreview_rpws9kov0i
+
+---
+
