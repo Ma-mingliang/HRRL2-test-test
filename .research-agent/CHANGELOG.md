@@ -2261,3 +2261,34 @@ a_potential_based_reward_arxiv_2502_01307, a_potential_based_reward_openreview_a
 
 ---
 
+## [2026-06-07T09:31:25.381434+00:00] v0496 - ✗ REJECTED
+
+**Candidate ID:** `reward_c027`
+**Description:** Added a safety gate that scales down the task reward when the bike is in an unsafe roll angle condition, preventing reward hacking where the agent might sacrifice safety for task performance. (rationale: The current reward function adds penalties for unsafe roll angles but doesn't gate the task reward. This creates a risk of reward hacking where the agent might accept safety penalties if task rewards are high enough. By introducing a safety_factor that scales down task rewards when in unsafe conditions, we ensure that safety violations are properly gated against task success. This should improve the safety metrics while maintaining the high completion rate and low lateral error.)
+
+### Reward Formula / Change
+```
+Added a safety gate that scales down the task reward when the bike is in an unsafe roll angle condition, preventing reward hacking where the agent might sacrifice safety for task performance. (rationale: The current reward function adds penalties for unsafe roll angles but doesn't gate the task reward. This creates a risk of reward hacking where the agent might accept safety penalties if task rewards are high enough. By introducing a safety_factor that scales down task rewards when in unsafe conditions, we ensure that safety violations are properly gated against task success. This should improve the safety metrics while maintaining the high completion rate and low lateral error.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 868.8525 (std: 0.0000)
+- **lateral_error:** 0.0057 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.1047 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_qcz3g6mh3l, b_safety_constraint_reward_openreview_raoaicihbs
+
+---
+

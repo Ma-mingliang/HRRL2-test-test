@@ -22,7 +22,18 @@
         
         # 横向误差惩罚
         if self.lateral_error is not None:
-- 第一阶段：纯强化学习平衡控制器
+            # Curriculum subgoal reward for path tracking progress
+            if hasattr(self, 'prev_lateral_error') and self.prev_lateral_error is not None:
+                # Reward progress toward reducing lateral error
+                progress = self.prev_lateral_error - abs(self.lateral_error)
+                # Scale by safety factor to gate against unsafe behavior
+                stage_weight = 10.0  # beta_stage
+                reward += stage_weight * progress * safety_factor
+                # Update previous error for next step
+                self.prev_lateral_error = abs(self.lateral_error)
+            else:
+                self.prev_lateral_error = abs(self.lateral_error)
+
 - 第三阶段：自适应Stanley控制器
 """
 
