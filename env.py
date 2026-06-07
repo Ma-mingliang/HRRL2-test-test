@@ -12,9 +12,9 @@
         if hasattr(self, 'prev_tracking_error'):
             tracking_improvement = abs(self.prev_tracking_error) - abs(current_tracking_error)
             heading_improvement = abs(self.prev_heading_error) - abs(current_heading_error)
-            gamma = 0.99
-            k_phi = 0.05  # Weight for tracking improvement
-            k_heading = 0.02  # Weight for heading improvement
+            gamma = 0.99  # Discount factor for potential function
+            k_phi = 0.1   # Weight for tracking improvement
+            k_heading = 0.05  # Weight for heading improvement
             # Normalize errors to prevent reward magnitude issues
             max_tracking_error = 2.0  # Expected maximum tracking error
             max_heading_error = 1.0   # Expected maximum heading error
@@ -27,6 +27,10 @@
             normalized_prev_tracking = safe_prev_tracking / max_tracking_error
             normalized_heading = safe_heading / max_heading_error
             normalized_prev_heading = safe_prev_heading / max_heading_error
+            # Apply potential-based shaping: gamma * Phi(s') - Phi(s)
+            tracking_shaping = gamma * normalized_tracking - normalized_prev_tracking
+            heading_shaping = gamma * normalized_heading - normalized_prev_heading
+            reward += k_phi * tracking_shaping + k_heading * heading_shaping
             
             # Potential-based shaping: gamma * Phi(s_next) - Phi(s)
             # Phi(s) = -k_phi * normalized_tracking - k_heading * normalized_heading

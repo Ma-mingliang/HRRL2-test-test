@@ -1439,3 +1439,34 @@ a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T09:00:23.964495+00:00] v0471 - ✗ REJECTED
+
+**Candidate ID:** `reward_c002`
+**Description:** Added potential-based reward shaping term that uses normalized error differences to encourage tracking improvement while preserving optimal policy (rationale: The current code calculates improvement metrics but doesn't actually add them to the reward. This modification implements proper potential-based reward shaping using the normalized errors. The shaping term encourages reducing tracking and heading errors over time while preserving the optimal policy (as proven by Ng et al., 1999). The normalization prevents reward magnitude issues, and the safety gating ensures errors stay within reasonable bounds. This should improve tracking performance while maintaining the high completion rate.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping term that uses normalized error differences to encourage tracking improvement while preserving optimal policy (rationale: The current code calculates improvement metrics but doesn't actually add them to the reward. This modification implements proper potential-based reward shaping using the normalized errors. The shaping term encourages reducing tracking and heading errors over time while preserving the optimal policy (as proven by Ng et al., 1999). The normalization prevents reward magnitude issues, and the safety gating ensures errors stay within reasonable bounds. This should improve tracking performance while maintaining the high completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 930.8458 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_tjhhb6cscw, a_potential_based_reward_openreview_hz9gu1io12
+
+---
+
