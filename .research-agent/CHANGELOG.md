@@ -4174,3 +4174,29 @@ a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_2
 
 ---
 
+## [2026-06-07T14:13:04.025013+00:00] v0528 - ✗ REJECTED
+
+**Candidate ID:** `reward_c009`
+**Description:** Simplify the potential-based reward shaping by removing the adaptive scaling and using a fixed weight, which reduces complexity and potential reward hacking while preserving the core potential difference structure. (rationale: The adaptive scaling (k_phi = k_phi_base * (1.0 + 2.0 * min(current_error, 1.0))) introduces non-linear reward shaping that could lead to reward hacking when errors are large. By using a fixed weight (k_phi = 2.0), we maintain the potential-based shaping that preserves optimal policy while simplifying the reward structure. This reduces the risk of the agent exploiting the adaptive scaling to maximize reward without actually improving tracking performance. The current metrics show excellent performance (completion_rate: 1.0000, lateral_error: 0.0041), so this simplification should maintain performance while making the reward more stable and interpretable.)
+
+### Reward Formula / Change
+```
+Simplify the potential-based reward shaping by removing the adaptive scaling and using a fixed weight, which reduces complexity and potential reward hacking while preserving the core potential difference structure. (rationale: The adaptive scaling (k_phi = k_phi_base * (1.0 + 2.0 * min(current_error, 1.0))) introduces non-linear reward shaping that could lead to reward hacking when errors are large. By using a fixed weight (k_phi = 2.0), we maintain the potential-based shaping that preserves optimal policy while simplifying the reward structure. This reduces the risk of the agent exploiting the adaptive scaling to maximize reward without actually improving tracking performance. The current metrics show excellent performance (completion_rate: 1.0000, lateral_error: 0.0041), so this simplification should maintain performance while making the reward more stable and interpretable.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2605_01787, a_potential_based_reward_openreview_0iouiel5nm
+
+---
+
