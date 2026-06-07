@@ -3196,3 +3196,29 @@ b_safety_constraint_reward_openreview_dju2kvsdts, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T10:46:02.642978+00:00] v0492 - ✗ REJECTED
+
+**Candidate ID:** `reward_c020`
+**Description:** Added explicit safety constraint penalty for angular velocity violations with proper gating of task rewards (rationale: The current safety penalty calculation has a bug where it only applies when angular_velocity > max_safe_angular_velocity, but the violation calculation is inside the if block. This means when angular_velocity is exactly at the threshold, no penalty is applied. By moving the violation calculation outside and using max(0, ...) we ensure proper penalty scaling. The explicit safety constraint penalty with proper gating will help prevent unsafe oscillations while maintaining task performance. The baseline shows perfect completion rate (1.0) and low lateral error (0.0041), so this change should improve safety without sacrificing performance.)
+
+### Reward Formula / Change
+```
+Added explicit safety constraint penalty for angular velocity violations with proper gating of task rewards (rationale: The current safety penalty calculation has a bug where it only applies when angular_velocity > max_safe_angular_velocity, but the violation calculation is inside the if block. This means when angular_velocity is exactly at the threshold, no penalty is applied. By moving the violation calculation outside and using max(0, ...) we ensure proper penalty scaling. The explicit safety constraint penalty with proper gating will help prevent unsafe oscillations while maintaining task performance. The baseline shows perfect completion rate (1.0) and low lateral error (0.0041), so this change should improve safety without sacrificing performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_umvicbadkk, b_safety_constraint_reward_openreview_v3kavlfvrd
+
+---
+
