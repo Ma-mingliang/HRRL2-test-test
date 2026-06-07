@@ -3362,3 +3362,31 @@ b_safety_constraint_reward_openreview_uqrs6vfcsd, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-07T10:49:46.290944+00:00] v0498 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c026`
+**Description:** Added a safety gate that reduces task reward when angular velocity exceeds safe threshold, with a more gradual penalty scaling (rationale: The current safety gate is too aggressive (gate_factor can drop to 0.1), which may discourage exploration near safety boundaries. By increasing the minimum gate factor from 0.1 to 0.3 and reducing the penalty scaling from 0.4 to 0.3, we create a more gradual penalty that still discourages unsafe behavior but allows the agent to learn from near-boundary experiences. This should maintain the high completion rate (1.0) while potentially improving lateral error (0.0041) by allowing more nuanced learning near safety constraints.)
+
+### Reward Formula / Change
+```
+Added a safety gate that reduces task reward when angular velocity exceeds safe threshold, with a more gradual penalty scaling (rationale: The current safety gate is too aggressive (gate_factor can drop to 0.1), which may discourage exploration near safety boundaries. By increasing the minimum gate factor from 0.1 to 0.3 and reducing the penalty scaling from 0.4 to 0.3, we create a more gradual penalty that still discourages unsafe behavior but allows the agent to learn from near-boundary experiences. This should maintain the high completion rate (1.0) while potentially improving lateral error (0.0041) by allowing more nuanced learning near safety constraints.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 946.9401 (std: 0.0000)
+- **lateral_error:** 0.0028 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+b_safety_constraint_reward_openreview_cawunem1je, b_safety_constraint_reward_openreview_pnhypbc4z7
+
+---
+

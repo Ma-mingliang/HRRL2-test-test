@@ -959,7 +959,7 @@ class Attitude_control_stage1(gym.Env):
             safety_penalty = -1.0 * violation**2 - 0.2 * violation
             # Safety gate: reduce task reward when violating safety constraints
             # More gradual gating based on violation severity
-            gate_factor = max(0.3, 1.0 - 0.3 * violation)
+            gate_factor = max(0.1, 1.0 - 0.5 * violation)
             tracking_reward *= gate_factor
             bonus_reward *= gate_factor
             # Additional penalty for excessive angular velocity
