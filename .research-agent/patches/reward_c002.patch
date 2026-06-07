@@ -1,12 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -1084,5 +1084,6 @@
-         # 4. 改进奖励
-         gamma = 0.99
--        potential_current = -current_error
--        potential_last = -abs(state_last_raw[0])
--        improvement_reward = gamma * potential_current - potential_last
-+        k_phi = 2.0  # Scaling factor for potential-based reward
-+        potential_current = -current_error
-+        potential_last = -abs(state_last_raw[0])
-+        improvement_reward = k_phi * (gamma * potential_current - potential_last)
+@@ -1017,10 +1017,5 @@
+         for i, threshold in enumerate(subgoal_thresholds):
+             if current_error < threshold:
+                 # Reward progress toward this subgoal
+-                prev_error = abs(state_last_raw[0])
+-                progress = max(0, prev_error - current_error)
+-                subgoal_reward += subgoal_weights[i] * progress
+-                prev_error = abs(state_last_raw[0])
+-                progress = max(0, prev_error - current_error)
+-                subgoal_reward = subgoal_weights[i] * (1.0 + 5.0 * progress)
++                subgoal_reward += subgoal_weights[i] * (1.0 + 5.0 * progress_to_subgoal)
+                 break

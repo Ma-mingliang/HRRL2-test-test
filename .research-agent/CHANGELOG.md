@@ -3898,3 +3898,29 @@ g_llm_reward_generation_openreview_u07fuaqgct
 
 ---
 
+## [2026-06-07T13:21:38.773565+00:00] v0517 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Added potential-based reward shaping using tracking error improvement to provide denser learning signal while preserving optimal policy (rationale: The current improvement_reward only rewards positive error reduction (when error decreases). By adding potential-based shaping (gamma*Phi(s') - Phi(s)), we provide a continuous learning signal that encourages moving toward lower error states even when error increases slightly. This is theoretically sound as it preserves the optimal policy while providing denser gradients. The safety gating ensures we don't reward rapid error reduction at the cost of unsafe angular velocities. This should improve tracking performance and reduce lateral error while maintaining the 100% completion rate.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping using tracking error improvement to provide denser learning signal while preserving optimal policy (rationale: The current improvement_reward only rewards positive error reduction (when error decreases). By adding potential-based shaping (gamma*Phi(s') - Phi(s)), we provide a continuous learning signal that encourages moving toward lower error states even when error increases slightly. This is theoretically sound as it preserves the optimal policy while providing denser gradients. The safety gating ensures we don't reward rapid error reduction at the cost of unsafe angular velocities. This should improve tracking performance and reduce lateral error while maintaining the 100% completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openreview_6lm1jxxlxb
+
+---
+

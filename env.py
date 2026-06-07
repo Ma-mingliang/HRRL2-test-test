@@ -1017,12 +1017,7 @@ class Attitude_control_stage1(gym.Env):
         for i, threshold in enumerate(subgoal_thresholds):
             if current_error < threshold:
                 # Reward progress toward this subgoal
-                prev_error = abs(state_last_raw[0])
-                progress = max(0, prev_error - current_error)
-                subgoal_reward += subgoal_weights[i] * progress
-                prev_error = abs(state_last_raw[0])
-                progress = max(0, prev_error - current_error)
-                subgoal_reward = subgoal_weights[i] * (1.0 + 5.0 * progress)
+                subgoal_reward += subgoal_weights[i] * (1.0 + 5.0 * progress_to_subgoal)
                 break
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
