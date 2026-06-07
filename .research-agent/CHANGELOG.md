@@ -3116,3 +3116,31 @@ f_residual_aware_reward_openreview_dzmd1pbtc5, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T10:44:36.205278+00:00] v0489 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c017`
+**Description:** Added residual action penalty to encourage smoother control outputs and reduce unnecessary corrections (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041) but may benefit from smoother control outputs. Adding a residual action penalty encourages the policy to make smaller, more consistent corrections rather than oscillating. This aligns with the research idea of penalizing residual action magnitude and roughness, which should improve action smoothness without sacrificing tracking accuracy. The penalty is applied to the change in control action (target_handle_angle) to discourage rapid fluctuations.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to encourage smoother control outputs and reduce unnecessary corrections (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041) but may benefit from smoother control outputs. Adding a residual action penalty encourages the policy to make smaller, more consistent corrections rather than oscillating. This aligns with the research idea of penalizing residual action magnitude and roughness, which should improve action smoothness without sacrificing tracking accuracy. The penalty is applied to the change in control action (target_handle_angle) to discourage rapid fluctuations.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 945.1918 (std: 0.0000)
+- **lateral_error:** 0.0029 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+f_residual_aware_reward_openreview_tcz7uwkrtt, f_residual_aware_reward_openreview_vk9j25hi1o
+
+---
+
