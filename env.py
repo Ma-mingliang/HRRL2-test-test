@@ -28,7 +28,13 @@
             lambda_res = 0.01  # Weight for residual magnitude penalty
             lambda_smooth = 0.005  # Weight for action smoothness penalty
             residual_norm = np.dot(self.residual_action, self.residual_action)
-            smoothness_norm = np.linalg.norm(self.residual_action - self.prev_residual_action)
+            smoothness_norm = np.dot(self.residual_action - self.prev_residual_action, 
+                                    self.residual_action - self.prev_residual_action)
+            residual_penalty = lambda_res * residual_norm + lambda_smooth * smoothness_norm
+            
+            # Subtract from main reward
+            if hasattr(self, 'reward'):
+                self.reward -= residual_penalty
             self.reward -= lambda_res * residual_norm + lambda_smooth * smoothness_norm
             self.prev_residual_action = self.residual_action.copy()
         self.prev_tracking_error = current_tracking_error
