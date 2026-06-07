@@ -983,10 +983,15 @@ class Attitude_control_stage1(gym.Env):
             reward -= 2.0 * angular_violation**2
         
         # Precision bonus
-        if current_error < 0.005:
-            reward += 1.0
-        elif current_error < 0.01:
-            reward += 0.3
+        # Smooth exponential precision bonus for fine tracking
+        precision_threshold = 0.02  # Start rewarding at 2cm error
+        if current_error < precision_threshold:
+            # Exponential scaling: stronger bonus as error approaches zero
+            precision_bonus = 2.0 * np.exp(-100.0 * current_error)
+            # Additional bonus for very high precision
+            if current_error < 0.005:
+                precision_bonus += 1.0
+            reward += precision_bonus
         
         return reward
 

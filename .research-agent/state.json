@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c036",
+    "candidate_id": "reward_c037",
     "optimizer": "reward",
-    "description": "Add adaptive subgoal scaling based on current error magnitude to prevent reward hacking and improve curriculum effectiveness (rationale: The current fixed subgoal weight (0.3) may cause reward hacking where the agent focuses on small progress increments rather than achieving the full task. By making the weight adaptive - stronger when error is large (encouraging exploration) and weaker when error is small (preventing gaming) - we align with the curriculum subgoal research idea while maintaining safety. This should improve completion rate and reduce lateral error by preventing the agent from getting stuck in local optima of small progress rewards.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -970,10 +970,15 @@\n         subgoal_reward = 0.0\n         # Initialize subgoal tracking if not present\n         if not hasattr(self, 'prev_subgoal_error'):\n             self.prev_subgoal_error = current_error\n         # Reward progress toward current subgoal with adaptive scaling\n         subgoal_progress = self.prev_subgoal_error - current_error\n-        # Use fixed small weight to prevent reward hacking\n-        subgoal_reward = 0.3 * subgoal_progress\n+        # Ad",
-    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_r7ppkxmovk\", \"c_curriculum_subgoal_reward_arxiv_2104_06410\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:r7PpkXMoVk\", \"arxiv:2104.06410\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Simplify the subgoal reward to focus on progress toward the target with a fixed weight, removing the adaptive scaling that may cause inconsistent learning signals (rationale: The current subgoal reward has several issues: 1) Duplicate assignment of prev_subgoal_error (line 983-984), 2) Adaptive scaling may create inconsistent learning signals, 3) The weight difference (0.5 vs 0.1) is too large. Simplifying to a fixed weight of 0.3 provides consistent progress incentives while avoiding reward hacking. The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), so we want to maintain stability while potentially improving convergence speed. This change removes complexity that could cause training instability.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -968,17 +968,8 @@\n         # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)\n         # Reward progress toward intermediate waypoints to encourage exploration\n         subgoal_reward = 0.0\n-        # Initialize subgoal tracking if not present\n-        if not hasattr(self, 'prev_subgoal_error'):\n-            self.prev_subgoal_error = current_error\n-        # Reward progress toward current subgoal with adaptive scaling\n-        subgoal_pro",
+    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_dhoxjoy1sp\", \"c_curriculum_subgoal_reward_openreview_n4x7a4gg7t\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:DHOxjoy1sP\", \"openreview:n4X7a4gG7T\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-07T15:00:31.439772+00:00"
+    "timestamp": "2026-06-07T15:06:32.718132+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 37,
-    "full_evals_run": 34
+    "candidates_proposed": 38,
+    "full_evals_run": 35
   },
   "stop_reason": null,
   "progress": null,
@@ -225,6 +225,10 @@
     {
       "candidate_id": "reward_c037",
       "applied_at": "2026-06-07T15:00:53.523395+00:00"
+    },
+    {
+      "candidate_id": "reward_c038",
+      "applied_at": "2026-06-07T15:06:47.269905+00:00"
     }
   ],
   "baseline_fair_eval": {

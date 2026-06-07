@@ -4912,3 +4912,31 @@ c_curriculum_subgoal_reward_openreview_r7ppkxmovk, c_curriculum_subgoal_reward_a
 
 ---
 
+## [2026-06-07T15:06:32.718132+00:00] v0556 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c037`
+**Description:** Simplify the subgoal reward to focus on progress toward the target with a fixed weight, removing the adaptive scaling that may cause inconsistent learning signals (rationale: The current subgoal reward has several issues: 1) Duplicate assignment of prev_subgoal_error (line 983-984), 2) Adaptive scaling may create inconsistent learning signals, 3) The weight difference (0.5 vs 0.1) is too large. Simplifying to a fixed weight of 0.3 provides consistent progress incentives while avoiding reward hacking. The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), so we want to maintain stability while potentially improving convergence speed. This change removes complexity that could cause training instability.)
+
+### Reward Formula / Change
+```
+Simplify the subgoal reward to focus on progress toward the target with a fixed weight, removing the adaptive scaling that may cause inconsistent learning signals (rationale: The current subgoal reward has several issues: 1) Duplicate assignment of prev_subgoal_error (line 983-984), 2) Adaptive scaling may create inconsistent learning signals, 3) The weight difference (0.5 vs 0.1) is too large. Simplifying to a fixed weight of 0.3 provides consistent progress incentives while avoiding reward hacking. The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), so we want to maintain stability while potentially improving convergence speed. This change removes complexity that could cause training instability.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 2177.9342
+- **lateral_error:** 0.0057
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_dhoxjoy1sp, c_curriculum_subgoal_reward_openreview_n4x7a4gg7t
+
+---
+
