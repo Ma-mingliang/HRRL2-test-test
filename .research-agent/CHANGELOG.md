@@ -3300,3 +3300,34 @@ b_safety_constraint_reward_arxiv_2306_03220, b_safety_constraint_reward_arxiv_26
 
 ---
 
+## [2026-06-07T10:47:47.060266+00:00] v0496 - ✗ REJECTED
+
+**Candidate ID:** `reward_c024`
+**Description:** Added a safety gate that reduces tracking and bonus rewards when angular velocity exceeds safe threshold, and added a penalty for excessive angular velocity to prevent oscillations (rationale: The current reward function already has a safety gate that reduces task rewards when angular velocity exceeds safe thresholds, but the penalty could be stronger to better discourage oscillations. Adding an additional penalty term proportional to angular velocity when violating safety constraints will create a stronger incentive to maintain smooth, controlled movements. This should reduce lateral error (currently 0.0041) by discouraging rapid oscillations that could lead to tracking errors, while maintaining the high completion rate (1.0000). The modification follows the research idea of gating task rewards with explicit penalties for safety violations.)
+
+### Reward Formula / Change
+```
+Added a safety gate that reduces tracking and bonus rewards when angular velocity exceeds safe threshold, and added a penalty for excessive angular velocity to prevent oscillations (rationale: The current reward function already has a safety gate that reduces task rewards when angular velocity exceeds safe thresholds, but the penalty could be stronger to better discourage oscillations. Adding an additional penalty term proportional to angular velocity when violating safety constraints will create a stronger incentive to maintain smooth, controlled movements. This should reduce lateral error (currently 0.0041) by discouraging rapid oscillations that could lead to tracking errors, while maintaining the high completion rate (1.0000). The modification follows the research idea of gating task rewards with explicit penalties for safety violations.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 868.8525 (std: 0.0000)
+- **lateral_error:** 0.0057 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.1047 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_7lfmnvnmfj, b_safety_constraint_reward_openreview_dhtoyebvmt
+
+---
+
