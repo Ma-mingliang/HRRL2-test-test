@@ -4252,3 +4252,29 @@ f_residual_aware_reward_openreview_dpkak1oh3x, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T14:14:14.038408+00:00] v0531 - ✗ REJECTED
+
+**Candidate ID:** `reward_c012`
+**Description:** Added residual action penalty to the reward calculation and fixed the duplicate reward line (rationale: The current code has two issues: 1) The residual_penalty variable is calculated but never added to the reward (line 966-967 show duplicate lines that don't include residual_penalty), and 2) there's a duplicate reward calculation line. By adding residual_penalty to the reward sum and removing the duplicate line, we properly implement the residual action penalty from the research idea. This should encourage smoother residual actions while maintaining the existing tracking performance, potentially reducing action roughness and improving overall control smoothness.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to the reward calculation and fixed the duplicate reward line (rationale: The current code has two issues: 1) The residual_penalty variable is calculated but never added to the reward (line 966-967 show duplicate lines that don't include residual_penalty), and 2) there's a duplicate reward calculation line. By adding residual_penalty to the reward sum and removing the duplicate line, we properly implement the residual action penalty from the research idea. This should encourage smoother residual actions while maintaining the existing tracking performance, potentially reducing action roughness and improving overall control smoothness.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_1dgp543ohn, f_residual_aware_reward_openreview_82vbpvhegr
+
+---
+

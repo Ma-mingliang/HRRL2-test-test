@@ -960,10 +960,15 @@ class Attitude_control_stage1(gym.Env):
         # 8. Residual action penalty (from research idea F_residual_aware_reward)
         # Penalize large residual actions to encourage smooth corrections
         residual_penalty = 0.0
+        residual_smoothness_penalty = 0.0
         if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
             residual_penalty = -0.1 * np.sum(self.last_residual_action**2)
+            # Add smoothness penalty for residual action changes
+            if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
+                residual_smoothness_penalty = -0.05 * np.sum((self.last_residual_action - self.prev_residual_action)**2)
+            self.prev_residual_action = self.last_residual_action.copy()
         
-        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty + residual_penalty
+        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty
         
         # 7. Small bonus for maintaining very low tracking error
         if current_error < 0.01:  # Very precise tracking
