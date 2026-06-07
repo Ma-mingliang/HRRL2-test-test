@@ -3085,3 +3085,34 @@ g_llm_reward_generation_openreview_u07fuaqgct
 
 ---
 
+## [2026-06-07T10:38:45.849414+00:00] v0488 - ✗ REJECTED
+
+**Candidate ID:** `reward_c016`
+**Description:** Added residual action penalty to encourage smoother residual control outputs (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041). Adding a residual action penalty encourages smoother control outputs by penalizing both the magnitude of the residual action and its roughness (change between steps). This aligns with the research idea to penalize residual action magnitude and roughness, which should improve action smoothness without compromising tracking performance. The penalty is small (0.01 coefficient) to avoid reward hacking while still providing a learning signal for smoother control.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to encourage smoother residual control outputs (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041). Adding a residual action penalty encourages smoother control outputs by penalizing both the magnitude of the residual action and its roughness (change between steps). This aligns with the research idea to penalize residual action magnitude and roughness, which should improve action smoothness without compromising tracking performance. The penalty is small (0.01 coefficient) to avoid reward hacking while still providing a learning signal for smoother control.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 927.5987 (std: 0.0000)
+- **lateral_error:** 0.0042 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.0063 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_dzmd1pbtc5, f_residual_aware_reward_openreview_mjarxzke30
+
+---
+
