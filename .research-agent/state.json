@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "project_path": "D:\research-agent\\HRRL2",
+  "project_path": "D:\\research-agent\\HRRL2",
   "work_dir": ".research-agent",
   "phase": "planned",
   "front_agent": {
@@ -52,10 +52,47 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 18,
-    "full_evals_run": 13
+    "candidates_proposed": 19,
+    "full_evals_run": 14
   },
   "stop_reason": null,
   "progress": null,
-  "applied_patches": []
+  "applied_patches": [],
+  "baseline_fair_eval": {
+    "reward": 930.8458,
+    "completion_rate": 1.0,
+    "lateral_error": 0.0041
+  },
+  "baseline_metrics": {
+    "reward": {
+      "mean": 930.8458,
+      "std": 0.0,
+      "min": 930.8458,
+      "max": 930.8458,
+      "n": 1,
+      "values": [
+        930.8458
+      ]
+    },
+    "completion_rate": {
+      "mean": 1.0,
+      "std": 0.0,
+      "min": 1.0,
+      "max": 1.0,
+      "n": 1,
+      "values": [
+        1.0
+      ]
+    },
+    "lateral_error": {
+      "mean": 0.0041,
+      "std": 0.0,
+      "min": 0.0041,
+      "max": 0.0041,
+      "n": 1,
+      "values": [
+        0.0041
+      ]
+    }
+  }
 }

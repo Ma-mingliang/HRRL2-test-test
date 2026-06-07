@@ -18,11 +18,22 @@
             # Normalize errors to prevent reward magnitude issues
             max_tracking_error = 2.0  # Expected maximum tracking error
             max_heading_error = 1.0   # Expected maximum heading error
-            normalized_tracking = abs(current_tracking_error) / max_tracking_error
-            normalized_prev_tracking = abs(self.prev_tracking_error) / max_tracking_error
-            normalized_heading = abs(current_heading_error) / max_heading_error
-            normalized_prev_heading = abs(self.prev_heading_error) / max_heading_error
-            # Potential-based shaping: gamma * Phi(s') - Phi(s)
+            # Safety gate: only apply shaping when errors are within safe bounds
+            safe_tracking = min(abs(current_tracking_error), max_tracking_error)
+            safe_prev_tracking = min(abs(self.prev_tracking_error), max_tracking_error)
+            safe_heading = min(abs(current_heading_error), max_heading_error)
+            safe_prev_heading = min(abs(self.prev_heading_error), max_heading_error)
+            normalized_tracking = safe_tracking / max_tracking_error
+            normalized_prev_tracking = safe_prev_tracking / max_tracking_error
+            normalized_heading = safe_heading / max_heading_error
+            normalized_prev_heading = safe_prev_heading / max_heading_error
+            # Apply potential-based shaping: gamma * Phi(s_next) - Phi(s)
+            # Phi(s) = -k_phi * normalized_tracking_error - k_heading * normalized_heading_error
+            potential_current = -k_phi * normalized_tracking - k_heading * normalized_heading
+            potential_prev = -k_phi * normalized_prev_tracking - k_heading * normalized_prev_heading
+            shaping_reward = gamma * potential_current - potential_prev
+            reward += shaping_reward
+    
             # where Phi(s) = -|error| (negative error as potential)
             potential_heading = gamma * (-normalized_heading) - (-normalized_prev_heading)
             potential_tracking = gamma * (-normalized_tracking) - (-normalized_prev_tracking)
