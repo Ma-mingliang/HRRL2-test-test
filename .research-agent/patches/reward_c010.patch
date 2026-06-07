@@ -1,16 +1,16 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,5 +954,10 @@
-                     gamma = 0.99
--                    alpha = 2.0
--                    if current_error > 0.5:
--                        alpha = 4.0
-+                    alpha = 3.0
-                     potential_current = -alpha * current_error
-+                    # Potential-based shaping: reward improvement in tracking error
-+                    if hasattr(self, 'prev_tracking_error'):
-+                        tracking_improvement = abs(self.prev_tracking_error) - abs(current_error)
-+                        # Scale improvement reward, but cap to prevent reward hacking
-+                        improvement_reward = np.clip(tracking_improvement * 5.0, -1.0, 1.0)
-+                        reward += improvement_reward
-+                    self.prev_tracking_error = current_error
+@@ -999,4 +999,13 @@
+         # 4. 改进奖励
+         improvement_reward = 0.0
++        # 4.5 Potential-based reward shaping using error improvement
++        # Phi(s) = -k_phi * |error|, so gamma*Phi(s') - Phi(s) = k_phi*(|e_t| - gamma*|e_t+1|)
++        # This encourages faster error reduction while preserving optimal policy
++        k_phi = 0.5
++        gamma = 0.99
++        last_error = abs(state_last_raw[0])
++        current_error_val = abs(state_raw[0])
++        potential_shaping = k_phi * (last_error - gamma * current_error_val)
++        improvement_reward = potential_shaping
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)

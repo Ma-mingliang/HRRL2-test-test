@@ -2528,3 +2528,31 @@ c_curriculum_subgoal_reward_openreview_hz9gu1io12, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-07T09:59:10.455810+00:00] v0481 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c009`
+**Description:** Replace the complex improvement reward calculation with a simpler potential-based shaping term using gamma * Phi(s_next) - Phi(s) formula (rationale: The current improvement reward calculation is overly complex with multiple conditional scaling factors that may create noisy gradients. Replacing it with a clean potential-based shaping term (gamma * Phi(s_next) - Phi(s)) provides a theoretically sound reward shaping that preserves optimal policies while giving consistent improvement signals. This should lead to more stable learning and potentially better final performance, as the agent receives direct feedback on error reduction without complex scaling heuristics.)
+
+### Reward Formula / Change
+```
+Replace the complex improvement reward calculation with a simpler potential-based shaping term using gamma * Phi(s_next) - Phi(s) formula (rationale: The current improvement reward calculation is overly complex with multiple conditional scaling factors that may create noisy gradients. Replacing it with a clean potential-based shaping term (gamma * Phi(s_next) - Phi(s)) provides a theoretically sound reward shaping that preserves optimal policies while giving consistent improvement signals. This should lead to more stable learning and potentially better final performance, as the agent receives direct feedback on error reduction without complex scaling heuristics.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 922.6499 (std: 0.0000)
+- **lateral_error:** 0.0031 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Source Methods
+a_potential_based_reward_arxiv_2605_01787, a_potential_based_reward_openreview_0iouiel5nm
+
+---
+

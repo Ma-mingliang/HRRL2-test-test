@@ -996,10 +996,19 @@ class Attitude_control_stage1(gym.Env):
         stability_bonus = 0.0
         if current_error < 0.02 and angular_velocity < 0.1:
             stability_bonus = 0.3
-        
-        # 4. 改进奖励
         # 4. 改进奖励
         improvement_reward = 0.0
+        # 4.5 Potential-based reward shaping using error improvement
+        # Phi(s) = -k_phi * |error|, so gamma*Phi(s') - Phi(s) = k_phi*(|e_t| - gamma*|e_t+1|)
+        # This encourages faster error reduction while preserving optimal policy
+        k_phi = 0.5
+        gamma = 0.99
+        last_error = abs(state_last_raw[0])
+        current_error_val = abs(state_raw[0])
+        potential_shaping = k_phi * (last_error - gamma * current_error_val)
+        improvement_reward = potential_shaping
+        # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
