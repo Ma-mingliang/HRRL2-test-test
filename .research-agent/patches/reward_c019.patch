@@ -1,0 +1,14 @@
+--- a/env.py
++++ b/env.py
+@@ -65,2 +65,11 @@
+         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
+                  math.tan(x) * ((l
++        
++        # Safety constraint: penalize excessive lean angle
++        lean_angle = abs(theta)
++        safe_lean_limit = 0.5  # ~28.6 degrees
++        lean_violation = max(0, lean_angle - safe_lean_limit)
++        
++        # Apply safety penalty to reward
++        safety_penalty = 5.0 * lean_violation
++        reward -= safety_penalty

@@ -1,19 +1,17 @@
 --- a/env.py
 +++ b/env.py
-@@ -20,7 +20,16 @@
-             potential_heading = gamma * (-abs(current_heading_error)) - (-abs(self.prev_heading_error))
-             potential_reward = k_phi * potential_tracking + k_heading * potential_heading
-             # Add to main reward (assuming reward is computed elsewhere)
-             if hasattr(self, 'reward'):
-                 self.reward += potential_reward
+@@ -1,0 +1,14 @@
++    # Add residual action penalty for smoother control
++    if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
++        # Penalize residual action magnitude
++        residual_norm = np.linalg.norm(residual_action)
++        residual_penalty = 0.1 * residual_norm**2
 +        
-+        # Residual action penalty to discourage excessive residual control effort
-+        if hasattr(self, 'prev_residual_action') and hasattr(self, 'residual_action'):
-+            lambda_res = 0.01  # Weight for residual magnitude penalty
-+            lambda_smooth = 0.005  # Weight for action smoothness penalty
-+            residual_norm = np.dot(self.residual_action, self.residual_action)
-+            smoothness_norm = np.linalg.norm(self.residual_action - self.prev_residual_action)
-+            self.reward -= lambda_res * residual_norm + lambda_smooth * smoothness_norm
-+            self.prev_residual_action = self.residual_action.copy()
-         self.prev_tracking_error = current_tracking_error
-         self.prev_heading_error = current_heading_error
++        # Penalize residual action roughness (change between steps)
++        action_change = np.linalg.norm(residual_action - self.prev_residual_action)
++        smoothness_penalty = 0.05 * action_change**2
++        
++        reward -= residual_penalty + smoothness_penalty
++    
++    # Store current residual action for next step
++    self.prev_residual_action = residual_action.copy()

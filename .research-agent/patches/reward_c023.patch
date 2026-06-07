@@ -1,0 +1,14 @@
+--- a/env.py
++++ b/env.py
+@@ -64,3 +64,12 @@
+         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
+                  math.tan(x) * ((l
++        
++        # Safety constraint: penalize excessive lean angle to prevent tipping
++        lean_angle = abs(theta)  # theta is the lean angle from vertical
++        max_safe_lean = math.radians(30)  # 30 degrees is a reasonable safety limit
++        if lean_angle > max_safe_lean:
++            # Apply quadratic penalty that increases sharply beyond safe limit
++            violation = (lean_angle - max_safe_lean) / max_safe_lean
++            safety_penalty = 10.0 * violation ** 2  # lambda_violation = 10.0
++            reward -= safety_penalty

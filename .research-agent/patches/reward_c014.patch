@@ -1,16 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -29,2 +29,13 @@
-         # Residual action penalty to discourage excessive residual control effort
-         if hasattr(self, 'prev_residual_action') and hasattr(self, 'residual_action'):
-+            # Calculate residual action magnitude penalty
+@@ -64,2 +64,11 @@
+         diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
+                  math.tan(x) * ((l
++        
++        # Residual action penalty for smoother control
++        if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
 +            residual_norm = np.linalg.norm(self.residual_action)
-+            lambda_res = 0.1  # Weight for residual action magnitude
-+            
-+            # Calculate residual action smoothness penalty
-+            if hasattr(self, 'prev_residual_action'):
-+                action_diff = np.linalg.norm(self.residual_action - self.prev_residual_action)
-+                lambda_smooth = 0.05  # Weight for action smoothness
-+                self.reward -= lambda_res * residual_norm**2 + lambda_smooth * action_diff
-+            else:
-+                self.reward -= lambda_res * residual_norm**2
++            smoothness_penalty = np.linalg.norm(self.residual_action - self.prev_residual_action)
++            lambda_res = 0.1
++            lambda_smooth = 0.05
++            reward -= lambda_res * residual_norm**2 + lambda_smooth * smoothness_penalty
++        self.prev_residual_action = self.residual_action.copy() if hasattr(self, 'residual_action') else None

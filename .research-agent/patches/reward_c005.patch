@@ -1,15 +1,16 @@
 --- a/env.py
 +++ b/env.py
-@@ -64,2 +64,12 @@
+@@ -64,2 +64,13 @@
          diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
                   math.tan(x) * ((l
 +        
 +        # Potential-based reward shaping for tracking improvement
-+        if hasattr(self, 'prev_tracking_error'):
++        if hasattr(self, 'prev_lateral_error'):
 +            gamma = 0.99
-+            k_phi = 0.5
-+            tracking_improvement = abs(self.prev_tracking_error) - abs(current_tracking_error)
-+            reward += k_phi * (gamma * (-abs(current_tracking_error)) - (-abs(self.prev_tracking_error)))
-+        self.prev_tracking_error = current_tracking_error
-+        
-+        # Original reward calculation continues below
++            k_phi = 5.0
++            # Potential function: negative absolute error
++            phi_current = -abs(self.lateral_error)
++            phi_prev = -abs(self.prev_lateral_error)
++            tracking_improvement = gamma * phi_current - phi_prev
++            reward += k_phi * tracking_improvement
++        self.prev_lateral_error = self.lateral_error

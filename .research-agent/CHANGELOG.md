@@ -1532,3 +1532,639 @@ a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-07T09:12:56.971427+00:00] v0473 - ✗ REJECTED
+
+**Candidate ID:** `reward_c004`
+**Description:** Added proper potential-based reward shaping using the correct formula: gamma * Phi(s_next) - Phi(s) with normalized potential functions (rationale: The current code is incomplete and doesn't implement proper potential-based reward shaping. By completing the normalization and adding the correct potential function formula (gamma * Phi(s_next) - Phi(s)), we ensure the shaping term preserves optimal policies while encouraging error reduction. The normalized potentials prevent reward magnitude issues and the safety gates prevent unsafe behavior. This should improve tracking performance while maintaining stability.)
+
+### Reward Formula / Change
+```
+Added proper potential-based reward shaping using the correct formula: gamma * Phi(s_next) - Phi(s) with normalized potential functions (rationale: The current code is incomplete and doesn't implement proper potential-based reward shaping. By completing the normalization and adding the correct potential function formula (gamma * Phi(s_next) - Phi(s)), we ensure the shaping term preserves optimal policies while encouraging error reduction. The normalized potentials prevent reward magnitude issues and the safety gates prevent unsafe behavior. This should improve tracking performance while maintaining stability.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **reward:** 868.8525 (std: 0.0000)
+- **lateral_error:** 0.0057 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+
+### Rejection Reason
+Score -0.1047 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2502_01307, a_potential_based_reward_openreview_anosgmzrdv
+
+---
+
+## [2026-06-07T09:13:06.628110+00:00] v0474 - ✗ REJECTED
+
+**Candidate ID:** `reward_c005`
+**Description:** Added potential-based reward shaping to encourage tracking error improvement over time (rationale: The current reward function achieves perfect completion but with very small lateral error (0.0041). Adding potential-based shaping encourages the agent to actively reduce tracking error over time rather than just maintaining low error. The gamma * Phi(s_next) - Phi(s) formulation preserves optimal policies while providing denser feedback for error reduction. This should help the agent learn more responsive control, potentially reducing lateral error further while maintaining the high completion rate.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping to encourage tracking error improvement over time (rationale: The current reward function achieves perfect completion but with very small lateral error (0.0041). Adding potential-based shaping encourages the agent to actively reduce tracking error over time rather than just maintaining low error. The gamma * Phi(s_next) - Phi(s) formulation preserves optimal policies while providing denser feedback for error reduction. This should help the agent learn more responsive control, potentially reducing lateral error further while maintaining the high completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    if hasattr(self, 'prev_lateral_error'):
+                                          ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+a_potential_based_reward_openreview_hu7hujemiw, a_potential_based_reward_openreview_lxfl2g3yxb
+
+---
+
+## [2026-06-07T09:13:14.833800+00:00] v0474 - ✗ REJECTED
+
+**Candidate ID:** `reward_c002`
+**Description:** Added a scaling factor to the potential-based reward term to make it more influential relative to other reward components (rationale: The current potential-based reward term (improvement_reward) is likely too small relative to other components like tracking_reward and bonus_reward. By adding a scaling factor k_phi=2.0, we amplify the signal for tracking error improvement, which should encourage faster convergence to the target. This aligns with the research idea of using potential differences as a shaping term while preserving policy incentives. The scaling makes the improvement signal more noticeable to the agent without changing the fundamental structure of the reward.)
+
+### Reward Formula / Change
+```
+Added a scaling factor to the potential-based reward term to make it more influential relative to other reward components (rationale: The current potential-based reward term (improvement_reward) is likely too small relative to other components like tracking_reward and bonus_reward. By adding a scaling factor k_phi=2.0, we amplify the signal for tracking error improvement, which should encourage faster convergence to the target. This aligns with the research idea of using potential differences as a shaping term while preserving policy incentives. The scaling makes the improvement signal more noticeable to the agent without changing the fundamental structure of the reward.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 1085
+    gamma = 0.99
+          ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+a_potential_based_reward_openreview_tjhhb6cscw, a_potential_based_reward_openreview_hz9gu1io12
+
+---
+
+## [2026-06-07T09:13:15.511708+00:00] v0475 - ✗ REJECTED
+
+**Candidate ID:** `reward_c006`
+**Description:** Added potential-based reward shaping to encourage tracking error improvement over time (rationale: Adding potential-based reward shaping encourages the agent to improve tracking performance over time. The shaping term uses the difference in potential between consecutive states (gamma * Phi(s_next) - Phi(s)) where Phi(s) = -|lateral_error|. This preserves the optimal policy while providing denser feedback about tracking improvement, which should help reduce lateral error further while maintaining the high completion rate.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping to encourage tracking error improvement over time (rationale: Adding potential-based reward shaping encourages the agent to improve tracking performance over time. The shaping term uses the difference in potential between consecutive states (gamma * Phi(s_next) - Phi(s)) where Phi(s) = -|lateral_error|. This preserves the optimal policy while providing denser feedback about tracking improvement, which should help reduce lateral error further while maintaining the high completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 60))
+
+### Source Methods
+a_potential_based_reward_arxiv_2012_08824, a_potential_based_reward_openreview_3napba3fn3
+
+---
+
+## [2026-06-07T09:13:53.467497+00:00] v0476 - ✗ REJECTED
+
+**Candidate ID:** `reward_c007`
+**Description:** Added potential-based reward shaping term to encourage tracking error improvement over time (rationale: The current reward function already has good baseline performance (930.85 reward, 1.0 completion rate, 0.0041 lateral error). Adding potential-based reward shaping encourages the agent to improve tracking performance over time by rewarding error reduction. This preserves the original policy incentives while providing denser feedback about progress. The shaping term uses the difference between previous and current tracking errors, which aligns with the research idea of using potential differences. This should help the agent learn faster convergence to the path while maintaining the existing good performance metrics.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping term to encourage tracking error improvement over time (rationale: The current reward function already has good baseline performance (930.85 reward, 1.0 completion rate, 0.0041 lateral error). Adding potential-based reward shaping encourages the agent to improve tracking performance over time by rewarding error reduction. This preserves the original policy incentives while providing denser feedback about progress. The shaping term uses the difference between previous and current tracking errors, which aligns with the research idea of using potential differences. This should help the agent learn faster convergence to the path while maintaining the existing good performance metrics.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 954))
+
+### Source Methods
+a_potential_based_reward_openreview_snxieztsff, a_potential_based_reward_arxiv_2109_05022
+
+---
+
+## [2026-06-07T09:14:17.538016+00:00] v0477 - ✗ REJECTED
+
+**Candidate ID:** `reward_c008`
+**Description:** Added potential-based reward shaping term to encourage tracking error improvement over time (rationale: The current reward function shows excellent performance (reward: 930.85, completion: 100%, lateral error: 0.0041), but adding potential-based reward shaping can further improve learning efficiency. This modification introduces a shaping term that rewards the agent for reducing tracking error over time (gamma * Phi(s_next) - Phi(s)), which preserves the optimal policy while providing denser feedback. The shaping term encourages consistent improvement in tracking performance, which should help maintain the already excellent metrics while potentially accelerating convergence in early training stages.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping term to encourage tracking error improvement over time (rationale: The current reward function shows excellent performance (reward: 930.85, completion: 100%, lateral error: 0.0041), but adding potential-based reward shaping can further improve learning efficiency. This modification introduces a shaping term that rewards the agent for reducing tracking error over time (gamma * Phi(s_next) - Phi(s)), which preserves the optimal policy while providing denser feedback. The shaping term encourages consistent improvement in tracking performance, which should help maintain the already excellent metrics while potentially accelerating convergence in early training stages.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 8
+    """Compute potential function for potential-based reward shaping"""
+       ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_23703
+
+---
+
+## [2026-06-07T09:14:26.355543+00:00] v0478 - ✗ REJECTED
+
+**Candidate ID:** `reward_c009`
+**Description:** Added potential-based reward shaping term to encourage tracking error improvement over time (rationale: The current reward function achieves excellent baseline metrics (930.85 reward, 1.0 completion, 0.0041 lateral error). Adding potential-based reward shaping encourages the agent to actively reduce tracking errors over time rather than just maintaining low errors. The term gamma * Phi(s_next) - Phi(s) preserves optimal policies while providing denser learning signals. The k_phi=0.5 weight is conservative to avoid reward hacking, and the gamma=0.99 discount aligns with standard RL practices. This should help the agent learn faster convergence to the path and potentially reduce the already-low lateral error further.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping term to encourage tracking error improvement over time (rationale: The current reward function achieves excellent baseline metrics (930.85 reward, 1.0 completion, 0.0041 lateral error). Adding potential-based reward shaping encourages the agent to actively reduce tracking errors over time rather than just maintaining low errors. The term gamma * Phi(s_next) - Phi(s) preserves optimal policies while providing denser learning signals. The k_phi=0.5 weight is conservative to avoid reward hacking, and the gamma=0.99 discount aligns with standard RL practices. This should help the agent learn faster convergence to the path and potentially reduce the already-low lateral error further.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    if hasattr(self, 'prev_lateral_error'):
+                                          ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+a_potential_based_reward_arxiv_2605_01787, a_potential_based_reward_openreview_0iouiel5nm
+
+---
+
+## [2026-06-07T09:14:35.065808+00:00] v0479 - ✗ REJECTED
+
+**Candidate ID:** `reward_c010`
+**Description:** Added potential-based reward shaping to encourage tracking error improvement over time (rationale: The current reward function already has high completion rate (1.0) and low lateral error (0.0041), but adding potential-based shaping will encourage the agent to actively reduce tracking errors rather than just maintaining low errors. This creates a denser reward signal that should help the agent learn faster and potentially achieve even lower tracking errors. The clipping prevents reward hacking from large improvements that might not be sustainable.)
+
+### Reward Formula / Change
+```
+Added potential-based reward shaping to encourage tracking error improvement over time (rationale: The current reward function already has high completion rate (1.0) and low lateral error (0.0041), but adding potential-based shaping will encourage the agent to actively reduce tracking errors rather than just maintaining low errors. This creates a denser reward signal that should help the agent learn faster and potentially achieve even lower tracking errors. The clipping prevents reward hacking from large improvements that might not be sustainable.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 954))
+
+### Source Methods
+a_potential_based_reward_openreview_tdomx6s4f5, a_potential_based_reward_arxiv_1902_06239
+
+---
+
+## [2026-06-07T09:14:43.826126+00:00] v0480 - ✗ REJECTED
+
+**Candidate ID:** `reward_c011`
+**Description:** Added residual action penalty to reward function to encourage smoother residual control actions (rationale: The current reward function achieves excellent tracking (lateral_error: 0.0041) but may benefit from smoother residual actions. Adding penalties for residual action magnitude and roughness will encourage the RL policy to produce smaller, smoother corrections while maintaining task performance. This addresses the research idea of penalizing residual action magnitude/roughness to prevent reward hacking and improve control smoothness. The small penalty weights (0.1 and 0.05) ensure task performance remains primary while promoting better control quality.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to reward function to encourage smoother residual control actions (rationale: The current reward function achieves excellent tracking (lateral_error: 0.0041) but may benefit from smoother residual actions. Adding penalties for residual action magnitude and roughness will encourage the RL policy to produce smaller, smoother corrections while maintaining task performance. This addresses the research idea of penalizing residual action magnitude/roughness to prevent reward hacking and improve control smoothness. The small penalty weights (0.1 and 0.05) ensure task performance remains primary while promoting better control quality.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 2))
+
+### Source Methods
+f_residual_aware_reward_openreview_dpkak1oh3x, f_residual_aware_reward_openreview_isxdqzvhox
+
+---
+
+## [2026-06-07T09:14:54.042466+00:00] v0481 - ✗ REJECTED
+
+**Candidate ID:** `reward_c012`
+**Description:** Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves excellent tracking (lateral_error: 0.0041) but may be using excessive residual control actions. By adding penalties for residual action magnitude and roughness, we encourage the RL policy to use minimal residual corrections while maintaining tracking performance. This should improve action smoothness and reduce control effort without sacrificing the high completion rate (1.0000). The small penalty weights (lambda_res=0.1, lambda_smooth=0.05) ensure task performance remains primary while promoting more efficient control.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves excellent tracking (lateral_error: 0.0041) but may be using excessive residual control actions. By adding penalties for residual action magnitude and roughness, we encourage the RL policy to use minimal residual corrections while maintaining tracking performance. This should improve action smoothness and reduce control effort without sacrificing the high completion rate (1.0000). The small penalty weights (lambda_res=0.1, lambda_smooth=0.05) ensure task performance remains primary while promoting more efficient control.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
+                                                                                      ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+f_residual_aware_reward_openreview_1dgp543ohn, f_residual_aware_reward_openreview_82vbpvhegr
+
+---
+
+## [2026-06-07T09:15:04.951243+00:00] v0482 - ✗ REJECTED
+
+**Candidate ID:** `reward_c013`
+**Description:** Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves excellent tracking (lateral_error: 0.0041) but may benefit from smoother residual control actions. By penalizing both the magnitude and roughness of residual actions, we encourage the RL agent to make minimal, smooth corrections to the classical controller. This should improve action smoothness and potentially reduce control effort while maintaining the high completion rate. The small penalty weights (lambda_res=0.1, lambda_smooth=0.05) ensure task performance isn't compromised.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves excellent tracking (lateral_error: 0.0041) but may benefit from smoother residual control actions. By penalizing both the magnitude and roughness of residual actions, we encourage the RL agent to make minimal, smooth corrections to the classical controller. This should improve action smoothness and potentially reduce control effort while maintaining the high completion rate. The small penalty weights (lambda_res=0.1, lambda_smooth=0.05) ensure task performance isn't compromised.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 60))
+
+### Source Methods
+f_residual_aware_reward_openreview_huslmvdg5k, f_residual_aware_reward_openreview_jy750ih1y0
+
+---
+
+## [2026-06-07T09:15:14.126366+00:00] v0483 - ✗ REJECTED
+
+**Candidate ID:** `reward_c014`
+**Description:** Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves perfect completion but may benefit from smoother residual actions. Adding a penalty on residual action magnitude and roughness (change between steps) encourages the RL policy to produce more stable, less jerky corrections while maintaining task performance. This addresses the research idea of penalizing residual action magnitude/roughness to prevent reward hacking and improve action smoothness, which should lead to more robust and predictable control behavior.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves perfect completion but may benefit from smoother residual actions. Adding a penalty on residual action magnitude and roughness (change between steps) encourages the RL policy to produce more stable, less jerky corrections while maintaining task performance. This addresses the research idea of penalizing residual action magnitude/roughness to prevent reward hacking and improve action smoothness, which should lead to more robust and predictable control behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
+                                                                                      ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+f_residual_aware_reward_openreview_l8pjfrpuuq, f_residual_aware_reward_openreview_n67dlqk5c4
+
+---
+
+## [2026-06-07T09:15:24.838365+00:00] v0484 - ✗ REJECTED
+
+**Candidate ID:** `reward_c015`
+**Description:** Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves excellent tracking (lateral_error: 0.0041) but may benefit from smoother residual control actions. Adding penalties for residual action magnitude and roughness encourages the RL policy to make minimal, smooth adjustments to the classical controller. This should improve action smoothness metrics while maintaining the high completion rate and low tracking error. The small penalty weights (lambda_res=0.1, lambda_smooth=0.05) ensure task performance isn't compromised while promoting more natural, energy-efficient control.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves excellent tracking (lateral_error: 0.0041) but may benefit from smoother residual control actions. Adding penalties for residual action magnitude and roughness encourages the RL policy to make minimal, smooth adjustments to the classical controller. This should improve action smoothness metrics while maintaining the high completion rate and low tracking error. The small penalty weights (lambda_res=0.1, lambda_smooth=0.05) ensure task performance isn't compromised while promoting more natural, energy-efficient control.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    lambda_res = 0.1
+    ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+f_residual_aware_reward_openreview_pech3gfc9d, f_residual_aware_reward_openreview_ar9uz1tmsz
+
+---
+
+## [2026-06-07T09:15:38.109174+00:00] v0485 - ✗ REJECTED
+
+**Candidate ID:** `reward_c016`
+**Description:** Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves perfect completion rate (1.0) and very low lateral error (0.0041), but may benefit from smoother residual control actions. By penalizing both the magnitude and roughness of residual actions, we encourage the RL agent to make minimal, smooth corrections to the classical controller. This should improve action smoothness metrics while maintaining the excellent tracking performance. The penalty weights (lambda_res=0.1, lambda_smooth=0.05) are chosen to be small enough to not dominate the task reward but sufficient to encourage smoother behavior.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves perfect completion rate (1.0) and very low lateral error (0.0041), but may benefit from smoother residual control actions. By penalizing both the magnitude and roughness of residual actions, we encourage the RL agent to make minimal, smooth corrections to the classical controller. This should improve action smoothness metrics while maintaining the excellent tracking performance. The penalty weights (lambda_res=0.1, lambda_smooth=0.05) are chosen to be small enough to not dominate the task reward but sufficient to encourage smoother behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 2))
+
+### Source Methods
+f_residual_aware_reward_openreview_dzmd1pbtc5, f_residual_aware_reward_openreview_mjarxzke30
+
+---
+
+## [2026-06-07T09:15:50.570507+00:00] v0486 - ✗ REJECTED
+
+**Candidate ID:** `reward_c017`
+**Description:** Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves excellent tracking (lateral_error: 0.0041) but may benefit from smoother residual actions. Adding a penalty on residual action magnitude and roughness encourages the RL policy to make minimal, smooth adjustments to the classical controller, which should improve control stability and reduce wear on actuators. The small penalty weights (lambda_res=0.1, lambda_smooth=0.05) ensure task performance isn't compromised while promoting smoother control behavior.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to the reward function to encourage smoother residual control actions (rationale: The current reward function achieves excellent tracking (lateral_error: 0.0041) but may benefit from smoother residual actions. Adding a penalty on residual action magnitude and roughness encourages the RL policy to make minimal, smooth adjustments to the classical controller, which should improve control stability and reduce wear on actuators. The small penalty weights (lambda_res=0.1, lambda_smooth=0.05) ensure task performance isn't compromised while promoting smoother control behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
+                                                                                      ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+f_residual_aware_reward_openreview_tcz7uwkrtt, f_residual_aware_reward_openreview_vk9j25hi1o
+
+---
+
+## [2026-06-07T09:16:00.101392+00:00] v0487 - ✗ REJECTED
+
+**Candidate ID:** `reward_c018`
+**Description:** Added safety penalty for excessive lean angle to prevent dangerous tilting (rationale: The baseline shows perfect completion (1.0) and very low lateral error (0.0041), but adding a safety penalty for excessive lean angles will encourage the agent to maintain safer riding postures. This implements the safety constraint reward idea by penalizing dangerous tilting beyond a safe threshold, which should improve robustness without significantly impacting the already good task performance.)
+
+### Reward Formula / Change
+```
+Added safety penalty for excessive lean angle to prevent dangerous tilting (rationale: The baseline shows perfect completion (1.0) and very low lateral error (0.0041), but adding a safety penalty for excessive lean angles will encourage the agent to maintain safer riding postures. This implements the safety constraint reward idea by penalizing dangerous tilting beyond a safe threshold, which should improve robustness without significantly impacting the already good task performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 60))
+
+### Source Methods
+b_safety_constraint_reward_openreview_hqwhxvzcmj, b_safety_constraint_reward_openreview_mhratccbtk
+
+---
+
+## [2026-06-07T09:16:14.681424+00:00] v0488 - ✗ REJECTED
+
+**Candidate ID:** `reward_c019`
+**Description:** Added safety constraint penalty for excessive lean angle to prevent dangerous tilting during balancing (rationale: The current reward function achieves high completion rate (1.0) and low lateral error (0.0041), but may allow dangerous lean angles during balancing. Adding a safety constraint penalty for excessive lean angles (beyond ~28.6 degrees) will encourage the agent to maintain safer riding postures while preserving task performance. This implements the B_safety_constraint_reward idea by gating task reward with explicit penalties for safety violations, preventing potential reward hacking where the agent might achieve path tracking through unsafe maneuvers.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive lean angle to prevent dangerous tilting during balancing (rationale: The current reward function achieves high completion rate (1.0) and low lateral error (0.0041), but may allow dangerous lean angles during balancing. Adding a safety constraint penalty for excessive lean angles (beyond ~28.6 degrees) will encourage the agent to maintain safer riding postures while preserving task performance. This implements the B_safety_constraint_reward idea by gating task reward with explicit penalties for safety violations, preventing potential reward hacking where the agent might achieve path tracking through unsafe maneuvers.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 64
+    diff_f = (1 + (math.tan(x)**2)) * (math.sqrt((l**2) + (l1**2) * (math.tan(x)**2)) + 0.4407) + \
+             ^
+SyntaxError: cannot assign to operator)
+
+### Source Methods
+b_safety_constraint_reward_openreview_dju2kvsdts, b_safety_constraint_reward_openreview_rgvqh3gjea
+
+---
+
+## [2026-06-07T09:16:28.177520+00:00] v0489 - ✗ REJECTED
+
+**Candidate ID:** `reward_c020`
+**Description:** Added a safety penalty for excessive lean angle to prevent the bicycle from tipping over, which is a critical safety constraint for self-balancing. (rationale: The current reward function achieves perfect completion but may not adequately penalize dangerous lean angles that could lead to falls. Adding a safety penalty for excessive lean angle (beyond ~28.6 degrees) creates a safety gate that discourages risky balancing strategies. This aligns with the research idea of gating task rewards with safety constraints, preventing the agent from learning strategies that succeed in tracking but are unsafe. The penalty is only applied when the lean angle exceeds a safe threshold, ensuring it doesn't interfere with normal balancing performance.)
+
+### Reward Formula / Change
+```
+Added a safety penalty for excessive lean angle to prevent the bicycle from tipping over, which is a critical safety constraint for self-balancing. (rationale: The current reward function achieves perfect completion but may not adequately penalize dangerous lean angles that could lead to falls. Adding a safety penalty for excessive lean angle (beyond ~28.6 degrees) creates a safety gate that discourages risky balancing strategies. This aligns with the research idea of gating task rewards with safety constraints, preventing the agent from learning strategies that succeed in tracking but are unsafe. The penalty is only applied when the lean angle exceeds a safe threshold, ensuring it doesn't interfere with normal balancing performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    lean_angle = abs(theta)
+    ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+b_safety_constraint_reward_openreview_umvicbadkk, b_safety_constraint_reward_openreview_v3kavlfvrd
+
+---
+
+## [2026-06-07T09:16:47.893868+00:00] v0490 - ✗ REJECTED
+
+**Candidate ID:** `reward_c021`
+**Description:** Added safety penalty for excessive lean angle to prevent dangerous tilting (rationale: The current reward function achieves perfect completion but may allow dangerous lean angles. Adding a safety penalty for excessive lean angles (beyond ~28.6 degrees) will encourage the agent to maintain safer balance while preserving task performance. This implements the safety constraint reward idea by penalizing constraint violations (lean angle > safe threshold) with a linear penalty that scales with violation severity.)
+
+### Reward Formula / Change
+```
+Added safety penalty for excessive lean angle to prevent dangerous tilting (rationale: The current reward function achieves perfect completion but may allow dangerous lean angles. Adding a safety penalty for excessive lean angles (beyond ~28.6 degrees) will encourage the agent to maintain safer balance while preserving task performance. This implements the safety constraint reward idea by penalizing constraint violations (lean angle > safe threshold) with a linear penalty that scales with violation severity.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 60))
+
+### Source Methods
+b_safety_constraint_reward_openreview_3zar4hakpw, b_safety_constraint_reward_openreview_imlpdfbvin
+
+---
+
+## [2026-06-07T09:17:01.784697+00:00] v0491 - ✗ REJECTED
+
+**Candidate ID:** `reward_c022`
+**Description:** Added safety constraint penalty for excessive lean angle to prevent dangerous tilting (rationale: The current reward function achieves perfect completion but may allow dangerous lean angles. Adding a safety constraint penalty for excessive lean angles (beyond ~28.6 degrees) will encourage the controller to maintain safer balance while preserving task performance. This implements the B_safety_constraint_reward research idea by gating task reward with explicit penalties for safety violations, preventing potential reward hacking where the agent might achieve high rewards through unsafe maneuvers.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive lean angle to prevent dangerous tilting (rationale: The current reward function achieves perfect completion but may allow dangerous lean angles. Adding a safety constraint penalty for excessive lean angles (beyond ~28.6 degrees) will encourage the controller to maintain safer balance while preserving task performance. This implements the B_safety_constraint_reward research idea by gating task reward with explicit penalties for safety violations, preventing potential reward hacking where the agent might achieve high rewards through unsafe maneuvers.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 60))
+
+### Source Methods
+b_safety_constraint_reward_openreview_dbuuzrhoqp, b_safety_constraint_reward_openreview_rpws9kov0i
+
+---
+
+## [2026-06-07T09:17:13.422769+00:00] v0492 - ✗ REJECTED
+
+**Candidate ID:** `reward_c023`
+**Description:** Added a safety penalty for excessive lean angle to prevent the bicycle from tipping over, which is a critical safety constraint for self-balancing. (rationale: The current reward function achieves perfect completion rate and low lateral error, but doesn't explicitly penalize dangerous lean angles. Adding a safety constraint penalty for excessive lean angles (beyond 30 degrees) will encourage the agent to maintain stable balance while still achieving path tracking. This implements the B_safety_constraint_reward research idea by gating the task reward with a safety penalty, which should improve robustness without sacrificing the existing good performance metrics.)
+
+### Reward Formula / Change
+```
+Added a safety penalty for excessive lean angle to prevent the bicycle from tipping over, which is a critical safety constraint for self-balancing. (rationale: The current reward function achieves perfect completion rate and low lateral error, but doesn't explicitly penalize dangerous lean angles. Adding a safety constraint penalty for excessive lean angles (beyond 30 degrees) will encourage the agent to maintain stable balance while still achieving path tracking. This implements the B_safety_constraint_reward research idea by gating the task reward with a safety penalty, which should improve robustness without sacrificing the existing good performance metrics.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: File "D:\research-agent\HRRL2\env.py", line 68
+    lean_angle = abs(theta)  # theta is the lean angle from vertical
+    ^
+SyntaxError: invalid syntax)
+
+### Source Methods
+b_safety_constraint_reward_arxiv_2306_03220, b_safety_constraint_reward_arxiv_2605_01787
+
+---
+
+## [2026-06-07T09:17:22.648506+00:00] v0493 - ✗ REJECTED
+
+**Candidate ID:** `reward_c024`
+**Description:** Added safety penalty for excessive lean angle to prevent dangerous tilting (rationale: The current reward function achieves perfect completion but may allow dangerous lean angles. Adding a safety penalty for excessive lean angle (beyond ~17 degrees) encourages the agent to maintain stable balance while still achieving path tracking. This implements the safety constraint research idea by gating task reward with explicit penalties for unsafe behavior, preventing potential reward hacking where the agent might sacrifice stability for path accuracy.)
+
+### Reward Formula / Change
+```
+Added safety penalty for excessive lean angle to prevent dangerous tilting (rationale: The current reward function achieves perfect completion but may allow dangerous lean angles. Adding a safety penalty for excessive lean angle (beyond ~17 degrees) encourages the agent to maintain stable balance while still achieving path tracking. This implements the safety constraint research idea by gating task reward with explicit penalties for unsafe behavior, preventing potential reward hacking where the agent might sacrifice stability for path accuracy.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 2))
+
+### Source Methods
+b_safety_constraint_reward_openreview_7lfmnvnmfj, b_safety_constraint_reward_openreview_dhtoyebvmt
+
+---
+
+## [2026-06-07T09:17:32.780491+00:00] v0494 - ✗ REJECTED
+
+**Candidate ID:** `reward_c025`
+**Description:** Added a safety penalty for excessive lean angle to prevent the bicycle from tipping over, which is a critical safety constraint for balance control. (rationale: The baseline shows perfect completion rate (1.0) and very low lateral error (0.0041), but adding a safety penalty for excessive lean angles will encourage the agent to maintain safer balance. This implements the B_safety_constraint_reward idea by gating the task reward with a penalty when the lean angle exceeds a safe threshold. This should improve robustness and prevent potential reward hacking where the agent might achieve low lateral error through dangerous lean angles.)
+
+### Reward Formula / Change
+```
+Added a safety penalty for excessive lean angle to prevent the bicycle from tipping over, which is a critical safety constraint for balance control. (rationale: The baseline shows perfect completion rate (1.0) and very low lateral error (0.0041), but adding a safety penalty for excessive lean angles will encourage the agent to maintain safer balance. This implements the B_safety_constraint_reward idea by gating the task reward with a penalty when the lean angle exceeds a safe threshold. This should improve robustness and prevent potential reward hacking where the agent might achieve low lateral error through dangerous lean angles.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch not applied: compilation_failed (env.py: Sorry: IndentationError: unexpected indent (env.py, line 60))
+
+### Source Methods
+b_safety_constraint_reward_openreview_uqrs6vfcsd, b_safety_constraint_reward_openreview_zseebz7zj5
+
+---
+

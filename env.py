@@ -1,7 +1,23 @@
-﻿"""
+"""
 自行车自平衡与路径跟踪控制系统
 
 包含：
+        # 路径跟踪奖励
+        reward = 0.0
+        
+        # Safety constraint: penalize excessive roll angle
+        roll_angle = abs(self.bike_roll)
+        safe_roll_limit = 0.3  # ~17 degrees
+        if roll_angle > safe_roll_limit:
+            violation = roll_angle - safe_roll_limit
+            lambda_violation = 50.0
+            reward -= lambda_violation * violation
+            # Additional penalty for near-fall condition
+            if roll_angle > 0.5:  # ~28 degrees
+                reward -= 100.0
+        
+        # 横向误差惩罚
+        if self.lateral_error is not None:
 - 第一阶段：纯强化学习平衡控制器
 - 第三阶段：自适应Stanley控制器
 """
