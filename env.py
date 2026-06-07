@@ -940,9 +940,7 @@ class Attitude_control_stage1(gym.Env):
         # 2. Potential-based reward shaping (preserves optimal policy)
         # Phi(s) = -k * |error|, so gamma*Phi(s') - Phi(s) = k*(|e_t| - gamma*|e_t+1|)
         gamma = 0.99
-        # Adaptive scaling: increase shaping weight when error is large
-        k_phi_base = 2.0
-        k_phi = k_phi_base * (1.0 + 2.0 * min(current_error, 1.0))  # Scale up to 3x when error > 0.5
+        k_phi = 2.0
         potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
         
         # 4. Heading error penalty to reduce oscillations

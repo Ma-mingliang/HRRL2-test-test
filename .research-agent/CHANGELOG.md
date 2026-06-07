@@ -4148,3 +4148,29 @@ a_potential_based_reward_openreview_snxieztsff, a_potential_based_reward_arxiv_2
 
 ---
 
+## [2026-06-07T14:12:42.853225+00:00] v0527 - ✗ REJECTED
+
+**Candidate ID:** `reward_c008`
+**Description:** Added adaptive scaling to the potential-based shaping term to increase emphasis on tracking improvement when error is large, while preserving the policy-invariant property. (rationale: The current potential shaping uses a fixed weight (k_phi=2.0), which may be too conservative when tracking error is large. By adaptively scaling the shaping weight based on current error magnitude, we provide stronger learning signals when the agent is far from the target, potentially accelerating convergence while maintaining the policy-invariant property of potential-based shaping. This should reduce lateral error (currently 0.0041) by providing more aggressive correction when needed, without affecting the optimal policy.)
+
+### Reward Formula / Change
+```
+Added adaptive scaling to the potential-based shaping term to increase emphasis on tracking improvement when error is large, while preserving the policy-invariant property. (rationale: The current potential shaping uses a fixed weight (k_phi=2.0), which may be too conservative when tracking error is large. By adaptively scaling the shaping weight based on current error magnitude, we provide stronger learning signals when the agent is far from the target, potentially accelerating convergence while maintaining the policy-invariant property of potential-based shaping. This should reduce lateral error (currently 0.0041) by providing more aggressive correction when needed, without affecting the optimal policy.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_23703
+
+---
+
