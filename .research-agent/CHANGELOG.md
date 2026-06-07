@@ -3144,3 +3144,29 @@ f_residual_aware_reward_openreview_tcz7uwkrtt, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-07T10:45:08.516095+00:00] v0490 - ✗ REJECTED
+
+**Candidate ID:** `reward_c018`
+**Description:** Added safety constraint penalty for excessive angular velocity to prevent dangerous oscillations (rationale: The baseline shows perfect completion rate (1.0) and low lateral error (0.0041), but adding a safety constraint penalty for excessive angular velocity will prevent dangerous oscillations that could occur during aggressive maneuvers. This implements the B_safety_constraint_reward research idea by gating the reward with explicit penalties for constraint violations (angular velocity exceeding safe limits). The penalty is quadratic to strongly discourage unsafe behavior while maintaining smooth tracking performance.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive angular velocity to prevent dangerous oscillations (rationale: The baseline shows perfect completion rate (1.0) and low lateral error (0.0041), but adding a safety constraint penalty for excessive angular velocity will prevent dangerous oscillations that could occur during aggressive maneuvers. This implements the B_safety_constraint_reward research idea by gating the reward with explicit penalties for constraint violations (angular velocity exceeding safe limits). The penalty is quadratic to strongly discourage unsafe behavior while maintaining smooth tracking performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8458 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_hqwhxvzcmj, b_safety_constraint_reward_openreview_mhratccbtk
+
+---
+
