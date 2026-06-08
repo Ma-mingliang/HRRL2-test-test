@@ -6503,3 +6503,29 @@ d_adaptive_dynamic_reward_openreview_a3xff0pglu, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T09:40:47.439020+00:00] v0617 - ✗ REJECTED
+
+**Candidate ID:** `reward_c007`
+**Description:** Added adaptive weighting for tracking reward based on current error magnitude, implementing the D_adaptive_dynamic_reward idea. The tracking reward weight increases as error decreases, encouraging more precise tracking when close to target. (rationale: The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but the reward function could be more adaptive. By increasing the tracking reward weight when the agent is close to the target (error < 0.01), we encourage finer precision adjustments. This implements the D_adaptive_dynamic_reward concept by making the tracking component weight dependent on current error magnitude, which should help maintain high precision while allowing faster learning when far from target. The change is minimal (5 lines added) and only modifies the tracking reward calculation.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting for tracking reward based on current error magnitude, implementing the D_adaptive_dynamic_reward idea. The tracking reward weight increases as error decreases, encouraging more precise tracking when close to target. (rationale: The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but the reward function could be more adaptive. By increasing the tracking reward weight when the agent is close to the target (error < 0.01), we encourage finer precision adjustments. This implements the D_adaptive_dynamic_reward concept by making the tracking component weight dependent on current error magnitude, which should help maintain high precision while allowing faster learning when far from target. The change is minimal (5 lines added) and only modifies the tracking reward calculation.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_hz9gu1io12, d_adaptive_dynamic_reward_openreview_rgvqh3gjea
+
+---
+
