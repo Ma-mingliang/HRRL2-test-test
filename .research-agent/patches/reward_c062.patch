@@ -1,0 +1,18 @@
+--- a/env.py
++++ b/env.py
+@@ -950,8 +950,12 @@
+         # 2. 高精度奖励
+         bonus_reward = 0.0
+         if current_error < 0.005:
+-            bonus_reward = 1.0
++            # Scale bonus by stability factor - higher bonus when angular velocity is low
++            stability_factor = max(0.1, 1.0 - 2.0 * angular_velocity)
++            bonus_reward = 1.0 * stability_factor
+         elif current_error < 0.01:
+-            bonus_reward = 0.5
++            stability_factor = max(0.1, 1.0 - 1.5 * angular_velocity)
++            bonus_reward = 0.5 * stability_factor
+         elif current_error < 0.02:
+-            bonus_reward = 0.2
++            stability_factor = max(0.1, 1.0 - 1.0 * angular_velocity)
++            bonus_reward = 0.2 * stability_factor

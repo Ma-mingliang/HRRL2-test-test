@@ -950,21 +950,20 @@ class Attitude_control_stage1(gym.Env):
         # 2. 高精度奖励
         bonus_reward = 0.0
         if current_error < 0.005:
-            bonus_reward = 1.0
+            # Scale bonus by stability factor - higher bonus when angular velocity is low
+            stability_factor = max(0.1, 1.0 - 2.0 * angular_velocity)
+            bonus_reward = 1.0 * stability_factor
         elif current_error < 0.01:
-            bonus_reward = 0.5
+            stability_factor = max(0.1, 1.0 - 1.5 * angular_velocity)
+            bonus_reward = 0.5 * stability_factor
         elif current_error < 0.02:
-            bonus_reward = 0.2
+            stability_factor = max(0.1, 1.0 - 1.0 * angular_velocity)
+            bonus_reward = 0.2 * stability_factor
         
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
-        # 3.5. Stability bonus for low angular velocity when error is small
-        stability_bonus = 0.0
-        if current_error < 0.01 and angular_velocity < 0.1:
-            stability_bonus = 0.2 * (0.1 - angular_velocity) / 0.1
-        
-        gamma = 0.95
+        gamma = 0.99
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
         improvement_reward = gamma * potential_current - potential_last
