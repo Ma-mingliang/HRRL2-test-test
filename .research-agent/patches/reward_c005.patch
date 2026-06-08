@@ -5,10 +5,10 @@
 -        potential_current = -current_error
 -        potential_last = -abs(state_last_raw[0])
 -        improvement_reward = gamma * potential_current - potential_last
-+        # Adaptive weighting for improvement reward based on error magnitude
-+        # Higher weight when error is large to encourage faster convergence
-+        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-10 * current_error))
-+        improvement_weight = min(improvement_weight, 3.0)  # Safety gating
++        # Adaptive gamma scaling: higher gamma for larger errors to encourage faster reduction
++        # Implements A_potential_based_reward with safety gating
++        adaptive_gamma = gamma + (1.0 - gamma) * min(1.0, current_error * 10)  # Scale from 0.99 to 1.0
++        adaptive_gamma = min(adaptive_gamma, 1.0)  # Safety cap
 +        potential_current = -current_error
 +        potential_last = -abs(state_last_raw[0])
-+        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
++        improvement_reward = adaptive_gamma * potential_current - potential_last

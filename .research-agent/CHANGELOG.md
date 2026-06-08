@@ -9186,3 +9186,31 @@ a_potential_based_reward_openreview_ubnujziy2o, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-08T14:02:44.073347+00:00] v0646 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c004`
+**Description:** Added a potential-based reward shaping term that encourages consistent error reduction over time, with safety gating to prevent reward hacking (rationale: The current reward function already uses potential-based shaping (improvement_reward), but it only considers immediate improvement. By adding a term that rewards consistent improvement over consecutive steps, we encourage more stable learning. The 20% bonus for consecutive positive improvements reinforces policies that make steady progress, while the safety cap prevents reward hacking. This should help reduce the lateral error (currently 0.0041) by promoting more consistent error reduction patterns.)
+
+### Reward Formula / Change
+```
+Added a potential-based reward shaping term that encourages consistent error reduction over time, with safety gating to prevent reward hacking (rationale: The current reward function already uses potential-based shaping (improvement_reward), but it only considers immediate improvement. By adding a term that rewards consistent improvement over consecutive steps, we encourage more stable learning. The 20% bonus for consecutive positive improvements reinforces policies that make steady progress, while the safety cap prevents reward hacking. This should help reduce the lateral error (currently 0.0041) by promoting more consistent error reduction patterns.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 983.6980
+- **lateral_error:** 0.0038
+
+### Source Methods
+a_potential_based_reward_arxiv_2502_01307, a_potential_based_reward_openreview_anosgmzrdv
+
+---
+

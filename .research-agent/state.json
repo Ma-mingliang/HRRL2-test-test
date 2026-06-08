@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c003",
+    "candidate_id": "reward_c004",
     "optimizer": "reward",
-    "description": "Enhanced the potential-based reward shaping term with adaptive scaling based on error magnitude to better encourage error reduction while maintaining stability (rationale: The current potential-based reward uses a simple linear potential function. By scaling the potential with error magnitude, we create stronger incentives for reducing large errors while maintaining stability for small errors. This adaptive scaling encourages faster convergence when far from the target while preserving fine-grained control near the goal. The scaling is capped at 0.1 error to prevent reward hacking and maintain safety. This modification aligns with the research idea of using potential differences as shaping terms while adding adaptive behavior based on current performance.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,4 +962,9 @@\n         gamma = 0.99\n-        potential_current = -current_error\n-        potential_last = -abs(state_last_raw[0])\n-        improvement_reward = gamma * potential_current - potential_last\n+        # Adaptive potential scaling: stronger incentive for larger errors\n+        # Implements A_potential_based_reward with safety gating\n+        base_potential = -current_error\n+        # Scale potential by error magnitude to encourage faster reduction of lar",
-    "source_idea": "{\"source_method_ids\": [\"a_potential_based_reward_openreview_ubnujziy2o\", \"a_potential_based_reward_openreview_v3kavlfvrd\"], \"source_categories\": [\"A_potential_based_reward\"], \"source_papers\": [\"openreview:ubnUjzIy2O\", \"openreview:v3kaVLFvRD\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added a potential-based reward shaping term that encourages consistent error reduction over time, with safety gating to prevent reward hacking (rationale: The current reward function already uses potential-based shaping (improvement_reward), but it only considers immediate improvement. By adding a term that rewards consistent improvement over consecutive steps, we encourage more stable learning. The 20% bonus for consecutive positive improvements reinforces policies that make steady progress, while the safety cap prevents reward hacking. This should help reduce the lateral error (currently 0.0041) by promoting more consistent error reduction patterns.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,6 +962,16 @@\n         gamma = 0.99\n         potential_current = -current_error\n         potential_last = -abs(state_last_raw[0])\n         improvement_reward = gamma * potential_current - potential_last\n+        \n+        # 4. Potential-based reward shaping for consistent improvement\n+        # Encourages sustained error reduction rather than just immediate improvement\n+        if hasattr(self, 'prev_improvement') and self.prev_improvement is not None:\n+         ",
+    "source_idea": "{\"source_method_ids\": [\"a_potential_based_reward_arxiv_2502_01307\", \"a_potential_based_reward_openreview_anosgmzrdv\"], \"source_categories\": [\"A_potential_based_reward\"], \"source_papers\": [\"arxiv:2502.01307\", \"openreview:ANosGmzrDV\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T13:54:30.857822+00:00"
+    "timestamp": "2026-06-08T14:02:44.073347+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 76,
-    "full_evals_run": 70
+    "candidates_proposed": 77,
+    "full_evals_run": 71
   },
   "stop_reason": null,
   "progress": null,
@@ -537,6 +537,10 @@
     {
       "candidate_id": "reward_c004",
       "applied_at": "2026-06-08T13:54:46.220166+00:00"
+    },
+    {
+      "candidate_id": "reward_c005",
+      "applied_at": "2026-06-08T14:02:56.887602+00:00"
     }
   ],
   "baseline_fair_eval": {
