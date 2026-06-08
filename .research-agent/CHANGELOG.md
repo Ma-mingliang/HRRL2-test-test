@@ -10510,3 +10510,34 @@ d_adaptive_dynamic_reward_openreview_xxs9zuhklb, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T18:33:28.210816+00:00] v0692 - ✗ REJECTED
+
+**Candidate ID:** `reward_c050`
+**Description:** Added adaptive dynamic weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward concept from research ideas (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive dynamic weighting, we increase the importance of error reduction when the system is far from the target (large error), which should accelerate learning in early stages. This implements the D_adaptive_dynamic_reward concept from research ideas with safety gating (min/max bounds). The exponential schedule ensures smooth transitions and prevents reward hacking. This should improve convergence speed while maintaining the high completion rate and low lateral error seen in baseline metrics.)
+
+### Reward Formula / Change
+```
+Added adaptive dynamic weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward concept from research ideas (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive dynamic weighting, we increase the importance of error reduction when the system is far from the target (large error), which should accelerate learning in early stages. This implements the D_adaptive_dynamic_reward concept from research ideas with safety gating (min/max bounds). The exponential schedule ensures smooth transitions and prevents reward hacking. This should improve convergence speed while maintaining the high completion rate and low lateral error seen in baseline metrics.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 887.3903
+- **lateral_error:** 0.0076
+
+### Rejection Reason
+Score -0.1894 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_arxiv_2408_03029, d_adaptive_dynamic_reward_openreview_6klpzcuq2d
+
+---
+
