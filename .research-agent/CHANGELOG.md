@@ -5786,3 +5786,29 @@ e_hierarchical_reward_openreview_vlz97qbjr2, e_hierarchical_reward_openreview_pw
 
 ---
 
+## [2026-06-08T05:48:05.180362+00:00] v0590 - ✗ REJECTED
+
+**Candidate ID:** `reward_c025`
+**Description:** Added hierarchical reward structure with separate goal progress and low-level control components, implementing the research idea of separating high-level subtask reward from low-level control reward. (rationale: This modification implements the hierarchical reward structure from the research ideas, separating high-level goal progress (manager_reward) from low-level tracking control (worker_reward). The goal progress reward provides stronger incentives for achieving different precision levels, while the tracking reward maintains fine-grained control. This structure should improve completion rate by providing clearer goal-oriented signals while maintaining precise tracking performance. The current baseline shows perfect completion (1.0000) but very low lateral error (0.0041), suggesting the agent is already performing well but could benefit from more structured goal incentives to potentially reduce error further or improve robustness.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure with separate goal progress and low-level control components, implementing the research idea of separating high-level subtask reward from low-level control reward. (rationale: This modification implements the hierarchical reward structure from the research ideas, separating high-level goal progress (manager_reward) from low-level tracking control (worker_reward). The goal progress reward provides stronger incentives for achieving different precision levels, while the tracking reward maintains fine-grained control. This structure should improve completion rate by providing clearer goal-oriented signals while maintaining precise tracking performance. The current baseline shows perfect completion (1.0000) but very low lateral error (0.0041), suggesting the agent is already performing well but could benefit from more structured goal incentives to potentially reduce error further or improve robustness.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_arxiv_2505_16410, e_hierarchical_reward_arxiv_2510_07181
+
+---
+
