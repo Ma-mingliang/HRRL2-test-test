@@ -937,7 +937,12 @@ class Attitude_control_stage1(gym.Env):
         
         # 1. 核心跟踪奖励
         max_penalty = 2.0
-        tracking_reward = -min(current_error**2, max_penalty)
+        # Adaptive weighting: higher weight for larger errors to accelerate learning
+        if current_error > 0.05:
+            error_weight = 2.0  # Stronger penalty for large errors
+        else:
+            error_weight = 1.0  # Standard penalty for small errors
+        tracking_reward = -error_weight * min(current_error**2, max_penalty)
         
         # 2. 高精度奖励
         bonus_reward = 0.0
@@ -978,9 +983,7 @@ class Attitude_control_stage1(gym.Env):
                     stage_weight = 0.2  # Medium-precision stage
                 else:
                     stage_weight = 0.1  # Coarse stage
-                # Adaptive scaling: increase weight when error is small to encourage precision
-                adaptive_scale = 1.0 + 2.0 * max(0, 0.02 - current_error) / 0.02
-                subgoal_reward = stage_weight * adaptive_scale * error_reduction * (1.0 / (current_error + 0.001))
+                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward

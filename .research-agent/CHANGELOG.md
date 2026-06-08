@@ -6358,3 +6358,34 @@ c_curriculum_subgoal_reward_openreview_dhoxjoy1sp, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T09:21:00.377981+00:00] v0615 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Enhanced curriculum subgoal reward with better stage weighting and progress scaling (rationale: The current reward function shows excellent performance (lateral_error: 0.0041) but the curriculum subgoal reward could be enhanced to further encourage precision. By increasing stage weights (especially for high-precision stage from 0.3 to 0.5) and reducing the denominator threshold from 0.001 to 0.0005, we provide stronger incentives for error reduction in the critical precision range. This should help maintain the current excellent completion rate while potentially reducing lateral error further by making the agent more responsive to small improvements when already close to target.)
+
+### Reward Formula / Change
+```
+Enhanced curriculum subgoal reward with better stage weighting and progress scaling (rationale: The current reward function shows excellent performance (lateral_error: 0.0041) but the curriculum subgoal reward could be enhanced to further encourage precision. By increasing stage weights (especially for high-precision stage from 0.3 to 0.5) and reducing the denominator threshold from 0.001 to 0.0005, we provide stronger incentives for error reduction in the critical precision range. This should help maintain the current excellent completion rate while potentially reducing lateral error further by making the agent more responsive to small improvements when already close to target.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 1135.1002
+- **lateral_error:** 0.0084
+
+### Rejection Reason
+Score -0.1220 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_dhoxjoy1sp, c_curriculum_subgoal_reward_openreview_n4x7a4gg7t
+
+---
+
