@@ -956,27 +956,24 @@ class Attitude_control_stage1(gym.Env):
         potential_last = -abs(state_last_raw[0])
         improvement_reward = gamma * potential_current - potential_last
         
-        # 5. Curriculum subgoal reward (stage-based progress)
-        # Define stages based on error magnitude
-        if current_error < 0.005:
-            stage_weight = 0.8  # High precision stage
-        elif current_error < 0.02:
-            stage_weight = 0.4  # Medium precision stage
-        else:
-            stage_weight = 0.1  # Coarse tracking stage
-        
-        # Reward progress toward subgoal (error reduction)
-        progress_reward = stage_weight * (abs(state_last_raw[0]) - current_error)
-        
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
-        
         # 6. 残差动作惩罚（基于研究想法）
         residual_penalty = 0.0
         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
         self.prev_residual = target_handle_angle
         
+        # 7. 课程学习子目标奖励
+        subgoal_reward = 0.0
+        if hasattr(self, 'current_stage') and hasattr(self, 'prev_error'):
+            stage_weights = [0.1, 0.3, 0.5, 0.8]  # 权重随阶段增加
+            if self.current_stage < len(stage_weights):
+                progress = abs(self.prev_error) - current_error
+                subgoal_reward = stage_weights[self.current_stage] * progress
+        self.prev_error = current_error
+        
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
         
