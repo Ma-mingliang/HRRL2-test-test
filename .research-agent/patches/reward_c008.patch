@@ -1,16 +1,17 @@
 --- a/env.py
 +++ b/env.py
-@@ -940,11 +940,5 @@
-         # 1. 核心跟踪奖励
-         max_penalty = 2.0
--        # Adaptive dynamic weighting: smooth schedule based on error magnitude
--        # Implements D_adaptive_dynamic_reward with safety gating
--        base_weight = 1.0
--        max_weight = 3.0
--        # Smooth exponential schedule: weight increases with error magnitude
--        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))
--        # Safety gating: cap weight to prevent reward hacking
--        error_weight = min(error_weight, max_weight)
-+        # Simplified adaptive weighting with lower maximum
-+        error_weight = 1.0 + 1.5 * (1 - math.exp(-8 * current_error))
-         tracking_reward = -error_weight * min(current_error**2, max_penalty)
+@@ -962,4 +962,11 @@
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive potential scaling: higher weight for smaller errors to encourage precision
++        if current_error < 0.005:
++            potential_scale = 2.0  # High-precision stage
++        elif current_error < 0.02:
++            potential_scale = 1.5  # Medium-precision stage
++        else:
++            potential_scale = 1.0  # Coarse stage
++        potential_current = -potential_scale * current_error
++        potential_last = -potential_scale * abs(state_last_raw[0])
++        improvement_reward = gamma * potential_current - potential_last

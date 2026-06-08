@@ -9273,3 +9273,34 @@ a_potential_based_reward_arxiv_2012_08824, a_potential_based_reward_openreview_3
 
 ---
 
+## [2026-06-08T14:28:41.095256+00:00] v0649 - ✗ REJECTED
+
+**Candidate ID:** `reward_c007`
+**Description:** Enhanced potential-based reward shaping with adaptive gamma and safety gating to better align with research idea A_potential_based_reward (rationale: The current potential-based reward uses a fixed gamma=0.99 which may not optimally shape learning across different error regimes. By making gamma adaptive (more aggressive near target, standard for larger errors), we better align with the research idea of using potential differences for shaping. The safety gating prevents reward hacking by reducing rewards for improvements when error is still large, ensuring the agent focuses on actual task success rather than just error reduction. This should improve tracking precision while maintaining stability.)
+
+### Reward Formula / Change
+```
+Enhanced potential-based reward shaping with adaptive gamma and safety gating to better align with research idea A_potential_based_reward (rationale: The current potential-based reward uses a fixed gamma=0.99 which may not optimally shape learning across different error regimes. By making gamma adaptive (more aggressive near target, standard for larger errors), we better align with the research idea of using potential differences for shaping. The safety gating prevents reward hacking by reducing rewards for improvements when error is still large, ensuring the agent focuses on actual task success rather than just error reduction. This should improve tracking precision while maintaining stability.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 812.3181
+- **lateral_error:** 0.0095
+
+### Rejection Reason
+Score -0.3144 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_snxieztsff, a_potential_based_reward_arxiv_2109_05022
+
+---
+
