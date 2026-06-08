@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c004",
+    "candidate_id": "reward_c006",
     "optimizer": "reward",
-    "description": "Added a potential-based reward shaping term that encourages consistent error reduction over time, with safety gating to prevent reward hacking (rationale: The current reward function already uses potential-based shaping (improvement_reward), but it only considers immediate improvement. By adding a term that rewards consistent improvement over consecutive steps, we encourage more stable learning. The 20% bonus for consecutive positive improvements reinforces policies that make steady progress, while the safety cap prevents reward hacking. This should help reduce the lateral error (currently 0.0041) by promoting more consistent error reduction patterns.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,6 +962,16 @@\n         gamma = 0.99\n         potential_current = -current_error\n         potential_last = -abs(state_last_raw[0])\n         improvement_reward = gamma * potential_current - potential_last\n+        \n+        # 4. Potential-based reward shaping for consistent improvement\n+        # Encourages sustained error reduction rather than just immediate improvement\n+        if hasattr(self, 'prev_improvement') and self.prev_improvement is not None:\n+         ",
-    "source_idea": "{\"source_method_ids\": [\"a_potential_based_reward_arxiv_2502_01307\", \"a_potential_based_reward_openreview_anosgmzrdv\"], \"source_categories\": [\"A_potential_based_reward\"], \"source_papers\": [\"arxiv:2502.01307\", \"openreview:ANosGmzrDV\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added a potential-based shaping term that rewards error reduction while preserving policy incentives, with safety gating to prevent reward hacking (rationale: The current improvement_reward uses a potential-based approach but doesn't explicitly reward error reduction. Adding a direct shaping term for tracking improvement (k_phi * (|e_t-1| - |e_t|)) provides stronger gradient signal for error reduction while preserving policy invariance. The safety gating ensures we only reward positive improvement, preventing reward hacking. This should accelerate learning of precise tracking behavior, potentially reducing the lateral_error metric from 0.0041 while maintaining the 1.0 completion rate.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,6 +962,14 @@\n         gamma = 0.99\n         potential_current = -current_error\n         potential_last = -abs(state_last_raw[0])\n         improvement_reward = gamma * potential_current - potential_last\n+        \n+        # 4. Potential-based shaping term (A_potential_based_reward)\n+        # Encourages consistent error reduction while preserving optimal policy\n+        k_phi = 0.5\n+        tracking_improvement = abs(state_last_raw[0]) - abs(state_raw[0])\n+      ",
+    "source_idea": "{\"source_method_ids\": [\"a_potential_based_reward_arxiv_2012_08824\", \"a_potential_based_reward_openreview_3napba3fn3\"], \"source_categories\": [\"A_potential_based_reward\"], \"source_papers\": [\"arxiv:2012.08824\", \"openreview:3NAPbA3fN3\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T14:02:44.073347+00:00"
+    "timestamp": "2026-06-08T14:18:46.314910+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 78,
-    "full_evals_run": 72
+    "candidates_proposed": 79,
+    "full_evals_run": 73
   },
   "stop_reason": null,
   "progress": null,
@@ -545,6 +545,10 @@
     {
       "candidate_id": "reward_c006",
       "applied_at": "2026-06-08T14:12:09.984355+00:00"
+    },
+    {
+      "candidate_id": "reward_c007",
+      "applied_at": "2026-06-08T14:19:01.801532+00:00"
     }
   ],
   "baseline_fair_eval": {

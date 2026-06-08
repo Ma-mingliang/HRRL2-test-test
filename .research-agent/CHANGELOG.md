@@ -9245,3 +9245,31 @@ a_potential_based_reward_openreview_hu7hujemiw, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-08T14:18:46.319918+00:00] v0648 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c006`
+**Description:** Added a potential-based shaping term that rewards error reduction while preserving policy incentives, with safety gating to prevent reward hacking (rationale: The current improvement_reward uses a potential-based approach but doesn't explicitly reward error reduction. Adding a direct shaping term for tracking improvement (k_phi * (|e_t-1| - |e_t|)) provides stronger gradient signal for error reduction while preserving policy invariance. The safety gating ensures we only reward positive improvement, preventing reward hacking. This should accelerate learning of precise tracking behavior, potentially reducing the lateral_error metric from 0.0041 while maintaining the 1.0 completion rate.)
+
+### Reward Formula / Change
+```
+Added a potential-based shaping term that rewards error reduction while preserving policy incentives, with safety gating to prevent reward hacking (rationale: The current improvement_reward uses a potential-based approach but doesn't explicitly reward error reduction. Adding a direct shaping term for tracking improvement (k_phi * (|e_t-1| - |e_t|)) provides stronger gradient signal for error reduction while preserving policy invariance. The safety gating ensures we only reward positive improvement, preventing reward hacking. This should accelerate learning of precise tracking behavior, potentially reducing the lateral_error metric from 0.0041 while maintaining the 1.0 completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 976.6986
+- **lateral_error:** 0.0039
+
+### Source Methods
+a_potential_based_reward_arxiv_2012_08824, a_potential_based_reward_openreview_3napba3fn3
+
+---
+

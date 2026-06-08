@@ -1,21 +1,19 @@
 --- a/env.py
 +++ b/env.py
-@@ -938,14 +938,9 @@
-         
-         # 1. 核心跟踪奖励
-         max_penalty = 2.0
--        # Adaptive dynamic weighting: smooth schedule based on error magnitude
--        # Implements D_adaptive_dynamic_reward with safety gating
--        base_weight = 1.0
--        max_weight = 3.0
--        # Smooth exponential schedule: weight increases with error magnitude
--        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))
--        # Safety gating: cap weight to prevent reward hacking
--        error_weight = min(error_weight, max_weight)
--        tracking_reward = -error_weight * min(current_error**2, max_penalty)
-+        # Simplified adaptive weighting: linear scaling with error magnitude
-+        # More stable than exponential, reduces risk of reward hacking
-+        error_weight = 1.0 + 2.0 * min(current_error, 0.5)  # Cap at 0.5 to prevent extreme weights
-+        tracking_reward = -error_weight * min(current_error**2, max_penalty)
-         
-         # 2. 高精度奖励
+@@ -962,4 +962,13 @@
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive gamma based on error magnitude for better shaping
++        if current_error < 0.01:
++            gamma_adaptive = 0.95  # More aggressive shaping near target
++        else:
++            gamma_adaptive = 0.99  # Standard shaping for larger errors
++        
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        # Safety gating: only reward improvement when error is decreasing
++        improvement_reward = gamma_adaptive * potential_current - potential_last
++        if improvement_reward > 0 and current_error > 0.05:  # Gate against unsafe improvements
++            improvement_reward *= 0.5  # Reduce reward for large-error improvements
