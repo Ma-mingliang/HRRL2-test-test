@@ -9391,3 +9391,29 @@ a_potential_based_reward_openreview_tdomx6s4f5, a_potential_based_reward_arxiv_1
 
 ---
 
+## [2026-06-08T14:52:43.033690+00:00] v0653 - ✗ REJECTED
+
+**Candidate ID:** `reward_c011`
+**Description:** Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows perfect completion rate but with lateral error of 0.0041. Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations that could lead to instability, while maintaining the current tracking performance. This implements the B_safety_constraint_reward research idea by gating the reward with explicit penalties for safety violations, which should improve robustness without sacrificing task success.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows perfect completion rate but with lateral error of 0.0041. Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations that could lead to instability, while maintaining the current tracking performance. This implements the B_safety_constraint_reward research idea by gating the reward with explicit penalties for safety violations, which should improve robustness without sacrificing task success.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_hqwhxvzcmj, b_safety_constraint_reward_openreview_mhratccbtk
+
+---
+
