@@ -1,25 +1,19 @@
 --- a/env.py
 +++ b/env.py
-@@ -968,13 +968,19 @@
-         # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)
-         # Reward progress toward intermediate waypoints to encourage exploration
-         # before focusing on precise final target tracking
-         subgoal_reward = 0.0
-         # Initialize subgoal tracking if not present
-         if not hasattr(self, 'prev_subgoal_error'):
-             self.prev_subgoal_error = current_error
-         # Reward progress toward current subgoal with adaptive scaling
-         subgoal_progress = self.prev_subgoal_error - current_error
--        # Scale reward based on error magnitude - larger rewards for bigger improvements
--        beta_stage = 0.5 * (1.0 + min(current_error, 1.0))  # 0.5 to 1.0 scaling
--        subgoal_reward = beta_stage * subgoal_progress
-+        # Curriculum scaling: early training emphasizes progress, later emphasizes precision
-+        # Use episode count if available, otherwise use error magnitude as proxy
-+        if hasattr(self, 'episode_count'):
-+            # Linear curriculum: start with high beta, decrease over episodes
-+            beta_stage = max(0.1, 1.0 - (self.episode_count / 1000.0))  # 1.0 -> 0.1 over 1000 episodes
-+        else:
-+            # Fallback: scale based on error magnitude
-+            beta_stage = 0.5 * (1.0 + min(current_error, 1.0))  # 0.5 to 1.0 scaling
-+        subgoal_reward = beta_stage * subgoal_progress
-         self.prev_subgoal_error = current_error
+@@ -954,9 +954,15 @@
+         gamma = 0.99
+         potential_current = -current_error
+         potential_last = -abs(state_last_raw[0])
+         improvement_reward = gamma * potential_current - potential_last
+         
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+         
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        # 6. 残差动作惩罚（基于研究想法）
++        residual_penalty = 0.0
++        if hasattr(self, 'prev_residual') and self.prev_residual is not None:
++            residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
++        self.prev_residual = target_handle_angle
++        
++        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
