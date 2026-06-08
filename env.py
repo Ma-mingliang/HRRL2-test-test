@@ -961,9 +961,9 @@ class Attitude_control_stage1(gym.Env):
         gamma = 0.99
         # Adaptive weighting for improvement reward based on error magnitude
         if current_error > 0.1:
-            improvement_weight = 1.5  # Stronger improvement signal for large errors
+            improvement_weight = 2.0  # Stronger improvement signal for large errors
         elif current_error > 0.02:
-            improvement_weight = 1.2  # Moderate improvement signal
+            improvement_weight = 1.5  # Moderate improvement signal
         else:
             improvement_weight = 1.0  # Standard improvement signal
         potential_current = -improvement_weight * current_error
