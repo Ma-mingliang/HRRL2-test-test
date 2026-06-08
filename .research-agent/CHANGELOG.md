@@ -10041,3 +10041,34 @@ f_residual_aware_reward_openreview_pech3gfc9d, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-08T16:46:23.578480+00:00] v0676 - ✗ REJECTED
+
+**Candidate ID:** `reward_c034`
+**Description:** Added explicit residual action magnitude penalty with safety gating to better align with F_residual_aware_reward research idea (rationale: The current residual penalty applies uniformly regardless of tracking performance. By adding safety gating that reduces penalty when tracking is good (error < 0.01) and increases it when tracking is poor, we prevent reward hacking where the agent might avoid necessary residual actions to minimize penalty even when tracking error is high. This better implements the F_residual_aware_reward idea with proper safety gating, which should improve both tracking accuracy and action smoothness.)
+
+### Reward Formula / Change
+```
+Added explicit residual action magnitude penalty with safety gating to better align with F_residual_aware_reward research idea (rationale: The current residual penalty applies uniformly regardless of tracking performance. By adding safety gating that reduces penalty when tracking is good (error < 0.01) and increases it when tracking is poor, we prevent reward hacking where the agent might avoid necessary residual actions to minimize penalty even when tracking error is high. This better implements the F_residual_aware_reward idea with proper safety gating, which should improve both tracking accuracy and action smoothness.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 854.4207
+- **lateral_error:** 0.0090
+
+### Rejection Reason
+Score -0.2719 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_dzmd1pbtc5, f_residual_aware_reward_openreview_mjarxzke30
+
+---
+

@@ -970,13 +970,12 @@ class Attitude_control_stage1(gym.Env):
         # 6. 残差动作惩罚（基于研究想法）
         residual_penalty = 0.0
         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
-            # Explicit residual magnitude penalty with safety gating
-            residual_magnitude = abs(target_handle_angle - self.prev_residual)
-            # Only penalize when residual is significant and tracking is poor
-            if residual_magnitude > 0.01 and current_error > 0.01:
-                residual_penalty = -0.02 * residual_magnitude**2
-            else:
-                residual_penalty = -0.005 * residual_magnitude**2
+            # Penalize residual action magnitude and roughness
+            residual_magnitude = target_handle_angle**2
+            residual_roughness = (target_handle_angle - self.prev_residual)**2
+            # Safety gating: only apply penalty when tracking is good
+            if current_error < 0.05:  # Only penalize when tracking is reasonable
+                residual_penalty = -0.02 * residual_magnitude - 0.01 * residual_roughness
         self.prev_residual = target_handle_angle
         
         # 7. Curriculum subgoal reward - encourage progressive improvement
