@@ -978,14 +978,13 @@ class Attitude_control_stage1(gym.Env):
                     stage_weight = 0.2  # Medium-precision stage
                 else:
                     stage_weight = 0.1  # Coarse stage
-                # Adaptive weight: increase weight as error decreases
-                adaptive_weight = 1.0 + 2.0 * max(0, 0.02 - current_error) / 0.02
-                subgoal_reward = stage_weight * adaptive_weight * error_reduction * (1.0 / (current_error + 0.001))
+                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
         
         return reward
+    
     def reset(self, seed=None, options=None):
         """重置环境"""
         super().reset(seed=seed)

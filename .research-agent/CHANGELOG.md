@@ -6529,3 +6529,31 @@ d_adaptive_dynamic_reward_openreview_hz9gu1io12, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T09:42:37.158564+00:00] v0618 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c004`
+**Description:** Added adaptive weighting for tracking reward based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea with a simple schedule that increases tracking penalty as error decreases to encourage precision. (rationale: The baseline metrics show excellent completion (100%) but very low lateral error (0.0041). The current tracking reward uses uniform weighting regardless of precision stage. By implementing adaptive weighting from the D_adaptive_dynamic_reward research idea, we increase the tracking penalty weight as error decreases (2.0x for <0.005, 1.5x for <0.02, 1.0x otherwise). This creates stronger incentive for the agent to maintain high precision once it achieves it, potentially reducing the already low error further while maintaining the stable completion rate. The change is minimal and only affects one component.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting for tracking reward based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea with a simple schedule that increases tracking penalty as error decreases to encourage precision. (rationale: The baseline metrics show excellent completion (100%) but very low lateral error (0.0041). The current tracking reward uses uniform weighting regardless of precision stage. By implementing adaptive weighting from the D_adaptive_dynamic_reward research idea, we increase the tracking penalty weight as error decreases (2.0x for <0.005, 1.5x for <0.02, 1.0x otherwise). This creates stronger incentive for the agent to maintain high precision once it achieves it, potentially reducing the already low error further while maintaining the stable completion rate. The change is minimal and only affects one component.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 1122.0139
+- **lateral_error:** 0.0036
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_hz9gu1io12, d_adaptive_dynamic_reward_openreview_rgvqh3gjea
+
+---
+
