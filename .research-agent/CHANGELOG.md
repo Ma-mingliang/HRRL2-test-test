@@ -9802,3 +9802,31 @@ e_hierarchical_reward_arxiv_2505_16410, e_hierarchical_reward_arxiv_2510_07181
 
 ---
 
+## [2026-06-08T15:52:12.828682+00:00] v0668 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c026`
+**Description:** Added hierarchical reward structure separating goal progress (manager) from low-level tracking (worker) with safety gating (rationale: This implements the hierarchical reward structure from research idea E_hierarchical_reward. By separating manager (goal progress) and worker (low-level control) rewards, we create clearer learning signals. The manager reward focuses on high-level progress (subgoal achievement and precision bonuses), while the worker reward handles low-level tracking and smoothness. Safety gating prevents manager reward from dominating or causing reward hacking. This should improve learning efficiency by providing distinct optimization targets for different aspects of the control task.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure separating goal progress (manager) from low-level tracking (worker) with safety gating (rationale: This implements the hierarchical reward structure from research idea E_hierarchical_reward. By separating manager (goal progress) and worker (low-level control) rewards, we create clearer learning signals. The manager reward focuses on high-level progress (subgoal achievement and precision bonuses), while the worker reward handles low-level tracking and smoothness. Safety gating prevents manager reward from dominating or causing reward hacking. This should improve learning efficiency by providing distinct optimization targets for different aspects of the control task.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 988.1264
+- **lateral_error:** 0.0041
+
+### Source Methods
+e_hierarchical_reward_arxiv_2602_04454, e_hierarchical_reward_arxiv_2602_18582
+
+---
+
