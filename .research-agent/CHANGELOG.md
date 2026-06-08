@@ -7420,3 +7420,34 @@ g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T10:51:18.786612+00:00] v0626 - ✗ REJECTED
+
+**Candidate ID:** `reward_c012`
+**Description:** Added a safety gate to the subgoal reward to prevent reward hacking when error is very small, and adjusted stage weights to better balance precision vs. progress (rationale: The current subgoal reward can cause reward hacking when error is very small (<0.001) because the 1/(current_error+0.001) term becomes very large, potentially dominating other reward components. Adding a safety gate (current_error > 0.001) prevents this. Adjusting stage weights reduces over-optimization in high-precision regime while increasing medium-precision focus, which should improve stability and reduce variance in the final performance metrics.)
+
+### Reward Formula / Change
+```
+Added a safety gate to the subgoal reward to prevent reward hacking when error is very small, and adjusted stage weights to better balance precision vs. progress (rationale: The current subgoal reward can cause reward hacking when error is very small (<0.001) because the 1/(current_error+0.001) term becomes very large, potentially dominating other reward components. Adding a safety gate (current_error > 0.001) prevents this. Adjusting stage weights reduces over-optimization in high-precision regime while increasing medium-precision focus, which should improve stability and reduce variance in the final performance metrics.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 974.3742
+- **lateral_error:** 0.0053
+
+### Rejection Reason
+Score -0.0398 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openreview_ieduruo55f
+
+---
+

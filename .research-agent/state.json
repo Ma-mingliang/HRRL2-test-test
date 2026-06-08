@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c007",
+    "candidate_id": "reward_c005",
     "optimizer": "reward",
-    "description": "Added a safety gate to the subgoal reward to prevent reward hacking when error reduction is minimal but current error is very small (rationale: The current subgoal reward can be exploited by making tiny error reductions when already near zero error, leading to reward hacking. Adding a minimum reduction threshold (0.001) ensures only meaningful improvements are rewarded, preventing the agent from gaming the system with negligible improvements. This should improve training stability and prevent the agent from focusing on trivial error reductions instead of maintaining high precision.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -976,14 +976,16 @@\n         # 7. Curriculum subgoal reward - encourage progressive improvement\n         subgoal_reward = 0.0\n         if hasattr(self, 'prev_error') and self.prev_error is not None:\n             # Reward for reducing error toward subgoal thresholds\n             error_reduction = self.prev_error - current_error\n-            if error_reduction > 0:\n+            # Safety gate: only reward meaningful reductions and avoid reward hacking near zero\n+        ",
-    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_dbuuzrhoqp\", \"g_llm_reward_generation_openreview_ieduruo55f\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:DbUuZrhOqp\", \"openreview:IEduRUO55F\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward concept from research ideas (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are large, we encourage faster convergence during coarse tracking phases while maintaining precision during fine-tuning. This implements the D_adaptive_dynamic_reward concept from research ideas with safety gating to prevent reward hacking. The baseline shows excellent performance (lateral_error=0.0041), so this change should help maintain high precision while potentially improving convergence speed during training.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,4 +962,8 @@\n         gamma = 0.99\n-        potential_current = -current_error\n-        potential_last = -abs(state_last_raw[0])\n-        improvement_reward = gamma * potential_current - potential_last\n+        # Adaptive weighting for improvement reward based on error magnitude\n+        # Higher weight when error is large to encourage faster convergence\n+        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-10 * current_error))\n+        improvement_weight = mi",
+    "source_idea": "{\"source_method_ids\": [\"d_adaptive_dynamic_reward_openreview_vbwm1rimjo\"], \"source_categories\": [\"D_adaptive_dynamic_reward\"], \"source_papers\": [\"openreview:vBwm1RimJo\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T10:50:43.780905+00:00"
+    "timestamp": "2026-06-08T10:43:22.616187+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 56,
-    "full_evals_run": 56
+    "candidates_proposed": 57,
+    "full_evals_run": 57
   },
   "stop_reason": null,
   "progress": null,
@@ -443,52 +443,60 @@
       "applied_at": "2026-06-08T09:07:23.603070+00:00"
     },
     {
-      "candidate_id": "reward_c001",
-      "applied_at": "2026-06-08T09:13:45.975875+00:00"
-    },
-    {
-      "candidate_id": "reward_c002",
-      "applied_at": "2026-06-08T09:21:34.150967+00:00"
-    },
-    {
-      "candidate_id": "reward_c003",
-      "applied_at": "2026-06-08T09:28:45.679385+00:00"
-    },
-    {
       "candidate_id": "reward_c004",
-      "applied_at": "2026-06-08T09:35:58.057174+00:00"
+      "applied_at": "2026-06-08T09:13:25.406389+00:00"
     },
     {
       "candidate_id": "reward_c005",
-      "applied_at": "2026-06-08T09:43:08.584435+00:00"
+      "applied_at": "2026-06-08T09:20:27.781132+00:00"
     },
     {
       "candidate_id": "reward_c006",
-      "applied_at": "2026-06-08T09:49:56.158446+00:00"
+      "applied_at": "2026-06-08T09:27:51.629395+00:00"
     },
     {
       "candidate_id": "reward_c007",
-      "applied_at": "2026-06-08T09:57:02.671714+00:00"
+      "applied_at": "2026-06-08T09:34:38.068055+00:00"
     },
     {
       "candidate_id": "reward_c008",
-      "applied_at": "2026-06-08T10:04:41.049069+00:00"
+      "applied_at": "2026-06-08T09:41:06.083405+00:00"
     },
     {
       "candidate_id": "reward_c009",
-      "applied_at": "2026-06-08T10:12:36.910462+00:00"
+      "applied_at": "2026-06-08T09:48:11.255600+00:00"
+    },
+    {
+      "candidate_id": "reward_c010",
+      "applied_at": "2026-06-08T09:54:42.628035+00:00"
+    },
+    {
+      "candidate_id": "reward_c001",
+      "applied_at": "2026-06-08T10:01:12.937346+00:00"
+    },
+    {
+      "candidate_id": "reward_c002",
+      "applied_at": "2026-06-08T10:05:09.184631+00:00"
+    },
+    {
+      "candidate_id": "reward_c003",
+      "applied_at": "2026-06-08T10:13:00.580139+00:00"
+    },
+    {
+      "candidate_id": "reward_c004",
+      "applied_at": "2026-06-08T10:23:41.036381+00:00"
     },
     {
       "candidate_id": "reward_c005",
-      "applied_at": "2026-06-08T10:23:12.847408+00:00"
+      "applied_at": "2026-06-08T10:33:42.953504+00:00"
     },
     {
-      "candidate_id": "reward_c006",
-      "applied_at": "2026-06-08T10:33:30.479058+00:00"
+      "candidate_id": "reward_c012",
+      "applied_at": "2026-06-08T10:43:29.301764+00:00"
     },
     {
-      "candidate_id": "reward_c007",
-      "applied_at": "2026-06-08T10:43:04.455289+00:00"
+      "candidate_id": "reward_c013",
+      "applied_at": "2026-06-08T10:51:36.917134+00:00"
     }
   ],
   "baseline_fair_eval": {
