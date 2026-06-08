@@ -1,52 +1,31 @@
 --- a/env.py
 +++ b/env.py
-@@ -930,36 +930,37 @@
-     def __calculate_reward(self, state_last, state, target_handle_angle=0.0):
-         """改进的奖励函数"""
-         state_last_raw = self.__observation_reduction(state_last)
-         state_raw = self.__observation_reduction(state)
+@@ -976,19 +976,27 @@
+         # 7. Curriculum subgoal reward - encourage progressive improvement
+         subgoal_reward = 0.0
+         if hasattr(self, 'prev_error') and self.prev_error is not None:
+             # Reward for reducing error toward subgoal thresholds
+             error_reduction = self.prev_error - current_error
+             if error_reduction > 0:
+                 # Stage-based weighting with safety gating
+                 if current_error < 0.005:
+                     stage_weight = 0.3  # High-precision stage
+                 elif current_error < 0.02:
+                     stage_weight = 0.2  # Medium-precision stage
+                 else:
+                     stage_weight = 0.1  # Coarse stage
+                 subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
+         self.prev_error = current_error
          
-         current_error = abs(state_raw[0])
-         angular_velocity = abs(state_raw[2])
-         
--        # 1. 核心跟踪奖励
--        max_penalty = 2.0
--        tracking_reward = -min(current_error**2, max_penalty)
-+        # 1. 高层目标奖励 (manager_reward)
-+        goal_progress_reward = 0.0
-+        if current_error < 0.005:
-+            goal_progress_reward = 2.0
-+        elif current_error < 0.01:
-+            goal_progress_reward = 1.0
-+        elif current_error < 0.02:
-+            goal_progress_reward = 0.5
-         
--        # 2. 高精度奖励
--        bonus_reward = 0.0
--        if current_error < 0.005:
--            bonus_reward = 1.0
--        elif current_error < 0.01:
--            bonus_reward = 0.5
--        elif current_error < 0.02:
--            bonus_reward = 0.2
-+        # 2. 低层控制奖励 (worker_reward)
-+        max_penalty = 2.0
-+        tracking_reward = -min(current_error**2, max_penalty)
-         
-         # 3. 平顺性惩罚
-         smoothness_penalty = -0.05 * angular_velocity
-         
-         # 4. 改进奖励
-         gamma = 0.99
-         potential_current = -current_error
-         potential_last = -abs(state_last_raw[0])
-         improvement_reward = gamma * potential_current - potential_last
-         
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
-         
--        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
-+        # Hierarchical reward: goal_progress_reward (high-level) + tracking_reward (low-level) + other components
-+        reward = goal_progress_reward + tracking_reward + smoothness_penalty + improvement_reward + action_penalty
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
++        # Hierarchical reward structure: manager (goal progress) + worker (low-level control)
++        # Manager reward: high-level goal progress with safety gating
++        manager_reward = subgoal_reward + bonus_reward
++        # Worker reward: low-level tracking and control smoothness
++        worker_reward = tracking_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
++        # Safety gating: cap manager reward to prevent reward hacking
++        manager_reward = max(manager_reward, -1.0)  # Prevent negative manager reward from dominating
++        
++        reward = manager_reward + worker_reward
          
          return reward

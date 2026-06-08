@@ -9745,3 +9745,60 @@ e_hierarchical_reward_openreview_snxieztsff, e_hierarchical_reward_openreview_te
 
 ---
 
+## [2026-06-08T15:42:53.172572+00:00] v0666 - ✗ REJECTED
+
+**Candidate ID:** `reward_c024`
+**Description:** Added hierarchical reward structure separating goal progress (manager) from low-level tracking (worker) with safety gating (rationale: This implements the hierarchical reward structure from research ideas by separating goal progress (manager reward) from low-level tracking (worker reward). The goal progress reward is capped at 0.5 to prevent reward hacking while maintaining the existing low-level tracking components. This should improve completion rate and reduce lateral error by providing clearer signal for both high-level goal achievement and low-level control precision.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure separating goal progress (manager) from low-level tracking (worker) with safety gating (rationale: This implements the hierarchical reward structure from research ideas by separating goal progress (manager reward) from low-level tracking (worker reward). The goal progress reward is capped at 0.5 to prevent reward hacking while maintaining the existing low-level tracking components. This should improve completion rate and reduce lateral error by providing clearer signal for both high-level goal achievement and low-level control precision.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 954.2625
+- **lateral_error:** 0.0044
+
+### Rejection Reason
+Score -0.0046 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_openreview_vlz97qbjr2, e_hierarchical_reward_openreview_pw5ysjy11s
+
+---
+
+## [2026-06-08T15:45:32.614606+00:00] v0667 - ✗ REJECTED
+
+**Candidate ID:** `reward_c025`
+**Description:** No-op candidate (LLM unavailable)
+
+### Reward Formula / Change
+```
+No-op candidate (LLM unavailable)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty_patch
+
+### Source Methods
+e_hierarchical_reward_arxiv_2505_16410, e_hierarchical_reward_arxiv_2510_07181
+
+---
+
