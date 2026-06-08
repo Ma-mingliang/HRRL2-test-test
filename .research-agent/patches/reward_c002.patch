@@ -1,19 +1,8 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,10 +960,11 @@
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
-         
--        # 6. 残差动作惩罚（基于研究想法）
--        residual_penalty = 0.0
--        if hasattr(self, 'prev_residual') and self.prev_residual is not None:
--            residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
+@@ -966,1 +966,0 @@
 -        self.prev_residual = target_handle_angle
-+        # 6. 残差动作惩罚（基于研究想法）
-+        residual_penalty = 0.0
-+        if hasattr(self, 'prev_residual') and self.prev_residual is not None:
-+            # Penalize residual action magnitude and roughness
-+            residual_penalty = -0.01 * target_handle_angle**2 - 0.005 * (target_handle_angle - self.prev_residual)**2
-+        self.prev_residual = target_handle_angle
-         
-         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
+@@ -979,2 +978,1 @@
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + subgoal_reward
++        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward

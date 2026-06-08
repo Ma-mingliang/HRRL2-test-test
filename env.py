@@ -963,12 +963,10 @@ class Attitude_control_stage1(gym.Env):
         residual_penalty = 0.0
         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
         self.prev_residual = target_handle_angle
         
         # 7. Curriculum subgoal reward - encourage progressive improvement
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
-        
-        return reward
         subgoal_reward = 0.0
         if hasattr(self, 'prev_error') and self.prev_error is not None:
             # Reward for reducing error toward subgoal thresholds

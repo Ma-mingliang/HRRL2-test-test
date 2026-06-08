@@ -6150,3 +6150,29 @@ c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T08:27:31.258472+00:00] v0605 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Fixed duplicate line and integrated subgoal reward into final reward calculation (rationale: The current code has two issues: 1) Duplicate assignment of self.prev_residual (line 966-967), and 2) The final reward calculation on line 980 overwrites line 979, excluding residual_penalty. By removing the duplicate line and combining all reward components into a single calculation, we ensure both residual_penalty and subgoal_reward are included. This maintains the curriculum subgoal reward while preserving the residual action penalty, which should improve training stability and reduce oscillations in the control output.)
+
+### Reward Formula / Change
+```
+Fixed duplicate line and integrated subgoal reward into final reward calculation (rationale: The current code has two issues: 1) Duplicate assignment of self.prev_residual (line 966-967), and 2) The final reward calculation on line 980 overwrites line 979, excluding residual_penalty. By removing the duplicate line and combining all reward components into a single calculation, we ensure both residual_penalty and subgoal_reward are included. This maintains the curriculum subgoal reward while preserving the residual action penalty, which should improve training stability and reduce oscillations in the control output.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_openreview_dju2kvsdts
+
+---
+
