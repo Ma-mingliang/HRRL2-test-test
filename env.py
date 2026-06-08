@@ -950,15 +950,11 @@ class Attitude_control_stage1(gym.Env):
         # 2. 高精度奖励
         bonus_reward = 0.0
         if current_error < 0.005:
-            # Scale bonus by stability factor - higher bonus when angular velocity is low
-            stability_factor = max(0.1, 1.0 - 2.0 * angular_velocity)
-            bonus_reward = 1.0 * stability_factor
+            bonus_reward = 1.0
         elif current_error < 0.01:
-            stability_factor = max(0.1, 1.0 - 1.5 * angular_velocity)
-            bonus_reward = 0.5 * stability_factor
+            bonus_reward = 0.5
         elif current_error < 0.02:
-            stability_factor = max(0.1, 1.0 - 1.0 * angular_velocity)
-            bonus_reward = 0.2 * stability_factor
+            bonus_reward = 0.2
         
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
@@ -993,7 +989,19 @@ class Attitude_control_stage1(gym.Env):
                 subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
+        # 8. Learned preference reward (simplified proxy)
+        # Use exponential moving average of past rewards as preference signal
+        if not hasattr(self, 'reward_ema'):
+            self.reward_ema = 0.0
+        # Update EMA with current reward components (excluding this component)
+        current_reward_estimate = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
+        self.reward_ema = 0.95 * self.reward_ema + 0.05 * current_reward_estimate
+        # Preference reward: encourage consistency with learned preference
+        preference_reward = 0.1 * (self.reward_ema - current_reward_estimate)
+        # Safety gating: cap preference reward magnitude
+        preference_reward = max(min(preference_reward, 0.5), -0.5)
+        
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward + preference_reward
         
         return reward
     def reset(self, seed=None, options=None):

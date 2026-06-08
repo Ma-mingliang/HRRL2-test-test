@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c060",
+    "candidate_id": "reward_c062",
     "optimizer": "reward",
-    "description": "Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the subgoal reward scaling to be more conservative (rationale: The current reward function shows excellent performance (lateral_error: 0.0041, completion_rate: 1.0000), but we can further refine it by: 1) Adding a stability bonus that encourages maintaining low angular velocity when the error is already small (prevents oscillations near target), 2) Reducing gamma from 0.99 to 0.95 to make the improvement reward more myopic and responsive to immediate changes, which can help with fine-tuning near the target. These changes should encourage smoother convergence and potentially reduce any residual oscillations while maintaining the excellent tracking performance.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -959,7 +959,12 @@\n         # 3. 平顺性惩罚\n         smoothness_penalty = -0.05 * angular_velocity\n         \n-        gamma = 0.99\n+        # 3.5. Stability bonus for low angular velocity when error is small\n+        stability_bonus = 0.0\n+        if current_error < 0.01 and angular_velocity < 0.1:\n+            stability_bonus = 0.2 * (0.1 - angular_velocity) / 0.1\n+        \n+        gamma = 0.95\n         potential_current = -current_error\n         potential_last = -abs(st",
-    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_q01nzxiwlt\", \"g_llm_reward_generation_openreview_bm6mwnd9uh\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:Q01nZXiWLT\", \"openreview:bm6MwNd9UH\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added adaptive scaling to the high-precision bonus reward based on angular velocity to encourage stable high-precision tracking (rationale: The current bonus reward gives fixed rewards for achieving low error thresholds, but doesn't account for stability during high-precision tracking. By scaling the bonus based on angular velocity, we encourage the agent to not only reach low error but maintain it with minimal oscillation. This addresses the research idea of using LLM-generated reward refinements by adding a stability-aware component that should improve both tracking precision and smoothness. The stability_factor ensures the bonus is never completely eliminated while providing stronger incentives for stable high-precision performance.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -950,8 +950,12 @@\n         # 2. 高精度奖励\n         bonus_reward = 0.0\n         if current_error < 0.005:\n-            bonus_reward = 1.0\n+            # Scale bonus by stability factor - higher bonus when angular velocity is low\n+            stability_factor = max(0.1, 1.0 - 2.0 * angular_velocity)\n+            bonus_reward = 1.0 * stability_factor\n         elif current_error < 0.01:\n-            bonus_reward = 0.5\n+            stability_factor = max(0.1, 1.0 - 1.5 * angu",
+    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_u07fuaqgct\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:u07FUAQgcT\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T19:40:30.574428+00:00"
+    "timestamp": "2026-06-08T19:49:00.639408+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 134,
-    "full_evals_run": 126
+    "candidates_proposed": 142,
+    "full_evals_run": 127
   },
   "stop_reason": null,
   "progress": null,
@@ -761,6 +761,10 @@
     {
       "candidate_id": "reward_c062",
       "applied_at": "2026-06-08T19:42:37.009139+00:00"
+    },
+    {
+      "candidate_id": "reward_c070",
+      "applied_at": "2026-06-08T20:03:43.273780+00:00"
     }
   ],
   "baseline_fair_eval": {
