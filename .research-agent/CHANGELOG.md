@@ -5864,3 +5864,29 @@ e_hierarchical_reward_arxiv_2603_16060, e_hierarchical_reward_arxiv_2604_10812
 
 ---
 
+## [2026-06-08T06:04:46.177939+00:00] v0593 - ✗ REJECTED
+
+**Candidate ID:** `reward_c028`
+**Description:** Added hierarchical reward structure by separating goal progress reward from low-level tracking reward, with explicit gating for safety (rationale: This modification implements the hierarchical reward structure from research idea E_hierarchical_reward. By separating goal progress (error reduction) from low-level tracking, we create clearer learning signals: the agent learns both to make progress toward the goal AND to maintain precise tracking. The safety gate prevents reward hacking by reducing the weight of goal progress when errors are large, ensuring the agent doesn't sacrifice safety for progress. This should improve both completion rate and lateral error by providing more structured learning signals.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure by separating goal progress reward from low-level tracking reward, with explicit gating for safety (rationale: This modification implements the hierarchical reward structure from research idea E_hierarchical_reward. By separating goal progress (error reduction) from low-level tracking, we create clearer learning signals: the agent learns both to make progress toward the goal AND to maintain precise tracking. The safety gate prevents reward hacking by reducing the weight of goal progress when errors are large, ensuring the agent doesn't sacrifice safety for progress. This should improve both completion rate and lateral error by providing more structured learning signals.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_openreview_a0cecoe9bp, e_hierarchical_reward_openreview_lz6dt5udzq
+
+---
+

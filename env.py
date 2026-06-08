@@ -935,16 +935,11 @@ class Attitude_control_stage1(gym.Env):
         current_error = abs(state_raw[0])
         angular_velocity = abs(state_raw[2])
         
-        # 1. 分层奖励结构：高层目标进度 + 低层控制奖励
-        # 高层奖励：目标进度（误差减少）
-        error_reduction = abs(state_last_raw[0]) - current_error
-        goal_progress_reward = 10.0 * error_reduction  # 鼓励误差持续减少
-        
-        # 低层奖励：跟踪精度与控制平顺性
+        # 1. 核心跟踪奖励
         max_penalty = 2.0
         tracking_reward = -min(current_error**2, max_penalty)
         
-        # 高精度奖励（安全门控：仅在误差较小时给予）
+        # 2. 高精度奖励
         bonus_reward = 0.0
         if current_error < 0.005:
             bonus_reward = 1.0
@@ -956,16 +951,22 @@ class Attitude_control_stage1(gym.Env):
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
-        # 4. 控制成本惩罚
+        # 4. 改进奖励
+        gamma = 0.99
+        potential_current = -current_error
+        potential_last = -abs(state_last_raw[0])
+        improvement_reward = gamma * potential_current - potential_last
+        
+        # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
-        # 5. 安全门控：当误差过大时降低高层奖励权重
-        safety_gate = 1.0 if current_error < 0.1 else 0.5
+        # 6. 残差动作惩罚（鼓励残差控制平顺）
+        residual_penalty = 0.0
+        if hasattr(self, 'prev_residual') and self.prev_residual is not None:
+            residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
+        self.prev_residual = target_handle_angle
         
-        reward = (safety_gate * goal_progress_reward + 
-                  tracking_reward + bonus_reward + 
-                  smoothness_penalty + action_penalty)
-        
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
         return reward
 
     def reset(self, seed=None, options=None):
