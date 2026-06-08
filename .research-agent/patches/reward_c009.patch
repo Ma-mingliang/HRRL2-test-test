@@ -1,12 +1,19 @@
 --- a/env.py
 +++ b/env.py
-@@ -940,7 +940,5 @@
-         # 2. Potential-based reward shaping (preserves optimal policy)
-         # Phi(s) = -k * |error|, so gamma*Phi(s') - Phi(s) = k*(|e_t| - gamma*|e_t+1|)
+@@ -954,5 +954,13 @@
+         # 4. 改进奖励
          gamma = 0.99
--        # Adaptive scaling: increase shaping weight when error is large
--        k_phi_base = 2.0
--        k_phi = k_phi_base * (1.0 + 2.0 * min(current_error, 1.0))  # Scale up to 3x when error > 0.5
--        potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
-+        k_phi = 2.0
-+        potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive scaling based on error magnitude
++        if current_error < 0.01:
++            alpha = 3.0  # Higher weight for small errors
++        else:
++            alpha = 1.0  # Standard weight for larger errors
++        potential_current = -alpha * current_error
++        potential_last = -alpha * abs(state_last_raw[0])
++        improvement_reward = gamma * potential_current - potential_last
++        # Stability bonus for consistent improvement
++        if improvement_reward > 0:
++            improvement_reward *= 1.2

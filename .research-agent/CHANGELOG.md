@@ -5344,3 +5344,29 @@ a_potential_based_reward_openreview_snxieztsff, a_potential_based_reward_arxiv_2
 
 ---
 
+## [2026-06-08T04:59:43.955737+00:00] v0573 - ✗ REJECTED
+
+**Candidate ID:** `reward_c008`
+**Description:** Added a stability bonus for maintaining low angular velocity when tracking error is small, and adjusted the improvement reward scaling to better balance exploration and exploitation. (rationale: The current reward function already achieves perfect completion rate and low lateral error (0.0041). However, the baseline metrics show zero standard deviation, suggesting the agent may be over-optimizing for tracking at the expense of smoothness. The stability bonus encourages maintaining both low tracking error AND low angular velocity simultaneously, which should improve motion quality. Increasing the potential_current scaling (1.5x) makes the improvement reward more sensitive to error reduction, potentially accelerating convergence to even lower errors. These changes should maintain the excellent tracking performance while promoting smoother, more stable control behavior.)
+
+### Reward Formula / Change
+```
+Added a stability bonus for maintaining low angular velocity when tracking error is small, and adjusted the improvement reward scaling to better balance exploration and exploitation. (rationale: The current reward function already achieves perfect completion rate and low lateral error (0.0041). However, the baseline metrics show zero standard deviation, suggesting the agent may be over-optimizing for tracking at the expense of smoothness. The stability bonus encourages maintaining both low tracking error AND low angular velocity simultaneously, which should improve motion quality. Increasing the potential_current scaling (1.5x) makes the improvement reward more sensitive to error reduction, potentially accelerating convergence to even lower errors. These changes should maintain the excellent tracking performance while promoting smoother, more stable control behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_23703
+
+---
+
