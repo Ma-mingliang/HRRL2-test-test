@@ -989,18 +989,6 @@ class Attitude_control_stage1(gym.Env):
                 subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
-        # 8. Learned preference reward (H_learned_preference_reward)
-        # Use exponential moving average of past rewards as preference signal
-        if not hasattr(self, 'reward_ema'):
-            self.reward_ema = 0.0
-        # Safety gating: only apply if error is small enough
-        preference_reward = 0.0
-        if current_error < 0.05:  # Safety gate
-            # Simple preference: reward consistency with past good performance
-            preference_reward = 0.1 * (self.reward_ema - current_error)
-        # Update EMA with current reward estimate
-        self.reward_ema = 0.95 * self.reward_ema + 0.05 * (1.0 - current_error)
-        
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
         
         return reward
