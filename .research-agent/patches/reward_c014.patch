@@ -1,24 +1,17 @@
 --- a/env.py
 +++ b/env.py
-@@ -951,7 +951,12 @@
-         # 3. 平顺性惩罚
-         smoothness_penalty = -0.05 * angular_velocity
-         
--        # 4. 改进奖励
-+        # 4. 安全约束惩罚 - 防止过度振荡
-+        safety_penalty = 0.0
-+        if angular_velocity > 2.0:  # 超过安全阈值
-+            safety_penalty = -0.5 * (angular_velocity - 2.0)  # 线性惩罚
-+        
-+        # 5. 改进奖励
+@@ -962,4 +962,11 @@
          gamma = 0.99
-         potential_current = -current_error
-         potential_last = -abs(state_last_raw[0])
-@@ -960,6 +965,6 @@
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
-         
--        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
-+        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty
-         
-         return reward
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive dynamic weighting for improvement reward
++        # Weight increases with error magnitude to prioritize error reduction when far from target
++        base_improvement_weight = 1.0
++        max_improvement_weight = 2.5
++        improvement_weight = base_improvement_weight + (max_improvement_weight - base_improvement_weight) * (1 - math.exp(-8 * current_error))
++        # Safety gating: cap weight to prevent reward hacking
++        improvement_weight = min(improvement_weight, max_improvement_weight)
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)

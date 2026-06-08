@@ -7053,3 +7053,29 @@ d_adaptive_dynamic_reward_openreview_1egvvwfsdd, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T10:26:51.140007+00:00] v0623 - ✗ REJECTED
+
+**Candidate ID:** `reward_c013`
+**Description:** Added adaptive weighting to the improvement reward component based on error magnitude, similar to the tracking reward's adaptive weighting approach (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting similar to the tracking reward, we can emphasize improvement more when errors are large (encouraging faster convergence) and reduce emphasis when errors are small (focusing on precision). This aligns with the D_adaptive_dynamic_reward research idea and should help the agent prioritize error reduction more effectively, potentially improving the lateral_error metric while maintaining the high completion_rate.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on error magnitude, similar to the tracking reward's adaptive weighting approach (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting similar to the tracking reward, we can emphasize improvement more when errors are large (encouraging faster convergence) and reduce emphasis when errors are small (focusing on precision). This aligns with the D_adaptive_dynamic_reward research idea and should help the agent prioritize error reduction more effectively, potentially improving the lateral_error metric while maintaining the high completion_rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_fdms41jxqq, d_adaptive_dynamic_reward_openreview_kt5hqjjwgs
+
+---
+
