@@ -965,21 +965,12 @@ class Attitude_control_stage1(gym.Env):
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
-        gamma = 0.99
-        potential_current = -current_error
-        potential_last = -abs(state_last_raw[0])
-        
-        # 4. Learned preference reward (simplified proxy)
-        # Weight error and velocity based on historical performance
-        # This simulates learning from demonstrations/preferences
-        preference_weight_error = 1.2  # Learned to emphasize error reduction
-        preference_weight_velocity = 0.8  # Learned to de-emphasize velocity
-        preference_reward = -preference_weight_error * current_error**2 - preference_weight_velocity * angular_velocity
-        # Safety gate: cap preference reward to prevent reward hacking
-        preference_reward = max(preference_reward, -2.0)
-        
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
+        # 6. 残差动作惩罚（基于研究想法）
+        residual_penalty = 0.0
+        if hasattr(self, 'prev_residual') and self.prev_residual is not None:
+            residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
         self.prev_residual = target_handle_angle
         
         # 7. Curriculum subgoal reward - encourage progressive improvement

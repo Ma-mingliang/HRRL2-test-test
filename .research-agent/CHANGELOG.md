@@ -8000,3 +8000,29 @@ h_learned_preference_reward_openreview_yfatkag5c9, h_learned_preference_reward_a
 
 ---
 
+## [2026-06-08T11:13:21.977411+00:00] v0630 - ✗ REJECTED
+
+**Candidate ID:** `reward_c011`
+**Description:** Added a small stability bonus for maintaining low angular velocity when error is small, to encourage smoother control near the target (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041), but adding a stability bonus for maintaining low angular velocity when error is small should encourage smoother control near the target. This addresses the research idea about LLM-generated rewards by adding a targeted stability component that rewards both accuracy AND smoothness simultaneously. The bonus is small (max 0.1) and only applies when error < 0.01 and angular_velocity < 0.1, preventing reward hacking while promoting more stable final convergence.)
+
+### Reward Formula / Change
+```
+Added a small stability bonus for maintaining low angular velocity when error is small, to encourage smoother control near the target (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041), but adding a stability bonus for maintaining low angular velocity when error is small should encourage smoother control near the target. This addresses the research idea about LLM-generated rewards by adding a targeted stability component that rewards both accuracy AND smoothness simultaneously. The bonus is small (max 0.1) and only applies when error < 0.01 and angular_velocity < 0.1, preventing reward hacking while promoting more stable final convergence.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_q01nzxiwlt, g_llm_reward_generation_openreview_bm6mwnd9uh
+
+---
+
