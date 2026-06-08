@@ -7839,3 +7839,55 @@ g_llm_reward_generation_openreview_g9ylcfd8bq, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T11:10:53.191307+00:00] v0630 - ✗ REJECTED
+
+**Candidate ID:** `reward_c016`
+**Description:** Added a small stability bonus for maintaining low angular velocity when error is small, to encourage smoother control near target (rationale: The baseline shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward is very high (930.85) with zero std, suggesting potential reward hacking or insufficient exploration. Adding a stability bonus for maintaining low angular velocity when error is small encourages smoother control near the target, which should improve robustness and reduce oscillations. This small addition promotes precision without disrupting the existing reward structure, potentially leading to more consistent performance and better generalization.)
+
+### Reward Formula / Change
+```
+Added a small stability bonus for maintaining low angular velocity when error is small, to encourage smoother control near target (rationale: The baseline shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward is very high (930.85) with zero std, suggesting potential reward hacking or insufficient exploration. Adding a stability bonus for maintaining low angular velocity when error is small encourages smoother control near the target, which should improve robustness and reduce oscillations. This small addition promotes precision without disrupting the existing reward structure, potentially leading to more consistent performance and better generalization.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_q01nzxiwlt, g_llm_reward_generation_openreview_bm6mwnd9uh
+
+---
+
+## [2026-06-08T11:10:55.962688+00:00] v0635 - ✗ REJECTED
+
+**Candidate ID:** `reward_c014`
+**Description:** No-op candidate (LLM unavailable)
+
+### Reward Formula / Change
+```
+No-op candidate (LLM unavailable)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty_patch
+
+### Source Methods
+h_learned_preference_reward_openreview_5t1vmqldr8, h_learned_preference_reward_openreview_isxdqzvhox
+
+---
+

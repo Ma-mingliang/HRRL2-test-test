@@ -1,21 +1,22 @@
 --- a/env.py
 +++ b/env.py
-@@ -976,15 +976,17 @@
-         # 7. Curriculum subgoal reward - encourage progressive improvement
-         subgoal_reward = 0.0
-         if hasattr(self, 'prev_error') and self.prev_error is not None:
-             # Reward for reducing error toward subgoal thresholds
-             error_reduction = self.prev_error - current_error
-             if error_reduction > 0:
-                 # Stage-based weighting with safety gating
-                 if current_error < 0.005:
-                     stage_weight = 0.3  # High-precision stage
-                 elif current_error < 0.02:
-                     stage_weight = 0.2  # Medium-precision stage
-                 else:
-                     stage_weight = 0.1  # Coarse stage
--                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
-+                # Dynamic scaling: stronger signal for larger errors
-+                error_scale = 1.0 + 2.0 * min(current_error, 0.1)
-+                subgoal_reward = stage_weight * error_reduction * error_scale * (1.0 / (current_error + 0.001))
+@@ -959,6 +959,12 @@
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
+         
++        # 3.5. Stability bonus for low angular velocity when error is small
++        stability_bonus = 0.0
++        if current_error < 0.01 and angular_velocity < 0.1:
++            # Reward for maintaining stability near target
++            stability_bonus = 0.1 * (0.1 - angular_velocity) / 0.1
++        
+         gamma = 0.99
+         potential_current = -current_error
+         potential_last = -abs(state_last_raw[0])
+@@ -992,5 +998,5 @@
          self.prev_error = current_error
+         
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
++        reward = tracking_reward + bonus_reward + smoothness_penalty + stability_bonus + improvement_reward + action_penalty + residual_penalty + subgoal_reward
+         
+         return reward

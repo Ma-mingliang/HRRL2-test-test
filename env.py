@@ -963,16 +963,16 @@ class Attitude_control_stage1(gym.Env):
         stability_bonus = 0.0
         if current_error < 0.01 and angular_velocity < 0.1:
             # Reward for maintaining stability near target
-            stability_bonus = 0.2 * (0.01 - current_error) * (0.1 - angular_velocity)
+            stability_bonus = 0.1 * (0.1 - angular_velocity) / 0.1
         
         gamma = 0.99
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
+        self.prev_error = current_error
         
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
+        reward = tracking_reward + bonus_reward + smoothness_penalty + stability_bonus + improvement_reward + action_penalty + residual_penalty + subgoal_reward
         
-        return reward + stability_bonus
-    def reset(self, seed=None, options=None):
+        return reward
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
