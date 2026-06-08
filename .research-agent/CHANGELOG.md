@@ -9629,3 +9629,29 @@ b_safety_constraint_reward_openreview_cawunem1je, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-08T15:15:28.203151+00:00] v0662 - ✗ REJECTED
+
+**Candidate ID:** `reward_c020`
+**Description:** Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows perfect completion rate (1.0) but very low lateral error (0.0041), suggesting the agent may be over-optimizing for precision at the cost of smoothness. Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations while maintaining tracking performance. This implements the B_safety_constraint_reward research idea by gating the task reward with explicit penalties for constraint violations (excessive angular velocity), which should improve robustness without sacrificing the excellent completion rate.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows perfect completion rate (1.0) but very low lateral error (0.0041), suggesting the agent may be over-optimizing for precision at the cost of smoothness. Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations while maintaining tracking performance. This implements the B_safety_constraint_reward research idea by gating the task reward with explicit penalties for constraint violations (excessive angular velocity), which should improve robustness without sacrificing the excellent completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_qcz3g6mh3l, b_safety_constraint_reward_openreview_raoaicihbs
+
+---
+
