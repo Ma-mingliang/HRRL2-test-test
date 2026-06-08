@@ -6389,3 +6389,29 @@ c_curriculum_subgoal_reward_openreview_dhoxjoy1sp, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T09:27:35.183368+00:00] v0615 - ✗ REJECTED
+
+**Candidate ID:** `reward_c005`
+**Description:** Added adaptive weighting to the subgoal reward component based on current error magnitude, making the reward function more responsive to different tracking precision stages (rationale: The current reward function already has good completion rate (1.0) and low lateral error (0.0041), but we can further improve precision by making the subgoal reward more aggressive when the agent is already performing well. The adaptive scaling increases the reward weight as the error decreases below 0.02, providing stronger incentive for the agent to achieve and maintain high precision. This should help reduce the lateral error further while maintaining the stable completion rate. The modification is minimal (3 lines added) and only affects the subgoal reward component, preserving the overall reward structure.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the subgoal reward component based on current error magnitude, making the reward function more responsive to different tracking precision stages (rationale: The current reward function already has good completion rate (1.0) and low lateral error (0.0041), but we can further improve precision by making the subgoal reward more aggressive when the agent is already performing well. The adaptive scaling increases the reward weight as the error decreases below 0.02, providing stronger incentive for the agent to achieve and maintain high precision. This should help reduce the lateral error further while maintaining the stable completion rate. The modification is minimal (3 lines added) and only affects the subgoal reward component, preserving the overall reward structure.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_6lm1jxxlxb, d_adaptive_dynamic_reward_openreview_mhratccbtk
+
+---
+
