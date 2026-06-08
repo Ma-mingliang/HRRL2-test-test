@@ -1,13 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -958,6 +958,7 @@
-         reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty
-         
-+        # 7. Small bonus for maintaining very low tracking error
-+        if current_error < 0.01:  # Very precise tracking
-+            reward += 0.5  # Small bonus for precision
-+        
-         return reward
--        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty
--        
--        return reward
+@@ -954,5 +954,7 @@
+         # 4. 改进奖励
+-        gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive gamma based on error magnitude
++        gamma = 0.95 if current_error > 0.01 else 0.99
++        # Scale potential by error magnitude for better gradient
++        potential_current = -current_error * (1.0 + 2.0 * current_error)
++        potential_last = -abs(state_last_raw[0]) * (1.0 + 2.0 * abs(state_last_raw[0]))
++        improvement_reward = gamma * potential_current - potential_last
