@@ -9889,3 +9889,34 @@ e_hierarchical_reward_openreview_a0cecoe9bp, e_hierarchical_reward_openreview_lz
 
 ---
 
+## [2026-06-08T16:12:35.321726+00:00] v0671 - ✗ REJECTED
+
+**Candidate ID:** `reward_c029`
+**Description:** Added residual action smoothness penalty to the residual penalty term to encourage smoother residual actions (rationale: The research idea suggests penalizing both residual action magnitude and roughness. The current implementation only penalizes roughness (change between consecutive residuals). Adding a magnitude penalty (||u_residual||^2) encourages smaller residual corrections, while keeping the smoothness penalty encourages temporal consistency. This should reduce residual action magnitude while maintaining smoothness, potentially improving tracking performance and reducing action oscillations. The coefficients are kept small to avoid reward hacking while still providing meaningful gradients.)
+
+### Reward Formula / Change
+```
+Added residual action smoothness penalty to the residual penalty term to encourage smoother residual actions (rationale: The research idea suggests penalizing both residual action magnitude and roughness. The current implementation only penalizes roughness (change between consecutive residuals). Adding a magnitude penalty (||u_residual||^2) encourages smaller residual corrections, while keeping the smoothness penalty encourages temporal consistency. This should reduce residual action magnitude while maintaining smoothness, potentially improving tracking performance and reducing action oscillations. The coefficients are kept small to avoid reward hacking while still providing meaningful gradients.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 823.3763
+- **lateral_error:** 0.0090
+
+### Rejection Reason
+Score -0.2852 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_dpkak1oh3x, f_residual_aware_reward_openreview_isxdqzvhox
+
+---
+

@@ -970,10 +970,11 @@ class Attitude_control_stage1(gym.Env):
         # 6. 残差动作惩罚（基于研究想法）
         residual_penalty = 0.0
         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
-            # Penalize residual magnitude and roughness
-            residual_magnitude_penalty = -0.01 * target_handle_angle**2
-            residual_smoothness_penalty = -0.005 * (target_handle_angle - self.prev_residual)**2
-            residual_penalty = residual_magnitude_penalty + residual_smoothness_penalty
+            # Magnitude penalty: penalize large residual actions
+            magnitude_penalty = -0.01 * target_handle_angle**2
+            # Smoothness penalty: penalize rapid changes in residual actions
+            smoothness_penalty = -0.005 * (target_handle_angle - self.prev_residual)**2
+            residual_penalty = magnitude_penalty + smoothness_penalty
         self.prev_residual = target_handle_angle
         
         # 7. Curriculum subgoal reward - encourage progressive improvement
