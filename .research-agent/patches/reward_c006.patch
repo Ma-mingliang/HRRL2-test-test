@@ -1,19 +1,15 @@
 --- a/env.py
 +++ b/env.py
-@@ -946,7 +946,15 @@
-         # 4. Heading error penalty to reduce oscillations
-         heading_error = abs(state_raw[1])  # theta0 is heading error
-         heading_penalty = -0.5 * heading_error**2
-         
--        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty
-+        # 5. Velocity reward to encourage smooth motion
-+        velocity = abs(state_raw[3])  # v is velocity
-+        velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed
-+        
-+        # 6. Angular velocity penalty to reduce steering oscillations
-+        angular_velocity = abs(state_raw[2])  # w0 is angular velocity
-+        angular_penalty = -0.05 * angular_velocity**2
-+        
-+        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty
-         
-         return reward
+@@ -954,4 +954,9 @@
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Enhanced potential-based shaping with scaling factor
++        k_phi = 2.0
++        potential_current = -k_phi * current_error
++        potential_last = -k_phi * abs(state_last_raw[0])
++        improvement_reward = gamma * potential_current - potential_last
++        # Stability bonus for low angular velocity
++        stability_bonus = 0.1 * max(0, 1 - angular_velocity / 0.5)
++        improvement_reward += stability_bonus
