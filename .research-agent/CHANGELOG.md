@@ -6847,3 +6847,34 @@ d_adaptive_dynamic_reward_openreview_pt1sssy1ta, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T10:12:09.140709+00:00] v0622 - ✗ REJECTED
+
+**Candidate ID:** `reward_c003`
+**Description:** Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea for the path_tracking layer (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases with error, we encourage stronger improvement signals when the agent is far from the target (coarse stage) while maintaining gentler corrections near high-precision thresholds. This aligns with the D_adaptive_dynamic_reward research idea and should help the agent learn faster in early training while avoiding overshooting in fine control phases. The exponential schedule with factor 8 provides smooth transitions without abrupt changes.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea for the path_tracking layer (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases with error, we encourage stronger improvement signals when the agent is far from the target (coarse stage) while maintaining gentler corrections near high-precision thresholds. This aligns with the D_adaptive_dynamic_reward research idea and should help the agent learn faster in early training while avoiding overshooting in fine control phases. The exponential schedule with factor 8 provides smooth transitions without abrupt changes.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 856.0266
+- **lateral_error:** 0.0088
+
+### Rejection Reason
+Score -0.2614 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_pt1sssy1ta, d_adaptive_dynamic_reward_openreview_s7rdnnujy6
+
+---
+
