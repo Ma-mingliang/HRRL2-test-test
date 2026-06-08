@@ -937,14 +937,14 @@ class Attitude_control_stage1(gym.Env):
         
         # 1. 核心跟踪奖励
         max_penalty = 2.0
-        # Adaptive weighting: increase tracking emphasis when error is large
-        if current_error > 0.05:
-            tracking_weight = 2.0  # High emphasis for coarse tracking
+        # Adaptive weighting: higher weight for larger errors, lower for small errors
+        if current_error > 0.1:
+            weight = 2.0  # Strong penalty for large errors
         elif current_error > 0.02:
-            tracking_weight = 1.5  # Medium emphasis
+            weight = 1.5  # Medium penalty
         else:
-            tracking_weight = 1.0  # Normal emphasis for fine tracking
-        tracking_reward = -tracking_weight * min(current_error**2, max_penalty)
+            weight = 1.0  # Standard penalty for small errors
+        tracking_reward = -weight * min(current_error**2, max_penalty)
         
         # 2. 高精度奖励
         bonus_reward = 0.0

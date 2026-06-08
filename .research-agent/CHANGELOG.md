@@ -6415,3 +6415,34 @@ d_adaptive_dynamic_reward_openreview_6lm1jxxlxb, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T09:28:29.265241+00:00] v0616 - ✗ REJECTED
+
+**Candidate ID:** `reward_c002`
+**Description:** Added adaptive weighting for tracking reward based on current error magnitude, making the reward more sensitive to larger errors while maintaining precision focus for small errors. (rationale: The baseline shows excellent performance (lateral_error: 0.0041), but the current reward function treats all errors equally. By adding adaptive weighting that increases penalty for larger errors (>0.05), we encourage faster convergence during early training while maintaining precision focus for small errors. This implements the D_adaptive_dynamic_reward concept by dynamically adjusting the tracking component weight based on error magnitude, which should improve training efficiency without sacrificing final precision.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting for tracking reward based on current error magnitude, making the reward more sensitive to larger errors while maintaining precision focus for small errors. (rationale: The baseline shows excellent performance (lateral_error: 0.0041), but the current reward function treats all errors equally. By adding adaptive weighting that increases penalty for larger errors (>0.05), we encourage faster convergence during early training while maintaining precision focus for small errors. This implements the D_adaptive_dynamic_reward concept by dynamically adjusting the tracking component weight based on error magnitude, which should improve training efficiency without sacrificing final precision.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 0.0000
+- **reward:** 0.0000
+- **lateral_error:** 0.3961
+
+### Rejection Reason
+Hard threshold violated: completion_rate
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_6lm1jxxlxb, d_adaptive_dynamic_reward_openreview_mhratccbtk
+
+---
+
