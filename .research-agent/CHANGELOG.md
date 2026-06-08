@@ -7808,3 +7808,34 @@ g_llm_reward_generation_openreview_q01nzxiwlt, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T11:10:04.009334+00:00] v0629 - ✗ REJECTED
+
+**Candidate ID:** `reward_c015`
+**Description:** Simplify the adaptive dynamic weighting by using a linear schedule instead of exponential, and reduce the maximum weight to prevent over-penalization during large errors (rationale: The current exponential weighting can cause very high penalties for moderate errors (e.g., error=0.1 gives weight≈2.0, error=0.2 gives weight≈2.7), which may discourage exploration. A linear schedule with reduced max_weight (2.5 vs 3.0) provides more gradual penalty scaling, potentially improving learning stability while maintaining strong incentives for small errors. This should help maintain the excellent completion rate (1.0) while potentially reducing lateral error further by encouraging smoother policy updates.)
+
+### Reward Formula / Change
+```
+Simplify the adaptive dynamic weighting by using a linear schedule instead of exponential, and reduce the maximum weight to prevent over-penalization during large errors (rationale: The current exponential weighting can cause very high penalties for moderate errors (e.g., error=0.1 gives weight≈2.0, error=0.2 gives weight≈2.7), which may discourage exploration. A linear schedule with reduced max_weight (2.5 vs 3.0) provides more gradual penalty scaling, potentially improving learning stability while maintaining strong incentives for small errors. This should help maintain the excellent completion rate (1.0) while potentially reducing lateral error further by encouraging smoother policy updates.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 916.6387
+- **lateral_error:** 0.0070
+
+### Rejection Reason
+Score -0.1476 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_g9ylcfd8bq, g_llm_reward_generation_openreview_iqnzibspz5
+
+---
+

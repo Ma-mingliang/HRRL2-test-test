@@ -499,12 +499,16 @@
       "applied_at": "2026-06-08T10:45:32.686931+00:00"
     },
     {
-      "candidate_id": "reward_c018",
-      "applied_at": "2026-06-08T10:53:00.662217+00:00"
+      "candidate_id": "reward_c014",
+      "applied_at": "2026-06-08T10:52:50.344207+00:00"
     },
     {
-      "candidate_id": "reward_c019",
-      "applied_at": "2026-06-08T11:01:25.714948+00:00"
+      "candidate_id": "reward_c015",
+      "applied_at": "2026-06-08T11:01:48.077262+00:00"
+    },
+    {
+      "candidate_id": "reward_c016",
+      "applied_at": "2026-06-08T11:10:16.265428+00:00"
     }
   ],
   "baseline_fair_eval": {
