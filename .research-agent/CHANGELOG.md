@@ -9078,3 +9078,29 @@ h_learned_preference_reward_openreview_pmkwnv6azi, h_learned_preference_reward_o
 
 ---
 
+## [2026-06-08T11:54:53.326528+00:00] v0642 - ✗ REJECTED
+
+**Candidate ID:** `reward_c023`
+**Description:** Added a learned preference reward component that uses a simple exponential moving average of past rewards to infer a preference signal, with safety gating to prevent reward hacking (rationale: This implements a simple learned preference reward that encourages consistency by rewarding the agent when its current reward is close to its recent average performance. This helps stabilize learning and prevents large reward fluctuations. The safety gating (capping at 0.5) prevents reward hacking. Since the baseline shows perfect completion (1.0) and low lateral error (0.0041), this should help maintain performance while potentially improving smoothness and consistency. The change is minimal and only adds a new component without modifying existing reward terms.)
+
+### Reward Formula / Change
+```
+Added a learned preference reward component that uses a simple exponential moving average of past rewards to infer a preference signal, with safety gating to prevent reward hacking (rationale: This implements a simple learned preference reward that encourages consistency by rewarding the agent when its current reward is close to its recent average performance. This helps stabilize learning and prevents large reward fluctuations. The safety gating (capping at 0.5) prevents reward hacking. Since the baseline shows perfect completion (1.0) and low lateral error (0.0041), this should help maintain performance while potentially improving smoothness and consistency. The change is minimal and only adds a new component without modifying existing reward terms.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+h_learned_preference_reward_openreview_titcv6pzia, h_learned_preference_reward_openreview_uv9aa45wym
+
+---
+

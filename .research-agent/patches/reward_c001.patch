@@ -1,14 +1,25 @@
 --- a/env.py
 +++ b/env.py
-@@ -962,4 +962,8 @@
+@@ -960,6 +960,15 @@
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
+         
++        # 4. Potential-based reward shaping (error reduction)
++        # Implements A_potential_based_reward with safety gating
++        potential_shaping = 0.0
++        if hasattr(self, 'prev_error') and self.prev_error is not None:
++            error_reduction = self.prev_error - current_error
++            # Only reward positive improvements, cap to prevent reward hacking
++            if error_reduction > 0:
++                potential_shaping = 0.1 * error_reduction
++        
          gamma = 0.99
--        potential_current = -current_error
--        potential_last = -abs(state_last_raw[0])
--        improvement_reward = gamma * potential_current - potential_last
-+        # Adaptive weighting for improvement reward based on error magnitude
-+        # Higher weight when error is large to encourage faster convergence
-+        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-5 * current_error))
-+        improvement_weight = min(improvement_weight, 3.0)  # Safety cap
-+        potential_current = -current_error
-+        potential_last = -abs(state_last_raw[0])
-+        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
+         potential_current = -current_error
+         potential_last = -abs(state_last_raw[0])
+@@ -992,5 +1001,5 @@
+         self.prev_error = current_error
+         
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
++        reward = tracking_reward + bonus_reward + smoothness_penalty + potential_shaping + improvement_reward + action_penalty + residual_penalty + subgoal_reward
+         
+         return reward
