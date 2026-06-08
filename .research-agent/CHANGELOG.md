@@ -10355,3 +10355,34 @@ c_curriculum_subgoal_reward_openreview_r7ppkxmovk, c_curriculum_subgoal_reward_a
 
 ---
 
+## [2026-06-08T18:00:27.103181+00:00] v0687 - ✗ REJECTED
+
+**Candidate ID:** `reward_c045`
+**Description:** Modified the curriculum subgoal reward to use a more stable scaling factor and added a safety gate to prevent reward hacking when error is very small (rationale: The current subgoal reward can become unstable when current_error is very small (near 0.001), causing the 1/(current_error+0.001) term to explode. This modification adds a safety gate (current_error > 0.001) to prevent reward hacking near zero error, and caps the scaling factor at 100.0 to ensure stable reward magnitudes. This should improve training stability while maintaining the curriculum learning benefits.)
+
+### Reward Formula / Change
+```
+Modified the curriculum subgoal reward to use a more stable scaling factor and added a safety gate to prevent reward hacking when error is very small (rationale: The current subgoal reward can become unstable when current_error is very small (near 0.001), causing the 1/(current_error+0.001) term to explode. This modification adds a safety gate (current_error > 0.001) to prevent reward hacking near zero error, and caps the scaling factor at 100.0 to ensure stable reward magnitudes. This should improve training stability while maintaining the curriculum learning benefits.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 920.5669
+- **lateral_error:** 0.0046
+
+### Rejection Reason
+Score -0.0288 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_dhoxjoy1sp, c_curriculum_subgoal_reward_openreview_n4x7a4gg7t
+
+---
+

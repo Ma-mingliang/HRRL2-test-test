@@ -960,9 +960,15 @@ class Attitude_control_stage1(gym.Env):
         smoothness_penalty = -0.05 * angular_velocity
         
         gamma = 0.99
+        # Adaptive dynamic weighting for improvement reward
+        base_gamma = 0.99
+        max_gamma = 1.5
+        # Smooth exponential schedule: gamma increases with error magnitude
+        gamma_weight = base_gamma + (max_gamma - base_gamma) * (1 - math.exp(-10 * current_error))
+        gamma_weight = min(gamma_weight, max_gamma)
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
-        improvement_reward = gamma * potential_current - potential_last
+        improvement_reward = gamma_weight * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
@@ -978,8 +984,7 @@ class Attitude_control_stage1(gym.Env):
         if hasattr(self, 'prev_error') and self.prev_error is not None:
             # Reward for reducing error toward subgoal thresholds
             error_reduction = self.prev_error - current_error
-            # Only reward progress when error is meaningful and reduction is significant
-            if error_reduction > 0 and current_error > 0.001:
+            if error_reduction > 0:
                 # Stage-based weighting with safety gating
                 if current_error < 0.005:
                     stage_weight = 0.3  # High-precision stage
@@ -987,8 +992,7 @@ class Attitude_control_stage1(gym.Env):
                     stage_weight = 0.2  # Medium-precision stage
                 else:
                     stage_weight = 0.1  # Coarse stage
-                # Use a more stable scaling factor to prevent exploding rewards
-                subgoal_reward = stage_weight * error_reduction * min(1.0 / (current_error + 0.001), 100.0)
+                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
