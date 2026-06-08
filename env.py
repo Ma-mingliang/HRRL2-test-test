@@ -978,22 +978,15 @@ class Attitude_control_stage1(gym.Env):
         if hasattr(self, 'prev_error') and self.prev_error is not None:
             # Reward for reducing error toward subgoal thresholds
             error_reduction = self.prev_error - current_error
-            if error_reduction > 0:
+            if error_reduction > 0 and current_error > 0.001:  # Safety gate: don't reward tiny improvements
                 # Stage-based weighting with safety gating
                 if current_error < 0.005:
                     stage_weight = 0.3  # High-precision stage
-                    stage_bonus = 0.5  # Bonus for reaching high-precision stage
                 elif current_error < 0.02:
                     stage_weight = 0.2  # Medium-precision stage
-                    stage_bonus = 0.2  # Bonus for reaching medium-precision stage
                 else:
                     stage_weight = 0.1  # Coarse stage
-                    stage_bonus = 0.0
-                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
-                # Add stage completion bonus when first entering a new stage
-                if not hasattr(self, 'current_stage') or self.current_stage != (current_error < 0.005, current_error < 0.02):
-                    subgoal_reward += stage_bonus
-                    self.current_stage = (current_error < 0.005, current_error < 0.02)
+                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.01))  # More stable scaling
         self.prev_error = current_error
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward

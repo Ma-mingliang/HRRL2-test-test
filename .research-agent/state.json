@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c040",
+    "candidate_id": "reward_c041",
     "optimizer": "reward",
-    "description": "Modified the curriculum subgoal reward to use a more stable scaling factor and added a safety gate to prevent reward hacking when error is very small (rationale: The current subgoal reward has two issues: 1) The scaling factor 1/(current_error + 0.001) can become very large when error approaches zero, potentially causing reward hacking. 2) There's no safety gate to prevent reward hacking when error is extremely small. By adding a safety gate (current_error > 0.001) and increasing the denominator constant from 0.001 to 0.01, we make the reward more stable and prevent excessive rewards for tiny improvements when already near perfect tracking. This should maintain the curriculum benefit while reducing reward variance and potential instability.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -976,15 +976,15 @@\n         # 7. Curriculum subgoal reward - encourage progressive improvement\n         subgoal_reward = 0.0\n         if hasattr(self, 'prev_error') and self.prev_error is not None:\n             # Reward for reducing error toward subgoal thresholds\n             error_reduction = self.prev_error - current_error\n-            if error_reduction > 0:\n+            if error_reduction > 0 and current_error > 0.001:  # Safety gate for very small errors\n      ",
-    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_v3kavlfvrd\", \"c_curriculum_subgoal_reward_openreview_5t1vmqldr8\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:v3kaVLFvRD\", \"openreview:5T1vMQldr8\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added a curriculum stage progression system that tracks cumulative progress and provides stage completion bonuses to encourage systematic improvement through error reduction stages. (rationale: The current curriculum subgoal reward only rewards error reduction within stages but doesn't provide explicit bonuses for reaching new precision stages. By adding stage completion bonuses when the agent first enters a new error threshold (coarse → medium → high precision), we create clearer progression milestones. This encourages the agent to systematically improve through stages rather than just making incremental improvements. The stage bonuses are small (0.2-0.5) to prevent reward hacking while providing meaningful feedback for stage transitions. This should improve the curriculum learning aspect and potentially lead to faster convergence to high-precision tracking.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -976,15 +976,22 @@\n         # 7. Curriculum subgoal reward - encourage progressive improvement\n         subgoal_reward = 0.0\n         if hasattr(self, 'prev_error') and self.prev_error is not None:\n             # Reward for reducing error toward subgoal thresholds\n             error_reduction = self.prev_error - current_error\n             if error_reduction > 0:\n                 # Stage-based weighting with safety gating\n                 if current_error < 0.005:\n   ",
+    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_leed5is4oi\", \"c_curriculum_subgoal_reward_openreview_obpqdcwlfd\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:LEed5Is4oi\", \"openreview:OBpQdCWLfd\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T17:26:20.081530+00:00"
+    "timestamp": "2026-06-08T17:33:07.865986+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 113,
-    "full_evals_run": 106
+    "candidates_proposed": 114,
+    "full_evals_run": 107
   },
   "stop_reason": null,
   "progress": null,
@@ -681,6 +681,10 @@
     {
       "candidate_id": "reward_c041",
       "applied_at": "2026-06-08T17:26:41.529893+00:00"
+    },
+    {
+      "candidate_id": "reward_c042",
+      "applied_at": "2026-06-08T17:33:23.671042+00:00"
     }
   ],
   "baseline_fair_eval": {

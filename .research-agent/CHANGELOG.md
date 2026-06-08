@@ -10243,3 +10243,31 @@ c_curriculum_subgoal_reward_openreview_v3kavlfvrd, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T17:33:07.870783+00:00] v0683 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c041`
+**Description:** Added a curriculum stage progression system that tracks cumulative progress and provides stage completion bonuses to encourage systematic improvement through error reduction stages. (rationale: The current curriculum subgoal reward only rewards error reduction within stages but doesn't provide explicit bonuses for reaching new precision stages. By adding stage completion bonuses when the agent first enters a new error threshold (coarse → medium → high precision), we create clearer progression milestones. This encourages the agent to systematically improve through stages rather than just making incremental improvements. The stage bonuses are small (0.2-0.5) to prevent reward hacking while providing meaningful feedback for stage transitions. This should improve the curriculum learning aspect and potentially lead to faster convergence to high-precision tracking.)
+
+### Reward Formula / Change
+```
+Added a curriculum stage progression system that tracks cumulative progress and provides stage completion bonuses to encourage systematic improvement through error reduction stages. (rationale: The current curriculum subgoal reward only rewards error reduction within stages but doesn't provide explicit bonuses for reaching new precision stages. By adding stage completion bonuses when the agent first enters a new error threshold (coarse → medium → high precision), we create clearer progression milestones. This encourages the agent to systematically improve through stages rather than just making incremental improvements. The stage bonuses are small (0.2-0.5) to prevent reward hacking while providing meaningful feedback for stage transitions. This should improve the curriculum learning aspect and potentially lead to faster convergence to high-precision tracking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 994.4729
+- **lateral_error:** 0.0046
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_leed5is4oi, c_curriculum_subgoal_reward_openreview_obpqdcwlfd
+
+---
+
