@@ -1,8 +1,26 @@
 --- a/env.py
 +++ b/env.py
-@@ -992,4 +992,5 @@
-         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
+@@ -976,17 +976,22 @@
+         # 7. Curriculum subgoal reward - encourage progressive improvement
+         subgoal_reward = 0.0
+         if hasattr(self, 'prev_error') and self.prev_error is not None:
+             # Reward for reducing error toward subgoal thresholds
+             error_reduction = self.prev_error - current_error
+             if error_reduction > 0:
+                 # Stage-based weighting with safety gating
+                 if current_error < 0.005:
+                     stage_weight = 0.3  # High-precision stage
+                 elif current_error < 0.02:
+                     stage_weight = 0.2  # Medium-precision stage
+                 else:
+                     stage_weight = 0.1  # Coarse stage
+-                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
++                # Hierarchical reward: separate goal progress from low-level control
++                goal_progress_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
++                # Safety gating: cap goal progress reward to prevent reward hacking
++                goal_progress_reward = min(goal_progress_reward, 0.5)
++                # Low-level control reward (already computed as tracking_reward)
++                subgoal_reward = goal_progress_reward
+         self.prev_error = current_error
          
-         return reward
-+
-     def reset(self, seed=None, options=None):
+         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward

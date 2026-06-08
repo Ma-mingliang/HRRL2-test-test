@@ -9717,3 +9717,31 @@ e_hierarchical_reward_openreview_umvicbadkk, e_hierarchical_reward_openreview_3n
 
 ---
 
+## [2026-06-08T15:35:44.796918+00:00] v0665 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c023`
+**Description:** Added hierarchical reward structure separating goal progress (manager) from tracking precision (worker) with safety gating (rationale: The hierarchical structure separates high-level goal progress (manager) from low-level tracking precision (worker), aligning with the E_hierarchical_reward research idea. This prevents reward hacking by capping the manager reward while maintaining strong tracking incentives. The safety gating ensures the agent doesn't exploit proxy metrics at the expense of actual task success. This should improve completion rate and reduce lateral error by providing clearer learning signals for both goal achievement and precise control.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure separating goal progress (manager) from tracking precision (worker) with safety gating (rationale: The hierarchical structure separates high-level goal progress (manager) from low-level tracking precision (worker), aligning with the E_hierarchical_reward research idea. This prevents reward hacking by capping the manager reward while maintaining strong tracking incentives. The safety gating ensures the agent doesn't exploit proxy metrics at the expense of actual task success. This should improve completion rate and reduce lateral error by providing clearer learning signals for both goal achievement and precise control.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 967.6347
+- **lateral_error:** 0.0039
+
+### Source Methods
+e_hierarchical_reward_openreview_snxieztsff, e_hierarchical_reward_openreview_tecql4fld0
+
+---
+

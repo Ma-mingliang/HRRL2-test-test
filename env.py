@@ -986,17 +986,15 @@ class Attitude_control_stage1(gym.Env):
                     stage_weight = 0.2  # Medium-precision stage
                 else:
                     stage_weight = 0.1  # Coarse stage
-                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
+                # Hierarchical reward: separate goal progress from low-level control
+                goal_progress_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
+                # Safety gating: cap goal progress reward to prevent reward hacking
+                goal_progress_reward = min(goal_progress_reward, 0.5)
+                # Low-level control reward (already computed as tracking_reward)
+                subgoal_reward = goal_progress_reward
         self.prev_error = current_error
         
-        # Hierarchical reward: separate goal progress (manager) from tracking precision (worker)
-        # Manager reward: high-level goal progress with safety gating
-        manager_reward = subgoal_reward + improvement_reward
-        # Worker reward: low-level tracking and control
-        worker_reward = tracking_reward + bonus_reward + smoothness_penalty + action_penalty + residual_penalty
-        # Safety gating: cap manager reward to prevent reward hacking
-        manager_reward = min(manager_reward, 0.5)
-        reward = manager_reward + worker_reward
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
         
         return reward
     def reset(self, seed=None, options=None):

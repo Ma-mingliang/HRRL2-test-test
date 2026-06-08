@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c017",
+    "candidate_id": "reward_c023",
     "optimizer": "reward",
-    "description": "Added safety constraint penalty for angular velocity to prevent unsafe oscillations, gated by error magnitude to avoid reward hacking (rationale: The baseline shows perfect completion rate (1.0) but with lateral error of 0.0041, which is close to the high-precision threshold (0.005). Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations that could destabilize the system, while being gated by error magnitude to prevent reward hacking. This aligns with the B_safety_constraint_reward research idea and should improve stability without sacrificing tracking performance.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -959,6 +959,13 @@\n         # 3. 平顺性惩罚\n         smoothness_penalty = -0.05 * angular_velocity\n         \n+        # 4. Safety constraint penalty for excessive angular velocity\n+        safety_penalty = 0.0\n+        max_safe_angular_velocity = 2.0  # rad/s threshold\n+        if angular_velocity > max_safe_angular_velocity:\n+            violation = angular_velocity - max_safe_angular_velocity\n+            safety_penalty = -0.1 * violation**2\n+        \n         gamma = 0.",
-    "source_idea": "{\"source_method_ids\": [\"b_safety_constraint_reward_openreview_7lfmnvnmfj\", \"b_safety_constraint_reward_openreview_dhtoyebvmt\"], \"source_categories\": [\"B_safety_constraint_reward\"], \"source_papers\": [\"openreview:7lfMNvNMFj\", \"openreview:DHToyEBVMT\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added hierarchical reward structure separating goal progress (manager) from tracking precision (worker) with safety gating (rationale: The hierarchical structure separates high-level goal progress (manager) from low-level tracking precision (worker), aligning with the E_hierarchical_reward research idea. This prevents reward hacking by capping the manager reward while maintaining strong tracking incentives. The safety gating ensures the agent doesn't exploit proxy metrics at the expense of actual task success. This should improve completion rate and reduce lateral error by providing clearer learning signals for both goal achievement and precise control.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -976,17 +976,24 @@\n         # 7. Curriculum subgoal reward - encourage progressive improvement\n         subgoal_reward = 0.0\n         if hasattr(self, 'prev_error') and self.prev_error is not None:\n             # Reward for reducing error toward subgoal thresholds\n             error_reduction = self.prev_error - current_error\n             if error_reduction > 0:\n                 # Stage-based weighting with safety gating\n                 if current_error < 0.005:\n   ",
+    "source_idea": "{\"source_method_ids\": [\"e_hierarchical_reward_openreview_snxieztsff\", \"e_hierarchical_reward_openreview_tecql4fld0\"], \"source_categories\": [\"E_hierarchical_reward\"], \"source_papers\": [\"openreview:SnXIEztSfF\", \"openreview:TECQL4FLD0\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T15:13:14.386044+00:00"
+    "timestamp": "2026-06-08T15:35:44.792285+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 95,
-    "full_evals_run": 89
+    "candidates_proposed": 96,
+    "full_evals_run": 90
   },
   "stop_reason": null,
   "progress": null,
@@ -613,6 +613,10 @@
     {
       "candidate_id": "reward_c023",
       "applied_at": "2026-06-08T15:29:22.744552+00:00"
+    },
+    {
+      "candidate_id": "reward_c024",
+      "applied_at": "2026-06-08T15:36:05.024436+00:00"
     }
   ],
   "baseline_fair_eval": {
