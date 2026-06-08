@@ -7645,3 +7645,34 @@ g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T11:04:50.251805+00:00] v0631 - ✗ REJECTED
+
+**Candidate ID:** `reward_c010`
+**Description:** Simplified the adaptive weight calculation to use a linear schedule instead of exponential, making the reward function more stable and easier to tune (rationale: The current exponential weight schedule can create sharp gradients when error is small, potentially causing unstable learning. A linear schedule provides more consistent gradient signals across the error range. This simplification should maintain the adaptive behavior while improving training stability, potentially reducing the standard deviation of the reward (currently 0.0000) and improving the lateral error (currently 0.0041). The linear schedule is also easier to interpret and tune.)
+
+### Reward Formula / Change
+```
+Simplified the adaptive weight calculation to use a linear schedule instead of exponential, making the reward function more stable and easier to tune (rationale: The current exponential weight schedule can create sharp gradients when error is small, potentially causing unstable learning. A linear schedule provides more consistent gradient signals across the error range. This simplification should maintain the adaptive behavior while improving training stability, potentially reducing the standard deviation of the reward (currently 0.0000) and improving the lateral error (currently 0.0041). The linear schedule is also easier to interpret and tune.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 876.2108
+- **lateral_error:** 0.0074
+
+### Rejection Reason
+Score -0.1845 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_q01nzxiwlt, g_llm_reward_generation_openreview_bm6mwnd9uh
+
+---
+
