@@ -9304,3 +9304,34 @@ a_potential_based_reward_openreview_snxieztsff, a_potential_based_reward_arxiv_2
 
 ---
 
+## [2026-06-08T14:37:54.216245+00:00] v0650 - ✗ REJECTED
+
+**Candidate ID:** `reward_c008`
+**Description:** Enhanced the potential-based reward shaping term with adaptive scaling based on error magnitude to better incentivize error reduction across different precision stages (rationale: The current potential-based reward uses uniform scaling across all error magnitudes. By implementing adaptive scaling that increases the potential weight as errors become smaller, we create stronger incentives for the agent to achieve high-precision tracking. This aligns with the research idea of using potential differences while addressing the risk of reward hacking by maintaining the same mathematical structure (gamma * Phi(s_next) - Phi(s)) but with error-magnitude-dependent scaling. The baseline shows excellent completion rate (1.0) but lateral error of 0.0041, suggesting the agent can achieve precision but needs stronger incentives to push for even smaller errors. This modification should encourage finer adjustments when close to the target while maintaining stability during coarse tracking phases.)
+
+### Reward Formula / Change
+```
+Enhanced the potential-based reward shaping term with adaptive scaling based on error magnitude to better incentivize error reduction across different precision stages (rationale: The current potential-based reward uses uniform scaling across all error magnitudes. By implementing adaptive scaling that increases the potential weight as errors become smaller, we create stronger incentives for the agent to achieve high-precision tracking. This aligns with the research idea of using potential differences while addressing the risk of reward hacking by maintaining the same mathematical structure (gamma * Phi(s_next) - Phi(s)) but with error-magnitude-dependent scaling. The baseline shows excellent completion rate (1.0) but lateral error of 0.0041, suggesting the agent can achieve precision but needs stronger incentives to push for even smaller errors. This modification should encourage finer adjustments when close to the target while maintaining stability during coarse tracking phases.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 939.2233
+- **lateral_error:** 0.0054
+
+### Rejection Reason
+Score -0.0598 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_23703
+
+---
+

@@ -1,19 +1,16 @@
 --- a/env.py
 +++ b/env.py
-@@ -940,11 +940,7 @@
-         # 1. 核心跟踪奖励
-         max_penalty = 2.0
--        # Adaptive dynamic weighting: smooth schedule based on error magnitude
--        # Implements D_adaptive_dynamic_reward with safety gating
--        base_weight = 1.0
--        max_weight = 3.0
--        # Smooth exponential schedule: weight increases with error magnitude
--        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))
--        # Safety gating: cap weight to prevent reward hacking
--        error_weight = min(error_weight, max_weight)
--        tracking_reward = -error_weight * min(current_error**2, max_penalty)
-+        # Simplified adaptive weighting with lower maximum
-+        base_weight = 1.0
-+        max_weight = 2.0
-+        error_weight = base_weight + (max_weight - base_weight) * min(1.0, current_error * 10)
-+        tracking_reward = -error_weight * min(current_error**2, max_penalty)
+@@ -962,6 +962,10 @@
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive gamma based on error magnitude for better convergence
++        adaptive_gamma = gamma + (1.0 - gamma) * min(1.0, current_error * 10)
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        # Safety gating: only reward improvement when error is decreasing
++        raw_improvement = adaptive_gamma * potential_current - potential_last
++        improvement_reward = raw_improvement if raw_improvement > 0 else raw_improvement * 0.5
+         
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
