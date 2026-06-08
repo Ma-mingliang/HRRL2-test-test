@@ -10541,3 +10541,34 @@ d_adaptive_dynamic_reward_arxiv_2408_03029, d_adaptive_dynamic_reward_openreview
 
 ---
 
+## [2026-06-08T18:40:28.310496+00:00] v0693 - ✗ REJECTED
+
+**Candidate ID:** `reward_c051`
+**Description:** Added adaptive dynamic weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current improvement reward uses a fixed gamma=0.99, which may not adapt well to different error magnitudes. By implementing adaptive dynamic weighting for the improvement reward component, we can increase the emphasis on improvement when errors are large (encouraging faster convergence) while maintaining stability when errors are small. This aligns with the D_adaptive_dynamic_reward research idea and should help reduce the lateral_error metric (currently 0.0041) by providing stronger learning signals during critical phases of training.)
+
+### Reward Formula / Change
+```
+Added adaptive dynamic weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current improvement reward uses a fixed gamma=0.99, which may not adapt well to different error magnitudes. By implementing adaptive dynamic weighting for the improvement reward component, we can increase the emphasis on improvement when errors are large (encouraging faster convergence) while maintaining stability when errors are small. This aligns with the D_adaptive_dynamic_reward research idea and should help reduce the lateral_error metric (currently 0.0041) by providing stronger learning signals during critical phases of training.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 968.5990
+- **lateral_error:** 0.0049
+
+### Rejection Reason
+Score -0.0228 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_d3wjfs6z2k, d_adaptive_dynamic_reward_openreview_eea3cqe2u1
+
+---
+
