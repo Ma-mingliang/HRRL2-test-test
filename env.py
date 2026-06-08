@@ -935,14 +935,14 @@ class Attitude_control_stage1(gym.Env):
         current_error = abs(state_raw[0])
         angular_velocity = abs(state_raw[2])
         
-        # 1. 目标进度奖励 (manager reward)
+        # 1. 高层目标进度奖励 (manager_reward)
         goal_progress_reward = 0.0
         if current_error < 0.01:  # 目标达成阈值
-            goal_progress_reward = 2.0  # 高奖励鼓励目标达成
-        elif current_error < 0.05:
-            goal_progress_reward = 1.0 * (0.05 - current_error) / 0.04  # 渐进奖励
+            goal_progress_reward = 2.0  # 高奖励鼓励目标完成
+        elif current_error < 0.05:  # 接近目标
+            goal_progress_reward = 1.0 * (0.05 - current_error) / 0.04
         
-        # 2. 低级跟踪奖励 (worker reward)
+        # 2. 低层跟踪控制奖励 (worker_reward)
         max_penalty = 2.0
         tracking_reward = -min(current_error**2, max_penalty)
         
@@ -967,7 +967,14 @@ class Attitude_control_stage1(gym.Env):
         # 6. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
-        reward = goal_progress_reward + tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
+        # 7. 安全门控：当误差过大时降低总奖励
+        safety_gate = 1.0
+        if current_error > 0.1:  # 安全阈值
+            safety_gate = max(0.1, 1.0 - (current_error - 0.1) * 2.0)
+        
+        # 分层奖励组合：高层目标 + 低层控制 - 控制成本
+        reward = (goal_progress_reward + tracking_reward + bonus_reward + 
+                 smoothness_penalty + improvement_reward + action_penalty) * safety_gate
         
         return reward
 

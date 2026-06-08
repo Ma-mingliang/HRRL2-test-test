@@ -5682,3 +5682,29 @@ b_safety_constraint_reward_openreview_qcz3g6mh3l, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-08T05:25:16.292011+00:00] v0586 - ✗ REJECTED
+
+**Candidate ID:** `reward_c021`
+**Description:** Added hierarchical reward structure by separating goal progress reward from low-level tracking reward, with explicit goal achievement bonus (rationale: This modification implements the hierarchical reward structure from research idea E_hierarchical_reward. By separating goal progress reward (manager level) from low-level tracking reward (worker level), we create clearer learning signals. The goal progress reward provides a strong incentive for achieving the primary objective (small tracking error), while the tracking reward continues to guide fine-grained control. This structure should improve completion rate and reduce lateral error by making the goal achievement more salient, while maintaining smooth control through existing penalties. The hierarchical separation helps prevent reward hacking by clearly distinguishing between goal achievement and control quality.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure by separating goal progress reward from low-level tracking reward, with explicit goal achievement bonus (rationale: This modification implements the hierarchical reward structure from research idea E_hierarchical_reward. By separating goal progress reward (manager level) from low-level tracking reward (worker level), we create clearer learning signals. The goal progress reward provides a strong incentive for achieving the primary objective (small tracking error), while the tracking reward continues to guide fine-grained control. This structure should improve completion rate and reduce lateral error by making the goal achievement more salient, while maintaining smooth control through existing penalties. The hierarchical separation helps prevent reward hacking by clearly distinguishing between goal achievement and control quality.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_openreview_dpkak1oh3x, e_hierarchical_reward_openreview_a3xff0pglu
+
+---
+
