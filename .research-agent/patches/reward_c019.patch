@@ -1,17 +1,24 @@
 --- a/env.py
 +++ b/env.py
-@@ -959,4 +959,13 @@
-         # 3. 平顺性惩罚
--        smoothness_penalty = -0.05 * angular_velocity
-+        # Scale penalty based on error magnitude - more penalty when error is small
-+        if current_error < 0.01:
-+            smoothness_penalty = -0.1 * angular_velocity
-+        else:
-+            smoothness_penalty = -0.03 * angular_velocity
-+        
-+        # Stability bonus for maintaining low angular velocity when error is small
-+        stability_bonus = 0.0
-+        if current_error < 0.005 and angular_velocity < 0.1:
-+            stability_bonus = 0.2
+@@ -970,9 +970,21 @@
+         # 6. 残差动作惩罚（基于研究想法）
+         residual_penalty = 0.0
+         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
+             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
+         self.prev_residual = target_handle_angle
          
-         gamma = 0.99
++        # 8. Learned preference reward (H_learned_preference_reward)
++        # Simple EMA-based preference inference from recent performance
++        preference_reward = 0.0
++        if not hasattr(self, 'reward_history'):
++            self.reward_history = []
++        self.reward_history.append(reward if 'reward' in dir() else 0.0)
++        if len(self.reward_history) > 10:
++            self.reward_history.pop(0)
++        if len(self.reward_history) >= 3:
++            ema = sum(self.reward_history[-3:]) / 3.0
++            preference_reward = 0.1 * max(0, ema - 0.5)  # Gate positive only
++        
+         # 7. Curriculum subgoal reward - encourage progressive improvement
+         subgoal_reward = 0.0
+         if hasattr(self, 'prev_error') and self.prev_error is not None:

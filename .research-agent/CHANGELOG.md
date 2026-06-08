@@ -8213,3 +8213,60 @@ g_llm_reward_generation_openreview_u07fuaqgct
 
 ---
 
+## [2026-06-08T11:22:38.357132+00:00] v0633 - ✗ REJECTED
+
+**Candidate ID:** `reward_c023`
+**Description:** Added a learned preference reward component that uses exponential moving average of past performance to provide consistency-based reward signal, gated by safety threshold (rationale: The current reward function has a learned preference component (section 8) but it's not included in the final reward sum (line 1004). Adding it with error-scaled weighting will: 1) Provide consistency-based reward that encourages maintaining good performance over time, 2) Scale the preference signal appropriately so it's more influential when error is larger (helping with coarse tracking) but less dominant when error is small (avoiding reward hacking), 3) Implement the H_learned_preference_reward research idea with safety gating, which should improve completion rate and reduce lateral error by rewarding stable performance patterns.)
+
+### Reward Formula / Change
+```
+Added a learned preference reward component that uses exponential moving average of past performance to provide consistency-based reward signal, gated by safety threshold (rationale: The current reward function has a learned preference component (section 8) but it's not included in the final reward sum (line 1004). Adding it with error-scaled weighting will: 1) Provide consistency-based reward that encourages maintaining good performance over time, 2) Scale the preference signal appropriately so it's more influential when error is larger (helping with coarse tracking) but less dominant when error is small (avoiding reward hacking), 3) Implement the H_learned_preference_reward research idea with safety gating, which should improve completion rate and reduce lateral error by rewarding stable performance patterns.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+h_learned_preference_reward_openreview_5t1vmqldr8, h_learned_preference_reward_openreview_isxdqzvhox
+
+---
+
+## [2026-06-08T11:25:26.157875+00:00] v0631 - ✗ REJECTED
+
+**Candidate ID:** `reward_c012`
+**Description:** Simplified the adaptive weight calculation to use a linear schedule instead of exponential, making the reward more predictable and easier to tune (rationale: The current exponential weight schedule (1 - exp(-10*error)) saturates quickly for small errors, making the reward insensitive to error reduction in the critical low-error region. A linear schedule provides more consistent gradient signals across error magnitudes, which should improve learning stability and final precision. The baseline shows excellent completion rate (1.0) but lateral error (0.0041) could be improved with better gradient flow in the low-error regime.)
+
+### Reward Formula / Change
+```
+Simplified the adaptive weight calculation to use a linear schedule instead of exponential, making the reward more predictable and easier to tune (rationale: The current exponential weight schedule (1 - exp(-10*error)) saturates quickly for small errors, making the reward insensitive to error reduction in the critical low-error region. A linear schedule provides more consistent gradient signals across error magnitudes, which should improve learning stability and final precision. The baseline shows excellent completion rate (1.0) but lateral error (0.0041) could be improved with better gradient flow in the low-error regime.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 656.1721
+- **lateral_error:** 0.0071
+
+### Rejection Reason
+Score -0.2644 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_drp7qvunut, g_llm_reward_generation_openreview_svmcdiqo2i
+
+---
+
