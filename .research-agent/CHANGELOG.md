@@ -10755,3 +10755,31 @@ g_llm_reward_generation_openreview_obpqdcwlfd, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T19:26:55.300495+00:00] v0700 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c058`
+**Description:** Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more responsive to high velocities (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041). Adding a stability bonus encourages the system to maintain low angular velocity when already tracking well, which should improve smoothness and reduce oscillations. This small addition (5 lines) promotes more stable control behavior without disrupting the existing reward structure. The bonus is gated to only apply when error is small (<0.01) and angular velocity is low (<0.1), preventing reward hacking while encouraging smoother trajectories.)
+
+### Reward Formula / Change
+```
+Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more responsive to high velocities (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041). Adding a stability bonus encourages the system to maintain low angular velocity when already tracking well, which should improve smoothness and reduce oscillations. This small addition (5 lines) promotes more stable control behavior without disrupting the existing reward structure. The bonus is gated to only apply when error is small (<0.01) and angular velocity is low (<0.1), preventing reward hacking while encouraging smoother trajectories.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 988.1264
+- **lateral_error:** 0.0041
+
+### Source Methods
+g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openreview_gbwovfgek8
+
+---
+
