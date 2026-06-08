@@ -1,23 +1,17 @@
 --- a/env.py
 +++ b/env.py
-@@ -970,8 +970,20 @@
-         # 6. 残差动作惩罚（基于研究想法）
-         residual_penalty = 0.0
-         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
-             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
-         self.prev_residual = target_handle_angle
+@@ -959,6 +959,14 @@
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
          
-+        # 8. Learned preference reward (simplified proxy)
-+        # Use exponential moving average of past rewards as preference signal
-+        preference_reward = 0.0
-+        if not hasattr(self, 'reward_ema'):
-+            self.reward_ema = 0.0
-+        # Update EMA with current reward estimate
-+        current_reward_estimate = tracking_reward + bonus_reward + smoothness_penalty
-+        self.reward_ema = 0.95 * self.reward_ema + 0.05 * current_reward_estimate
-+        # Preference reward: encourage consistency with learned preference
-+        preference_reward = 0.1 * (current_reward_estimate - self.reward_ema)
-+        # Safety gating: cap preference reward magnitude
-+        preference_reward = np.clip(preference_reward, -0.5, 0.5)
-         
-         # 7. Curriculum subgoal reward - encourage progressive improvement
++        # 4. Safety constraint penalty for excessive angular velocity
++        safety_penalty = 0.0
++        max_safe_angular_velocity = 2.0  # rad/s threshold
++        if angular_velocity > max_safe_angular_velocity:
++            # Quadratic penalty that increases with violation magnitude
++            violation = angular_velocity - max_safe_angular_velocity
++            safety_penalty = -0.5 * violation**2
++        
+         gamma = 0.99
+         potential_current = -current_error
+         potential_last = -abs(state_last_raw[0])
