@@ -10131,3 +10131,31 @@ c_curriculum_subgoal_reward_openreview_hqwhxvzcmj, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T17:06:11.598120+00:00] v0679 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c037`
+**Description:** Added curriculum stage progression tracking with explicit stage transitions and completion bonuses to better implement the C_curriculum_subgoal_reward research idea (rationale: The current curriculum subgoal reward only rewards error reduction within stages but doesn't explicitly reward stage transitions. Adding stage completion bonuses (0.5 for reaching high-precision, 0.3 for medium-precision) provides clearer learning signals for progressive improvement. This aligns with the C_curriculum_subgoal_reward research idea by explicitly rewarding subgoal completion (stage transitions) before exposing the full task objective. The bonuses are gated by checking if the previous error was in a worse stage, preventing reward hacking. This should improve learning efficiency by providing stronger signals for meaningful progress milestones.)
+
+### Reward Formula / Change
+```
+Added curriculum stage progression tracking with explicit stage transitions and completion bonuses to better implement the C_curriculum_subgoal_reward research idea (rationale: The current curriculum subgoal reward only rewards error reduction within stages but doesn't explicitly reward stage transitions. Adding stage completion bonuses (0.5 for reaching high-precision, 0.3 for medium-precision) provides clearer learning signals for progressive improvement. This aligns with the C_curriculum_subgoal_reward research idea by explicitly rewarding subgoal completion (stage transitions) before exposing the full task objective. The bonuses are gated by checking if the previous error was in a worse stage, preventing reward hacking. This should improve learning efficiency by providing stronger signals for meaningful progress milestones.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 988.1264
+- **lateral_error:** 0.0041
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_mhratccbtk, c_curriculum_subgoal_reward_openreview_tjhhb6cscw
+
+---
+
