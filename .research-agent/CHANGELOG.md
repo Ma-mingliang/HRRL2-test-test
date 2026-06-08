@@ -9951,3 +9951,31 @@ f_residual_aware_reward_openreview_1dgp543ohn, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-08T16:25:51.293272+00:00] v0673 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c031`
+**Description:** Added explicit residual action magnitude penalty to reinforce the residual-aware reward concept from research ideas (rationale: The current residual penalty only penalizes action changes but not residual magnitude itself. The research idea F_residual_aware_reward explicitly recommends penalizing ||u_residual||^2. Adding magnitude penalty encourages the residual controller to output smaller corrections, while the change penalty maintains smoothness. This should reduce residual action magnitude while preserving tracking performance, potentially improving action smoothness metrics without degrading the excellent completion rate (1.0) and lateral error (0.0041).)
+
+### Reward Formula / Change
+```
+Added explicit residual action magnitude penalty to reinforce the residual-aware reward concept from research ideas (rationale: The current residual penalty only penalizes action changes but not residual magnitude itself. The research idea F_residual_aware_reward explicitly recommends penalizing ||u_residual||^2. Adding magnitude penalty encourages the residual controller to output smaller corrections, while the change penalty maintains smoothness. This should reduce residual action magnitude while preserving tracking performance, potentially improving action smoothness metrics without degrading the excellent completion rate (1.0) and lateral error (0.0041).)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 997.6343
+- **lateral_error:** 0.0028
+
+### Source Methods
+f_residual_aware_reward_openreview_huslmvdg5k, f_residual_aware_reward_openreview_jy750ih1y0
+
+---
+
