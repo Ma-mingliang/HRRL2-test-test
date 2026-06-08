@@ -401,6 +401,10 @@
     {
       "candidate_id": "reward_c002",
       "applied_at": "2026-06-08T08:27:40.363416+00:00"
+    },
+    {
+      "candidate_id": "reward_c006",
+      "applied_at": "2026-06-08T08:28:23.187617+00:00"
     }
   ],
   "baseline_fair_eval": {

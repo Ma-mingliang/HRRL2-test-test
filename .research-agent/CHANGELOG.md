@@ -6176,3 +6176,29 @@ c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T08:27:51.433956+00:00] v0606 - ✗ REJECTED
+
+**Candidate ID:** `reward_c002`
+**Description:** Fix duplicate line and integrate subgoal reward into final reward calculation (rationale: The current code has two issues: 1) A duplicate line (self.prev_residual = target_handle_angle appears twice), and 2) The subgoal_reward is calculated but not included in the final reward (line 980 overwrites line 979 without residual_penalty). By fixing the duplicate and combining all reward components, we ensure the curriculum subgoal reward is properly utilized, which should improve learning efficiency and reduce lateral error by providing better guidance for progressive improvement.)
+
+### Reward Formula / Change
+```
+Fix duplicate line and integrate subgoal reward into final reward calculation (rationale: The current code has two issues: 1) A duplicate line (self.prev_residual = target_handle_angle appears twice), and 2) The subgoal_reward is calculated but not included in the final reward (line 980 overwrites line 979 without residual_penalty). By fixing the duplicate and combining all reward components, we ensure the curriculum subgoal reward is properly utilized, which should improve learning efficiency and reduce lateral error by providing better guidance for progressive improvement.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_hz9gu1io12, c_curriculum_subgoal_reward_openreview_rgvqh3gjea
+
+---
+
