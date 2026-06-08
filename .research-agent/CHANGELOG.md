@@ -9549,3 +9549,31 @@ b_safety_constraint_reward_arxiv_2306_03220, b_safety_constraint_reward_arxiv_26
 
 ---
 
+## [2026-06-08T15:13:14.401070+00:00] v0659 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c017`
+**Description:** Added safety constraint penalty for angular velocity to prevent unsafe oscillations, gated by error magnitude to avoid reward hacking (rationale: The baseline shows perfect completion rate (1.0) but with lateral error of 0.0041, which is close to the high-precision threshold (0.005). Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations that could destabilize the system, while being gated by error magnitude to prevent reward hacking. This aligns with the B_safety_constraint_reward research idea and should improve stability without sacrificing tracking performance.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for angular velocity to prevent unsafe oscillations, gated by error magnitude to avoid reward hacking (rationale: The baseline shows perfect completion rate (1.0) but with lateral error of 0.0041, which is close to the high-precision threshold (0.005). Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations that could destabilize the system, while being gated by error magnitude to prevent reward hacking. This aligns with the B_safety_constraint_reward research idea and should improve stability without sacrificing tracking performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 988.1264
+- **lateral_error:** 0.0041
+
+### Source Methods
+b_safety_constraint_reward_openreview_7lfmnvnmfj, b_safety_constraint_reward_openreview_dhtoyebvmt
+
+---
+

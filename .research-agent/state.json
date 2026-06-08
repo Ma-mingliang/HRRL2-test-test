@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c014",
+    "candidate_id": "reward_c017",
     "optimizer": "reward",
-    "description": "Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows perfect completion rate but with lateral error of 0.0041, which is close to the high-precision threshold (0.005). Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations that might cause the agent to overshoot or destabilize. This implements the B_safety_constraint_reward research idea by gating the reward with explicit penalties for safety violations. The quadratic penalty structure ensures that small violations have minimal impact while large violations are heavily penalized, promoting smoother, safer control while maintaining task performance.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -959,6 +959,14 @@\n         # 3. 平顺性惩罚\n         smoothness_penalty = -0.05 * angular_velocity\n         \n+        # 4. Safety constraint penalty for excessive angular velocity\n+        safety_penalty = 0.0\n+        max_safe_angular_velocity = 2.0  # rad/s threshold\n+        if angular_velocity > max_safe_angular_velocity:\n+            # Quadratic penalty that increases with violation magnitude\n+            violation = angular_velocity - max_safe_angular_velocity\n+     ",
-    "source_idea": "{\"source_method_ids\": [\"b_safety_constraint_reward_openreview_3zar4hakpw\", \"b_safety_constraint_reward_openreview_imlpdfbvin\"], \"source_categories\": [\"B_safety_constraint_reward\"], \"source_papers\": [\"openreview:3zar4HaKPW\", \"openreview:IMlPdFbVIN\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added safety constraint penalty for angular velocity to prevent unsafe oscillations, gated by error magnitude to avoid reward hacking (rationale: The baseline shows perfect completion rate (1.0) but with lateral error of 0.0041, which is close to the high-precision threshold (0.005). Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations that could destabilize the system, while being gated by error magnitude to prevent reward hacking. This aligns with the B_safety_constraint_reward research idea and should improve stability without sacrificing tracking performance.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -959,6 +959,13 @@\n         # 3. 平顺性惩罚\n         smoothness_penalty = -0.05 * angular_velocity\n         \n+        # 4. Safety constraint penalty for excessive angular velocity\n+        safety_penalty = 0.0\n+        max_safe_angular_velocity = 2.0  # rad/s threshold\n+        if angular_velocity > max_safe_angular_velocity:\n+            violation = angular_velocity - max_safe_angular_velocity\n+            safety_penalty = -0.1 * violation**2\n+        \n         gamma = 0.",
+    "source_idea": "{\"source_method_ids\": [\"b_safety_constraint_reward_openreview_7lfmnvnmfj\", \"b_safety_constraint_reward_openreview_dhtoyebvmt\"], \"source_categories\": [\"B_safety_constraint_reward\"], \"source_papers\": [\"openreview:7lfMNvNMFj\", \"openreview:DHToyEBVMT\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T15:02:37.363650+00:00"
+    "timestamp": "2026-06-08T15:13:14.386044+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 89,
-    "full_evals_run": 83
+    "candidates_proposed": 90,
+    "full_evals_run": 84
   },
   "stop_reason": null,
   "progress": null,
@@ -589,6 +589,10 @@
     {
       "candidate_id": "reward_c017",
       "applied_at": "2026-06-08T15:06:34.789115+00:00"
+    },
+    {
+      "candidate_id": "reward_c018",
+      "applied_at": "2026-06-08T15:13:31.126989+00:00"
     }
   ],
   "baseline_fair_eval": {

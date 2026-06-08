@@ -964,11 +964,11 @@ class Attitude_control_stage1(gym.Env):
         max_safe_angular_velocity = 2.0  # rad/s threshold
         if angular_velocity > max_safe_angular_velocity:
             violation = angular_velocity - max_safe_angular_velocity
-            safety_penalty = -0.1 * violation**2
+            safety_penalty = -0.5 * violation**2
         
         gamma = 0.99
         potential_current = -current_error
-        potential_last = -abs(state_last_raw[0])
+        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
