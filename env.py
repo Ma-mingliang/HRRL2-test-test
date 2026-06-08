@@ -957,16 +957,19 @@ class Attitude_control_stage1(gym.Env):
             bonus_reward = 0.2
         
         # 3. 平顺性惩罚
+        # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
+        # 4. Safety constraint penalty for excessive angular velocity
+        safety_penalty = 0.0
+        max_safe_angular_velocity = 2.0  # rad/s threshold
+        if angular_velocity > max_safe_angular_velocity:
+            violation = angular_velocity - max_safe_angular_velocity
+            safety_penalty = -0.5 * violation**2
+        
         gamma = 0.99
-        # Adaptive gamma: higher weight for small errors to encourage precision
-        adaptive_gamma = gamma + (1.0 - gamma) * math.exp(-50 * current_error)
         potential_current = -current_error
-        potential_last = -abs(state_last_raw[0])
-        # Scale improvement reward based on error magnitude
-        improvement_scale = 1.0 + 2.0 * math.exp(-10 * current_error)
-        improvement_reward = improvement_scale * (adaptive_gamma * potential_current - potential_last)
+
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)

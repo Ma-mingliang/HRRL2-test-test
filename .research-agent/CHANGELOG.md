@@ -9363,3 +9363,31 @@ a_potential_based_reward_arxiv_2605_01787, a_potential_based_reward_openreview_0
 
 ---
 
+## [2026-06-08T14:51:12.344267+00:00] v0652 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c010`
+**Description:** Enhanced potential-based reward shaping with adaptive gamma and error-dependent scaling to better encourage progressive improvement while preventing reward hacking (rationale: The current potential-based reward uses a fixed gamma=0.99 which may not sufficiently encourage precision when errors are small. By making gamma adaptive (higher when errors are small) and scaling the improvement reward based on error magnitude, we create stronger incentives for the agent to achieve and maintain high precision. This aligns with the research idea of using potential differences while adding safety gating through the exponential scaling that naturally reduces as errors decrease. The modification should improve lateral_error metrics by providing more nuanced feedback during the fine-tuning phase of learning.)
+
+### Reward Formula / Change
+```
+Enhanced potential-based reward shaping with adaptive gamma and error-dependent scaling to better encourage progressive improvement while preventing reward hacking (rationale: The current potential-based reward uses a fixed gamma=0.99 which may not sufficiently encourage precision when errors are small. By making gamma adaptive (higher when errors are small) and scaling the improvement reward based on error magnitude, we create stronger incentives for the agent to achieve and maintain high precision. This aligns with the research idea of using potential differences while adding safety gating through the exponential scaling that naturally reduces as errors decrease. The modification should improve lateral_error metrics by providing more nuanced feedback during the fine-tuning phase of learning.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 976.9540
+- **lateral_error:** 0.0041
+
+### Source Methods
+a_potential_based_reward_openreview_tdomx6s4f5, a_potential_based_reward_arxiv_1902_06239
+
+---
+
