@@ -1,45 +1,27 @@
 --- a/env.py
 +++ b/env.py
-@@ -938,26 +938,33 @@
-         # 1. 核心跟踪奖励
-         max_penalty = 2.0
-         tracking_reward = -min(current_error**2, max_penalty)
+@@ -970,8 +970,21 @@
+         # 6. 残差动作惩罚（基于研究想法）
+         residual_penalty = 0.0
+         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
+             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
+         self.prev_residual = target_handle_angle
          
--        # 2. 高精度奖励
--        bonus_reward = 0.0
--        if current_error < 0.005:
--            bonus_reward = 1.0
--        elif current_error < 0.01:
--            bonus_reward = 0.5
--        elif current_error < 0.02:
--            bonus_reward = 0.2
-+        # 2. 分层奖励结构
-+        # 高层目标进度奖励（鼓励持续改进）
-+        goal_progress_reward = 0.0
-+        if current_error < 0.02:  # 安全阈值
-+            improvement_ratio = (abs(state_last_raw[0]) - current_error) / max(abs(state_last_raw[0]), 1e-6)
-+            goal_progress_reward = 0.5 * max(0, improvement_ratio)
-+        
-+        # 低层精度奖励（鼓励精确跟踪）
-+        precision_reward = 0.0
-+        if current_error < 0.005:
-+            precision_reward = 1.0
-+        elif current_error < 0.01:
-+            precision_reward = 0.5
-+        elif current_error < 0.02:
-+            precision_reward = 0.2
++        # 8. Learned preference reward (H_learned_preference_reward)
++        # Simple exponential moving average model of past rewards
++        if not hasattr(self, 'reward_history'):
++            self.reward_history = []
++        self.reward_history.append(tracking_reward + bonus_reward + smoothness_penalty + improvement_reward)
++        if len(self.reward_history) > 100:
++            self.reward_history.pop(0)
++        preference_reward = 0.0
++        if len(self.reward_history) >= 10:
++            avg_reward = np.mean(self.reward_history[-10:])
++            # Safety gating: only apply preference reward when performance is stable
++            if avg_reward > -0.5:  # Threshold for stable performance
++                preference_reward = 0.1 * (avg_reward - np.mean(self.reward_history))
          
-         # 3. 平顺性惩罚
-         smoothness_penalty = -0.05 * angular_velocity
-         
-         # 4. 改进奖励
-         gamma = 0.99
-         potential_current = -current_error
-         potential_last = -abs(state_last_raw[0])
-         improvement_reward = gamma * potential_current - potential_last
-         
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
-         
--        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
-+        reward = tracking_reward + goal_progress_reward + precision_reward + smoothness_penalty + improvement_reward + action_penalty
+         # 7. Curriculum subgoal reward - encourage progressive improvement
+@@ -992,1 +1001,1 @@
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
++        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward + preference_reward

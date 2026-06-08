@@ -1,18 +1,6 @@
 --- a/env.py
 +++ b/env.py
-@@ -968,6 +968,15 @@
-         
-         gamma = 0.99
-         potential_current = -current_error
-         potential_last = -abs(state_last_raw[0])
-+        
-+        # 4. Learned preference reward (simplified proxy)
-+        # Weight error and velocity based on historical performance
-+        # This simulates learning from demonstrations/preferences
-+        preference_weight_error = 1.2  # Learned to emphasize error reduction
-+        preference_weight_velocity = 0.8  # Learned to de-emphasize velocity
-+        preference_reward = -preference_weight_error * current_error**2 - preference_weight_velocity * angular_velocity
-+        # Safety gate: cap preference reward to prevent reward hacking
-+        preference_reward = max(preference_reward, -2.0)
-         
-         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
+@@ -994,2 +994,3 @@
+         return reward
++    
+     def reset(self, seed=None, options=None):
