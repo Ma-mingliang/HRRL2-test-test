@@ -1,16 +1,18 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,12 +960,11 @@
-         # 8. Residual action penalty (from research idea F_residual_aware_reward)
-         # Penalize large residual actions to encourage smooth corrections
-         residual_penalty = 0.0
-         if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
-             residual_penalty = -0.1 * np.sum(self.last_residual_action**2)
+@@ -951,6 +951,12 @@
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
          
--        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty
--        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty
-+        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty + residual_penalty
-         
-         # 7. Small bonus for maintaining very low tracking error
-         if current_error < 0.01:  # Very precise tracking
-             reward += 0.5  # Small bonus for precision
++        # 3.5 安全约束惩罚：防止过度振荡
++        safety_penalty = 0.0
++        max_safe_angular_velocity = 2.0  # 安全阈值
++        if angular_velocity > max_safe_angular_velocity:
++            safety_penalty = -0.5 * (angular_velocity - max_safe_angular_velocity)
++        
+         # 4. 改进奖励
+         gamma = 0.99
+         potential_current = -current_error
+@@ -963,1 +969,1 @@
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty

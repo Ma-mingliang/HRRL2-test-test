@@ -5422,3 +5422,29 @@ a_potential_based_reward_openreview_tdomx6s4f5, a_potential_based_reward_arxiv_1
 
 ---
 
+## [2026-06-08T05:11:08.672511+00:00] v0576 - ✗ REJECTED
+
+**Candidate ID:** `reward_c011`
+**Description:** Added safety constraint penalty for excessive angular velocity to prevent dangerous oscillations (rationale: The current reward function shows excellent tracking performance (lateral_error: 0.0041) but may be vulnerable to unsafe oscillations. Adding a safety constraint penalty for excessive angular velocity (safety_penalty) implements the research idea of gating task reward with explicit safety penalties. This will discourage dangerous high-frequency oscillations while maintaining the excellent tracking performance. The penalty is only applied when angular velocity exceeds a safe threshold (2.0 rad/s), preventing reward hacking while ensuring the agent learns smooth, safe control policies.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive angular velocity to prevent dangerous oscillations (rationale: The current reward function shows excellent tracking performance (lateral_error: 0.0041) but may be vulnerable to unsafe oscillations. Adding a safety constraint penalty for excessive angular velocity (safety_penalty) implements the research idea of gating task reward with explicit safety penalties. This will discourage dangerous high-frequency oscillations while maintaining the excellent tracking performance. The penalty is only applied when angular velocity exceeds a safe threshold (2.0 rad/s), preventing reward hacking while ensuring the agent learns smooth, safe control policies.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_hqwhxvzcmj, b_safety_constraint_reward_openreview_mhratccbtk
+
+---
+
