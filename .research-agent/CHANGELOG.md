@@ -6671,3 +6671,34 @@ d_adaptive_dynamic_reward_arxiv_2408_03029, d_adaptive_dynamic_reward_openreview
 
 ---
 
+## [2026-06-08T09:56:50.009208+00:00] v0620 - ✗ REJECTED
+
+**Candidate ID:** `reward_c006`
+**Description:** Added adaptive weighting to the improvement reward component based on current error magnitude, making the reward more responsive to error size (rationale: The current improvement reward uses a fixed weight of 1.0 for all error magnitudes. By adding adaptive weighting similar to the tracking reward, we create a more consistent reward structure that emphasizes improvement more strongly when errors are large. This should encourage faster convergence during early training while maintaining precision during fine-tuning. The lateral_error metric (0.0041) is already good, but this change should help reduce it further by making the improvement signal more responsive to error size.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on current error magnitude, making the reward more responsive to error size (rationale: The current improvement reward uses a fixed weight of 1.0 for all error magnitudes. By adding adaptive weighting similar to the tracking reward, we create a more consistent reward structure that emphasizes improvement more strongly when errors are large. This should encourage faster convergence during early training while maintaining precision during fine-tuning. The lateral_error metric (0.0041) is already good, but this change should help reduce it further by making the improvement signal more responsive to error size.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 852.9528
+- **lateral_error:** 0.0093
+
+### Rejection Reason
+Score -0.2871 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_arxiv_2408_03029, d_adaptive_dynamic_reward_openreview_6klpzcuq2d
+
+---
+
