@@ -5968,3 +5968,29 @@ f_residual_aware_reward_openreview_huslmvdg5k, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-08T06:25:02.477904+00:00] v0597 - ✗ REJECTED
+
+**Candidate ID:** `reward_c032`
+**Description:** Added residual action penalty to encourage smoother residual control outputs (rationale: The research idea suggests penalizing residual action magnitude and roughness. Since we don't have access to the base controller output directly, I'm penalizing the change in control actions between steps (smoothness of residual). This encourages the policy to produce smoother control outputs, which should reduce oscillations and improve tracking stability. The penalty is small (0.01 coefficient) to avoid dominating the task reward while still providing a smoothness incentive.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to encourage smoother residual control outputs (rationale: The research idea suggests penalizing residual action magnitude and roughness. Since we don't have access to the base controller output directly, I'm penalizing the change in control actions between steps (smoothness of residual). This encourages the policy to produce smoother control outputs, which should reduce oscillations and improve tracking stability. The penalty is small (0.01 coefficient) to avoid dominating the task reward while still providing a smoothness incentive.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_l8pjfrpuuq, f_residual_aware_reward_openreview_n67dlqk5c4
+
+---
+
