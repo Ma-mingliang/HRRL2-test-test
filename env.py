@@ -937,13 +937,17 @@ class Attitude_control_stage1(gym.Env):
         
         # 1. 核心跟踪奖励
         max_penalty = 2.0
-        # 1. 核心跟踪奖励
-        max_penalty = 2.0
-        # Simplified adaptive weighting with lower maximum
+        # Adaptive dynamic weighting: smooth schedule based on error magnitude
+        # Implements D_adaptive_dynamic_reward with safety gating
         base_weight = 1.0
-        max_weight = 2.0
-        error_weight = base_weight + (max_weight - base_weight) * min(1.0, current_error * 10)
+        max_weight = 3.0
+        # Smooth exponential schedule: weight increases with error magnitude
+        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))
+        # Safety gating: cap weight to prevent reward hacking
+        error_weight = min(error_weight, max_weight)
         tracking_reward = -error_weight * min(current_error**2, max_penalty)
+        
+        # 2. 高精度奖励
         bonus_reward = 0.0
         if current_error < 0.005:
             bonus_reward = 1.0
@@ -953,7 +957,16 @@ class Attitude_control_stage1(gym.Env):
             bonus_reward = 0.2
         
         # 3. 平顺性惩罚
-        smoothness_penalty = -0.05 * angular_velocity
+        # Scale penalty based on error magnitude - more penalty when error is small
+        if current_error < 0.01:
+            smoothness_penalty = -0.1 * angular_velocity
+        else:
+            smoothness_penalty = -0.03 * angular_velocity
+        
+        # Stability bonus for maintaining low angular velocity when error is small
+        stability_bonus = 0.0
+        if current_error < 0.005 and angular_velocity < 0.1:
+            stability_bonus = 0.2
         
         gamma = 0.99
         potential_current = -current_error
