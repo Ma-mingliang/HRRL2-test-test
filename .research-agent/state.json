@@ -511,12 +511,12 @@
       "applied_at": "2026-06-08T11:13:32.640647+00:00"
     },
     {
-      "candidate_id": "reward_c023",
-      "applied_at": "2026-06-08T11:21:33.267392+00:00"
+      "candidate_id": "reward_c013",
+      "applied_at": "2026-06-08T11:25:42.739553+00:00"
     },
     {
-      "candidate_id": "reward_c019",
-      "applied_at": "2026-06-08T11:21:59.872380+00:00"
+      "candidate_id": "reward_c014",
+      "applied_at": "2026-06-08T11:28:11.010891+00:00"
     }
   ],
   "baseline_fair_eval": {

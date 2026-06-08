@@ -959,19 +959,9 @@ class Attitude_control_stage1(gym.Env):
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
-        # 3.5. Stability bonus for low angular velocity when error is small
-        stability_bonus = 0.0
-        if current_error < 0.01 and angular_velocity < 0.1:
-            stability_bonus = 0.2 * (0.01 - current_error) / 0.01
-            stability_bonus += 0.1 * (0.1 - angular_velocity) / 0.1
-        
         gamma = 0.99
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
-        
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward + stability_bonus
-        
-        return reward
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
@@ -983,8 +973,20 @@ class Attitude_control_stage1(gym.Env):
             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
         self.prev_residual = target_handle_angle
         
+        # 8. Learned preference reward (simplified proxy)
+        # Use exponential moving average of past rewards as preference signal
+        preference_reward = 0.0
+        if not hasattr(self, 'reward_ema'):
+            self.reward_ema = 0.0
+        # Update EMA with current reward estimate
+        current_reward_estimate = tracking_reward + bonus_reward + smoothness_penalty
+        self.reward_ema = 0.95 * self.reward_ema + 0.05 * current_reward_estimate
+        # Preference reward: encourage consistency with learned preference
+        preference_reward = 0.1 * (current_reward_estimate - self.reward_ema)
+        # Safety gating: cap preference reward magnitude
+        preference_reward = np.clip(preference_reward, -0.5, 0.5)
+        
         # 7. Curriculum subgoal reward - encourage progressive improvement
-        subgoal_reward = 0.0
         if hasattr(self, 'prev_error') and self.prev_error is not None:
             # Reward for reducing error toward subgoal thresholds
             error_reduction = self.prev_error - current_error
