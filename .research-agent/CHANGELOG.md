@@ -9655,3 +9655,34 @@ b_safety_constraint_reward_openreview_qcz3g6mh3l, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-08T15:22:22.802543+00:00] v0663 - ✗ REJECTED
+
+**Candidate ID:** `reward_c021`
+**Description:** Added hierarchical reward structure separating goal progress (manager) from low-level tracking (worker) with safety gating (rationale: The current subgoal reward can become very large when current_error is small (due to 1/(current_error+0.001) term), potentially causing reward hacking. By capping the goal progress reward at 0.5, we implement the hierarchical reward structure from E_hierarchical_reward: the goal progress (manager) is bounded while low-level tracking (tracking_reward) remains the primary driver. This prevents the subgoal reward from dominating and ensures the agent focuses on precise tracking rather than exploiting the reward structure.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure separating goal progress (manager) from low-level tracking (worker) with safety gating (rationale: The current subgoal reward can become very large when current_error is small (due to 1/(current_error+0.001) term), potentially causing reward hacking. By capping the goal progress reward at 0.5, we implement the hierarchical reward structure from E_hierarchical_reward: the goal progress (manager) is bounded while low-level tracking (tracking_reward) remains the primary driver. This prevents the subgoal reward from dominating and ensures the agent focuses on precise tracking rather than exploiting the reward structure.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 954.2625
+- **lateral_error:** 0.0044
+
+### Rejection Reason
+Score -0.0046 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_openreview_dpkak1oh3x, e_hierarchical_reward_openreview_a3xff0pglu
+
+---
+
