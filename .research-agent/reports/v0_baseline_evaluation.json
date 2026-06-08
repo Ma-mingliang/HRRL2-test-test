@@ -1,0 +1,105 @@
+{
+  "baseline": {
+    "reward": 930.85,
+    "lateral_error": 0.0041,
+    "completion_rate": 1.0
+  },
+  "candidates": [
+    {
+      "version": "v0520",
+      "reward": 945.4423629834498,
+      "lateral_error": 0.0028601231268354805,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0521",
+      "reward": 945.4423629834498,
+      "lateral_error": 0.0028601231268354805,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0522",
+      "reward": 934.0392695618569,
+      "lateral_error": 0.0027530701622466157,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0551",
+      "reward": 836.7588391442802,
+      "lateral_error": 0.004821359152142519,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0552",
+      "reward": 845.5329454281267,
+      "lateral_error": 0.004994262250078456,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0553",
+      "reward": 845.5329454281267,
+      "lateral_error": 0.004994262250078456,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0554",
+      "reward": 820.1175072102094,
+      "lateral_error": 0.005692211520177196,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0555",
+      "reward": 817.1578531262654,
+      "lateral_error": 0.006073586078852265,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0556",
+      "reward": 820.1175072102094,
+      "lateral_error": 0.005692211520177196,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0557",
+      "reward": 927.3181602627006,
+      "lateral_error": 0.004538391096121532,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0558",
+      "reward": 935.038629719836,
+      "lateral_error": 0.0030156086114928675,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0559",
+      "reward": 927.3181602627006,
+      "lateral_error": 0.004538391096121532,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0560",
+      "reward": 931.6846427339461,
+      "lateral_error": 0.003749522985526355,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0561",
+      "reward": 921.1798704572034,
+      "lateral_error": 0.0035282016404279432,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0562",
+      "reward": 526.7249023879677,
+      "lateral_error": 0.00860800155032827,
+      "completion_rate": 1.0
+    },
+    {
+      "version": "v0563",
+      "reward": 914.0702204563584,
+      "lateral_error": 0.004211719265112494,
+      "completion_rate": 1.0
+    }
+  ]
+}

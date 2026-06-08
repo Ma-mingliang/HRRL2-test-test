@@ -944,35 +944,12 @@ class Attitude_control_stage1(gym.Env):
         if current_error < 0.005:
             bonus_reward = 1.0
         elif current_error < 0.01:
-            bonus_reward = 0.7
+            bonus_reward = 0.5
         elif current_error < 0.02:
             bonus_reward = 0.2
+        
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
-        
-        # 3.2. Velocity penalty for excessive angular velocity
-        velocity_penalty = 0.0
-        if angular_velocity > 0.1:
-            velocity_penalty = -0.1 * (angular_velocity - 0.1)
-        
-        # 3.3. Smoothness bonus for low angular velocity when tracking well
-        if current_error < 0.02 and angular_velocity < 0.1:
-            smoothness_bonus = 0.05 * (0.1 - angular_velocity) / 0.1
-        else:
-            smoothness_bonus = 0.0
-        
-        # 3.4. Addit
-        
-        # 3.4. Additional penalty for high angular velocity when tracking well
-        high_velocity_penalty = 0.0
-        if current_error < 0.01 and angular_velocity > 0.2:
-            high_velocity_penalty = -0.1 * (angular_velocity - 0.2)
-            smoothness_bonus = 0.05 * (0.1 - angular_velocity) / 0.1
-        
-        # 3.5. Additional oscillation penalty for high angular velocity
-        oscillation_penalty = 0.0
-        if angular_velocity > 0.2:
-            oscillation_penalty = -0.15 * (angular_velocity - 0.2)
         
         # 4. 改进奖励
         improvement_reward = 0.0
@@ -980,43 +957,10 @@ class Attitude_control_stage1(gym.Env):
         if error_reduction > 0:
             improvement_reward = 0.3 * error_reduction
         
-        # 4.1 Potential-based reward shaping (preserves optimal policy)
-        # Phi(s) = -k * |error|, so gamma*Phi(s') - Phi(s) = k*(|e_t| - gamma*|e_t+1|)
-        gamma = 0.99
-        k_phi = 0.5
-        potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
-        # Gate against unsafe behavior: only apply when angular velocity is reasonable
-        if angular_velocity > 0.3:
-            potential_shaping *= max(0.2, 1.0 - (angular_velocity - 0.3) * 2.0)
-        
-        # 5. 课程学习子目标奖励
-
-        subgoal_thresholds = [0.05, 0.1, 0.2]
-        # Dynamic stage progression based on error magnitude
-        if current_error < 0.005:
-            current_stage = 0  # Ultra-precision stage
-            subgoal_weights = [1.5, 0.8, 0.4]
-        elif current_error < 0.01:
-            current_stage = 1  # Precision stage
-            subgoal_weights = [1.0, 0.6, 0.3]
-        else:
-            current_stage = 2  # Coarse stage
-            subgoal_weights = [0.5, 0.3, 0.15]
-        
-        # Calculate progress to current stage subgoal
-        progress_to_subgoal = max(0, abs(state_last_raw[0]) - current_error)
-        subgoal_reward = subgoal_weights[current_stage] * progress_to_subgoal
-        
-        for i, threshold in enumerate(subgoal_thresholds):
-            if current_error < threshold:
-                # Reward progress toward this subgoal
-                subgoal_reward += subgoal_weights[i] * (1.0 + 5.0 * progress_to_subgoal)
-                break
-        
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + subgoal_reward + action_penalty
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
         
         return reward
 

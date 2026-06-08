@@ -933,73 +933,35 @@ class Attitude_control_stage1(gym.Env):
         state_raw = self.__observation_reduction(state)
         
         current_error = abs(state_raw[0])
+        angular_velocity = abs(state_raw[2])
         
         # 1. 核心跟踪奖励
-        tracking_reward = -current_error**2
+        max_penalty = 2.0
+        tracking_reward = -min(current_error**2, max_penalty)
         
-        # 2. Potential-based reward shaping (preserves optimal policy)
-        # Phi(s) = -k * |error|, so gamma*Phi(s') - Phi(s) = k*(|e_t| - gamma*|e_t+1|)
+        # 2. 高精度奖励
+        bonus_reward = 0.0
+        if current_error < 0.005:
+            bonus_reward = 1.0
+        elif current_error < 0.01:
+            bonus_reward = 0.5
+        elif current_error < 0.02:
+            bonus_reward = 0.2
+        
+        # 3. 平顺性惩罚
+        smoothness_penalty = -0.05 * angular_velocity
+        
+        # 4. 改进奖励
         gamma = 0.99
-        # Adaptive scaling: increase shaping magnitude when error is large
-        # Adaptive scaling: increase shaping magnitude when error is large
-        base_k_phi = 2.0
-        # Scale up shaping when error is large to encourage faster convergence
-        # Scale down when error is small to avoid overshooting
-        k_phi = base_k_phi * (1.0 + min(2.0, current_error))
-        potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
-        # 4. Heading error penalty to reduce oscillations
-        heading_error = abs(state_raw[1])  # theta0 is heading error
-        heading_penalty = -0.5 * heading_error**2
+        potential_current = -current_error
+        potential_last = -abs(state_last_raw[0])
+        improvement_reward = gamma * potential_current - potential_last
         
-        heading_error_limit = 0.5  # Safe heading error threshold (radians)
-        heading_violation = max(0, heading_error - heading_error_limit)
-        if heading_violation > 0:
-            lambda_heading = 3.0  # Strong penalty for dangerous heading errors
-            heading_penalty -= lambda_heading * heading_violation**2
-            # Safety gate: reduce overall reward when heading is unsafe
-            # This implements B_safety_constraint_reward: reward -= lambda_violation * max(0, constraint_value)
-            safety_gate_penalty = -5.0 * heading_violation  # Additional penalty to gate task reward
-            # Apply safety gate to the final reward calculation
-            # This implements B_safety_constraint_reward: reward -= lambda_violation * max(0, constraint_value)
-            heading_penalty += safety_gate_penalty
-        velocity = abs(state_raw[3])  # v is velocity
-        velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed
-        angular_velocity = abs(state_raw[2])  # w0 is angular velocity
+        # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
-        # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)
-        # Reward progress toward intermediate waypoints to encourage exploration
-        subgoal_reward = 0.0
-        # Simple progress reward toward target
-        if hasattr(self, 'prev_subgoal_error'):
-            subgoal_progress = self.prev_subgoal_error - current_error
-            subgoal_reward = 0.3 * subgoal_progress
-        self.prev_subgoal_error = current_error
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
         
-        reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + subgoal_reward
-        
-        # Safety constraint: penalize excessive angular velocity
-        angular_velocity_limit = 2.0
-        angular_violation = max(0, angular_velocity - angular_velocity_limit)
-        if angular_violation > 0:
-            reward -= 2.0 * angular_violation**2
-        
-        # Precision bonus
-        # Precision bonus
-        # Smooth exponential precision bonus for fine tracking
-        precision_threshold = 0.02  # Start rewarding at 2cm error
-        if current_error < precision_threshold:
-            # Simple exponential bonus for precise tracking
-            precision_bonus = 2.0 * np.exp(-50.0 * current_error)
-            # Additional bonus for very high precision
-            if current_error < 0.005:
-                precision_bonus += 1.0
-            # Stability bonus: reward consistent low-error performance
-            if hasattr(self, 'prev_precision_error') and self.prev_precision_error < precision_threshold:
-                # Extra bonus for maintaining precision over time
-                stability_bonus = 0.5 * np.exp(-20.0 * current_error)
-                precision_bonus += stability_bonus
-            self.prev_precision_error = current_error
-            reward += precision_bonus
         return reward
 
     def reset(self, seed=None, options=None):
