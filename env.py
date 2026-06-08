@@ -976,16 +976,23 @@ class Attitude_control_stage1(gym.Env):
         # 7. Curriculum subgoal reward - encourage progressive improvement
         subgoal_reward = 0.0
         if hasattr(self, 'prev_error') and self.prev_error is not None:
+            # Track current stage based on error magnitude
+            if not hasattr(self, 'current_stage'):
+                self.current_stage = 0  # 0: coarse, 1: medium, 2: high-precision
+            
+            # Update stage based on current error
+            if current_error < 0.005:
+                self.current_stage = 2
+            elif current_error < 0.02:
+                self.current_stage = 1
+            else:
+                self.current_stage = 0
+            
+            # Stage-specific reward for error reduction
             error_reduction = self.prev_error - current_error
             if error_reduction > 0:
-                # Stage-based weighting with safety gating
-                if current_error < 0.005:
-                    stage_weight = 0.3  # High-precision stage
-                elif current_error < 0.02:
-                    stage_weight = 0.2  # Medium-precision stage
-                else:
-                    stage_weight = 0.1  # Coarse stage
-                subgoal_reward = stage_weight * error_reduction
+                stage_weights = [0.1, 0.2, 0.3]  # Coarse, medium, high-precision
+                subgoal_reward = stage_weights[self.current_stage] * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward

@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c042",
+    "candidate_id": "reward_c043",
     "optimizer": "reward",
-    "description": "Modified the curriculum subgoal reward to use a more stable scaling factor and added a safety gate to prevent reward hacking when error is very small (rationale: The current subgoal reward can cause reward hacking when error is very small (e.g., 0.001) because the scaling factor 1/(current_error + 0.001) becomes very large (up to 500). This creates unstable gradients and can dominate other reward components. By adding a safety gate (current_error > 0.001) and increasing the denominator offset from 0.001 to 0.01, we prevent extreme reward magnitudes while still encouraging progress. This should lead to more stable training and better final performance, as the agent won't be incentivized to make tiny improvements just for large reward spikes.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -976,15 +976,15 @@\n         # 7. Curriculum subgoal reward - encourage progressive improvement\n         subgoal_reward = 0.0\n         if hasattr(self, 'prev_error') and self.prev_error is not None:\n             # Reward for reducing error toward subgoal thresholds\n             error_reduction = self.prev_error - current_error\n-            if error_reduction > 0:\n+            if error_reduction > 0 and current_error > 0.001:  # Safety gate: don't reward tiny improveme",
-    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_pmkwnv6azi\", \"c_curriculum_subgoal_reward_openreview_uv9aa45wym\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:PMKwnV6Azi\", \"openreview:UV9aa45wyM\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Simplified the curriculum subgoal reward to use a more direct progress metric with stage-based scaling, removing the problematic division by current_error that could cause instability (rationale: The original subgoal reward formula multiplied error_reduction by (1.0 / (current_error + 0.001)), which creates a singularity near zero error and can cause reward instability. By removing this division, we get a cleaner progress metric that still uses stage-based weighting to encourage progressive improvement. This should maintain the curriculum learning benefit while avoiding potential reward hacking or instability issues, especially since the baseline already shows excellent performance (lateral_error: 0.0041).)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -976,15 +976,14 @@\n         # 7. Curriculum subgoal reward - encourage progressive improvement\n         subgoal_reward = 0.0\n         if hasattr(self, 'prev_error') and self.prev_error is not None:\n-            # Reward for reducing error toward subgoal thresholds\n             error_reduction = self.prev_error - current_error\n             if error_reduction > 0:\n-                # Stage-based weighting with safety gating\n-                if current_error < 0.005:\n-  ",
+    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_b6awzauzpv\", \"c_curriculum_subgoal_reward_openreview_pyq8rtmwtm\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:b6AwZauZPV\", \"openreview:pyQ8RtMwTM\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T17:40:16.312083+00:00"
+    "timestamp": "2026-06-08T17:47:05.056217+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 115,
-    "full_evals_run": 108
+    "candidates_proposed": 116,
+    "full_evals_run": 109
   },
   "stop_reason": null,
   "progress": null,
@@ -689,6 +689,10 @@
     {
       "candidate_id": "reward_c043",
       "applied_at": "2026-06-08T17:40:36.500471+00:00"
+    },
+    {
+      "candidate_id": "reward_c044",
+      "applied_at": "2026-06-08T17:47:23.687011+00:00"
     }
   ],
   "baseline_fair_eval": {

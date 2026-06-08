@@ -10299,3 +10299,31 @@ c_curriculum_subgoal_reward_openreview_pmkwnv6azi, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T17:47:05.056217+00:00] v0685 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c043`
+**Description:** Simplified the curriculum subgoal reward to use a more direct progress metric with stage-based scaling, removing the problematic division by current_error that could cause instability (rationale: The original subgoal reward formula multiplied error_reduction by (1.0 / (current_error + 0.001)), which creates a singularity near zero error and can cause reward instability. By removing this division, we get a cleaner progress metric that still uses stage-based weighting to encourage progressive improvement. This should maintain the curriculum learning benefit while avoiding potential reward hacking or instability issues, especially since the baseline already shows excellent performance (lateral_error: 0.0041).)
+
+### Reward Formula / Change
+```
+Simplified the curriculum subgoal reward to use a more direct progress metric with stage-based scaling, removing the problematic division by current_error that could cause instability (rationale: The original subgoal reward formula multiplied error_reduction by (1.0 / (current_error + 0.001)), which creates a singularity near zero error and can cause reward instability. By removing this division, we get a cleaner progress metric that still uses stage-based weighting to encourage progressive improvement. This should maintain the curriculum learning benefit while avoiding potential reward hacking or instability issues, especially since the baseline already shows excellent performance (lateral_error: 0.0041).)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 928.7908
+- **lateral_error:** 0.0031
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_b6awzauzpv, c_curriculum_subgoal_reward_openreview_pyq8rtmwtm
+
+---
+
