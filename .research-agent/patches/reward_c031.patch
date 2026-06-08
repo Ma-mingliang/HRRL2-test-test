@@ -1,14 +1,15 @@
 --- a/env.py
 +++ b/env.py
-@@ -1017,7 +1017,9 @@
-         reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty
+@@ -960,4 +960,11 @@
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
          
-         # 7. Small bonus for maintaining very low tracking error
--        if current_error < 0.01:  # Very precise tracking
--            reward += 0.5  # Small bonus for precision
-+        if current_error < 0.005:  # Very precise tracking
-+            reward += 1.0  # Increased bonus for precision
-+        elif current_error < 0.01:  # Good tracking
-+            reward += 0.3  # Smaller bonus for good tracking
-         
-         return reward
++        # 6. 残差动作惩罚（基于研究想法）
++        # 鼓励残差动作平滑，避免剧烈变化
++        residual_penalty = 0.0
++        if hasattr(self, 'prev_residual') and self.prev_residual is not None:
++            residual_penalty = -0.01 * abs(target_handle_angle - self.prev_residual)
++        self.prev_residual = target_handle_angle
++        
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
