@@ -7614,3 +7614,34 @@ g_llm_reward_generation_openreview_g9ylcfd8bq, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T11:01:37.177533+00:00] v0628 - ✗ REJECTED
+
+**Candidate ID:** `reward_c014`
+**Description:** Added a small stability bonus for maintaining low angular velocity when error is small, to encourage smoother control near the target (rationale: The baseline shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward is very high (930.85) with zero standard deviation, suggesting potential overfitting or reward hacking. Adding a stability bonus for maintaining low angular velocity when error is small encourages smoother control near the target, which should improve robustness and reduce oscillations. This small modification adds a positive incentive for stability rather than just penalizing instability, which may help the agent learn more refined control near the target while maintaining the existing good performance.)
+
+### Reward Formula / Change
+```
+Added a small stability bonus for maintaining low angular velocity when error is small, to encourage smoother control near the target (rationale: The baseline shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward is very high (930.85) with zero standard deviation, suggesting potential overfitting or reward hacking. Adding a stability bonus for maintaining low angular velocity when error is small encourages smoother control near the target, which should improve robustness and reduce oscillations. This small modification adds a positive incentive for stability rather than just penalizing instability, which may help the agent learn more refined control near the target while maintaining the existing good performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 927.2636
+- **lateral_error:** 0.0060
+
+### Rejection Reason
+Score -0.0942 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openreview_gbwovfgek8
+
+---
+

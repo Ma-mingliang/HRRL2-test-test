@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c005",
+    "candidate_id": "reward_c008",
     "optimizer": "reward",
-    "description": "Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward concept from research ideas (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are large, we encourage faster convergence during coarse tracking phases while maintaining precision during fine-tuning. This implements the D_adaptive_dynamic_reward concept from research ideas with safety gating to prevent reward hacking. The baseline shows excellent performance (lateral_error=0.0041), so this change should help maintain high precision while potentially improving convergence speed during training.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,4 +962,8 @@\n         gamma = 0.99\n-        potential_current = -current_error\n-        potential_last = -abs(state_last_raw[0])\n-        improvement_reward = gamma * potential_current - potential_last\n+        # Adaptive weighting for improvement reward based on error magnitude\n+        # Higher weight when error is large to encourage faster convergence\n+        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-10 * current_error))\n+        improvement_weight = mi",
-    "source_idea": "{\"source_method_ids\": [\"d_adaptive_dynamic_reward_openreview_vbwm1rimjo\"], \"source_categories\": [\"D_adaptive_dynamic_reward\"], \"source_papers\": [\"openreview:vBwm1RimJo\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more sensitive at low errors (rationale: The baseline shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward is very high (930.85) with zero std, suggesting potential reward hacking or insufficient exploration. Adding a stability bonus encourages the agent to maintain smooth control when already tracking well, which should improve robustness and reduce oscillations. This small addition (5 lines) targets the specific scenario where error is already low, promoting smoother behavior without disrupting the existing reward structure.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -959,4 +959,9 @@\n         # 3. 平顺性惩罚\n-        smoothness_penalty = -0.05 * angular_velocity\n+        smoothness_penalty = -0.05 * angular_velocity\n+        \n+        # 3.1 Stability bonus for low angular velocity when error is small\n+        stability_bonus = 0.0\n+        if current_error < 0.01 and angular_velocity < 0.1:\n+            stability_bonus = 0.2 * (0.1 - angular_velocity) / 0.1\n         \n         gamma = 0.99",
+    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_cmn54vpksz\", \"g_llm_reward_generation_openreview_gbwovfgek8\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:cmN54vPKsz\", \"openreview:gBwovFgeK8\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T10:43:22.616187+00:00"
+    "timestamp": "2026-06-08T10:54:50.740960+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 59,
-    "full_evals_run": 59
+    "candidates_proposed": 61,
+    "full_evals_run": 61
   },
   "stop_reason": null,
   "progress": null,
@@ -495,12 +495,20 @@
       "applied_at": "2026-06-08T10:43:35.302434+00:00"
     },
     {
-      "candidate_id": "reward_c017",
-      "applied_at": "2026-06-08T10:45:32.686931+00:00"
+      "candidate_id": "reward_c007",
+      "applied_at": "2026-06-08T10:45:43.877038+00:00"
     },
     {
-      "candidate_id": "reward_c018",
-      "applied_at": "2026-06-08T10:53:00.662217+00:00"
+      "candidate_id": "reward_c008",
+      "applied_at": "2026-06-08T10:46:32.716535+00:00"
+    },
+    {
+      "candidate_id": "reward_c009",
+      "applied_at": "2026-06-08T10:55:05.913988+00:00"
+    },
+    {
+      "candidate_id": "reward_c010",
+      "applied_at": "2026-06-08T10:55:56.544010+00:00"
     }
   ],
   "baseline_fair_eval": {
