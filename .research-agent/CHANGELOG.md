@@ -10072,3 +10072,34 @@ f_residual_aware_reward_openreview_dzmd1pbtc5, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-08T16:52:56.889587+00:00] v0677 - ✗ REJECTED
+
+**Candidate ID:** `reward_c035`
+**Description:** Added residual action magnitude penalty with safety gating to discourage excessive residual control actions while maintaining task performance (rationale: The current residual penalty only penalizes action changes but not action magnitude itself. By adding magnitude penalty (||u_residual||^2) and roughness penalty (||u_res - prev_u_res||^2) with safety gating, we encourage smoother, smaller residual actions while preventing reward hacking when tracking is poor. This aligns with the research idea to penalize residual action magnitude and roughness, which should improve action smoothness without sacrificing tracking performance.)
+
+### Reward Formula / Change
+```
+Added residual action magnitude penalty with safety gating to discourage excessive residual control actions while maintaining task performance (rationale: The current residual penalty only penalizes action changes but not action magnitude itself. By adding magnitude penalty (||u_residual||^2) and roughness penalty (||u_res - prev_u_res||^2) with safety gating, we encourage smoother, smaller residual actions while preventing reward hacking when tracking is poor. This aligns with the research idea to penalize residual action magnitude and roughness, which should improve action smoothness without sacrificing tracking performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 886.0112
+- **lateral_error:** 0.0069
+
+### Rejection Reason
+Score -0.1559 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_tcz7uwkrtt, f_residual_aware_reward_openreview_vk9j25hi1o
+
+---
+

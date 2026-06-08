@@ -970,12 +970,7 @@ class Attitude_control_stage1(gym.Env):
         # 6. 残差动作惩罚（基于研究想法）
         residual_penalty = 0.0
         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
-            # Penalize residual action magnitude and roughness
-            residual_magnitude = target_handle_angle**2
-            residual_roughness = (target_handle_angle - self.prev_residual)**2
-            # Safety gating: only apply penalty when tracking is good
-            if current_error < 0.05:  # Only penalize when tracking is reasonable
-                residual_penalty = -0.02 * residual_magnitude - 0.01 * residual_roughness
+            residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
         self.prev_residual = target_handle_angle
         
         # 7. Curriculum subgoal reward - encourage progressive improvement
@@ -986,12 +981,13 @@ class Attitude_control_stage1(gym.Env):
             if error_reduction > 0:
                 # Stage-based weighting with safety gating
                 if current_error < 0.005:
-                    stage_weight = 0.3  # High-precision stage
+                    stage_weight = 0.5  # High-precision stage - increased reward for fine-tuning
                 elif current_error < 0.02:
-                    stage_weight = 0.2  # Medium-precision stage
+                    stage_weight = 0.3  # Medium-precision stage - moderate reward
                 else:
-                    stage_weight = 0.1  # Coarse stage
-                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
+                    stage_weight = 0.15  # Coarse stage - slightly increased for initial progress
+                # Scale reward by error magnitude to encourage faster convergence
+                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001)) * min(1.0, 10.0 * current_error)
         self.prev_error = current_error
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
