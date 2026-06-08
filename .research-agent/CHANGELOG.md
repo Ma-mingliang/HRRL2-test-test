@@ -10783,3 +10783,34 @@ g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T19:33:30.405660+00:00] v0701 - ✗ REJECTED
+
+**Candidate ID:** `reward_c059`
+**Description:** Added a dynamic scaling factor to the subgoal reward that increases with error reduction magnitude, making the reward more sensitive to larger improvements when error is high (rationale: The current subgoal reward uses a simple inverse scaling with current error, which may not sufficiently incentivize large improvements when error is high. By adding a dynamic scaling factor that increases with the magnitude of error reduction (capped at 1.0 for stability), we create stronger gradients for significant improvements during coarse tracking stages. This should accelerate learning in early phases while maintaining precision in later stages, potentially improving both completion rate and reducing lateral error further.)
+
+### Reward Formula / Change
+```
+Added a dynamic scaling factor to the subgoal reward that increases with error reduction magnitude, making the reward more sensitive to larger improvements when error is high (rationale: The current subgoal reward uses a simple inverse scaling with current error, which may not sufficiently incentivize large improvements when error is high. By adding a dynamic scaling factor that increases with the magnitude of error reduction (capped at 1.0 for stability), we create stronger gradients for significant improvements during coarse tracking stages. This should accelerate learning in early phases while maintaining precision in later stages, potentially improving both completion rate and reducing lateral error further.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 1085.9059
+- **lateral_error:** 0.0060
+
+### Rejection Reason
+Score -0.0261 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_g9ylcfd8bq, g_llm_reward_generation_openreview_iqnzibspz5
+
+---
+
