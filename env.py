@@ -957,22 +957,18 @@ class Attitude_control_stage1(gym.Env):
             bonus_reward = 0.2
         
         # 3. 平顺性惩罚
-        smoothness_penalty = -0.05 * angular_velocity
-        
-        # 3.5. Stability bonus for low angular velocity when error is small
-        stability_bonus = 0.0
-        if current_error < 0.01 and angular_velocity < 0.1:
-            # Reward for maintaining stability near target
-            stability_bonus = 0.1 * (0.1 - angular_velocity) / 0.1
+        # Scale penalty based on error magnitude - more penalty when error is small
+        if current_error < 0.01:
+            smoothness_penalty = -0.1 * angular_velocity
+        else:
+            smoothness_penalty = -0.03 * angular_velocity
+        # Stability bonus for low angular velocity when error is small
+        if current_error < 0.005 and angular_velocity < 0.1:
+            smoothness_penalty += 0.05
         
         gamma = 0.99
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
-        self.prev_error = current_error
-        
-        reward = tracking_reward + bonus_reward + smoothness_penalty + stability_bonus + improvement_reward + action_penalty + residual_penalty + subgoal_reward
-        
-        return reward
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
