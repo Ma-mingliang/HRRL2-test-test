@@ -1,23 +1,17 @@
 --- a/env.py
 +++ b/env.py
-@@ -968,15 +968,16 @@
-         # 7. Curriculum subgoal reward - encourage progressive improvement
-         subgoal_reward = 0.0
-         if hasattr(self, 'prev_error') and self.prev_error is not None:
-             # Reward for reducing error toward subgoal thresholds
-             error_reduction = self.prev_error - current_error
-             if error_reduction > 0:
-                 # Stage-based weighting with safety gating
-                 if current_error < 0.005:
--                    stage_weight = 0.3  # High-precision stage
-+                    stage_weight = 0.5  # High-precision stage - increased reward
-                 elif current_error < 0.02:
--                    stage_weight = 0.2  # Medium-precision stage
-+                    stage_weight = 0.3  # Medium-precision stage - increased reward
-                 else:
--                    stage_weight = 0.1  # Coarse stage
--                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
-+                    stage_weight = 0.15  # Coarse stage - slightly increased
-+                # Scale by inverse of current error with minimum threshold
-+                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.0005))
-         self.prev_error = current_error
+@@ -960,5 +960,12 @@
+         
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
++        # Adaptive weighting for improvement reward based on error magnitude
++        if current_error > 0.1:
++            improvement_weight = 1.5  # Stronger improvement signal for large errors
++        elif current_error > 0.02:
++            improvement_weight = 1.2  # Moderate improvement signal
++        else:
++            improvement_weight = 1.0  # Standard improvement signal
++        potential_current = -improvement_weight * current_error
++        potential_last = -improvement_weight * abs(state_last_raw[0])
+         improvement_reward = gamma * potential_current - potential_last

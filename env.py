@@ -937,7 +937,14 @@ class Attitude_control_stage1(gym.Env):
         
         # 1. 核心跟踪奖励
         max_penalty = 2.0
-        tracking_reward = -min(current_error**2, max_penalty)
+        # Adaptive weighting: higher weight for larger errors to encourage faster convergence
+        if current_error > 0.1:
+            error_weight = 2.0  # Stronger penalty for large errors
+        elif current_error > 0.02:
+            error_weight = 1.5  # Moderate penalty for medium errors
+        else:
+            error_weight = 1.0  # Standard penalty for small errors
+        tracking_reward = -error_weight * min(current_error**2, max_penalty)
         
         # 2. 高精度奖励
         bonus_reward = 0.0
@@ -952,8 +959,15 @@ class Attitude_control_stage1(gym.Env):
         smoothness_penalty = -0.05 * angular_velocity
         
         gamma = 0.99
-        potential_current = -current_error
-        potential_last = -abs(state_last_raw[0])
+        # Adaptive weighting for improvement reward based on error magnitude
+        if current_error > 0.1:
+            improvement_weight = 1.5  # Stronger improvement signal for large errors
+        elif current_error > 0.02:
+            improvement_weight = 1.2  # Moderate improvement signal
+        else:
+            improvement_weight = 1.0  # Standard improvement signal
+        potential_current = -improvement_weight * current_error
+        potential_last = -improvement_weight * abs(state_last_raw[0])
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
@@ -984,7 +998,6 @@ class Attitude_control_stage1(gym.Env):
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
         
         return reward
-    
     def reset(self, seed=None, options=None):
         """重置环境"""
         super().reset(seed=seed)

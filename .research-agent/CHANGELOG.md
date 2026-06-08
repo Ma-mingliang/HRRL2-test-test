@@ -6557,3 +6557,29 @@ d_adaptive_dynamic_reward_openreview_hz9gu1io12, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T09:47:56.239351+00:00] v0618 - ✗ REJECTED
+
+**Candidate ID:** `reward_c008`
+**Description:** Added adaptive weighting for the subgoal reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea. The weight increases as error decreases, encouraging more precise tracking in later training stages. (rationale: The baseline metrics show excellent performance (completion_rate=1.0, lateral_error=0.0041), but the reward function could be more adaptive. By adding an adaptive weight that increases as error decreases (from 1.0 at error=0.02 to 3.0 at error=0), we implement the D_adaptive_dynamic_reward concept. This encourages the agent to focus more on precision improvements when already performing well, potentially reducing the small remaining error (0.0041) without destabilizing the learning process. The adaptive weight is gated to only apply when error < 0.02, preventing reward hacking in early training stages.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting for the subgoal reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea. The weight increases as error decreases, encouraging more precise tracking in later training stages. (rationale: The baseline metrics show excellent performance (completion_rate=1.0, lateral_error=0.0041), but the reward function could be more adaptive. By adding an adaptive weight that increases as error decreases (from 1.0 at error=0.02 to 3.0 at error=0), we implement the D_adaptive_dynamic_reward concept. This encourages the agent to focus more on precision improvements when already performing well, potentially reducing the small remaining error (0.0041) without destabilizing the learning process. The adaptive weight is gated to only apply when error < 0.02, preventing reward hacking in early training stages.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_xxs9zuhklb, d_adaptive_dynamic_reward_openreview_rpws9kov0i
+
+---
+
