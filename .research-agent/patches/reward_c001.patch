@@ -1,20 +1,23 @@
 --- a/env.py
 +++ b/env.py
-@@ -968,9 +968,15 @@
+@@ -968,15 +968,16 @@
          # 7. Curriculum subgoal reward - encourage progressive improvement
          subgoal_reward = 0.0
          if hasattr(self, 'prev_error') and self.prev_error is not None:
              # Reward for reducing error toward subgoal thresholds
              error_reduction = self.prev_error - current_error
              if error_reduction > 0:
--                # Scale reward based on how close we are to high-precision zone
--                subgoal_reward = 0.1 * error_reduction * (1.0 / (current_error + 0.001))
-+                # Stage-based weighting: higher reward for smaller errors
-+                if current_error < 0.01:
-+                    stage_weight = 0.3  # High-precision stage
-+                elif current_error < 0.05:
-+                    stage_weight = 0.2  # Medium-precision stage
-+                else:
-+                    stage_weight = 0.1  # Coarse stage
-+                subgoal_reward = stage_weight * error_reduction
+                 # Stage-based weighting with safety gating
+                 if current_error < 0.005:
+-                    stage_weight = 0.3  # High-precision stage
++                    stage_weight = 0.5  # High-precision stage - stronger reward for fine tuning
+                 elif current_error < 0.02:
+-                    stage_weight = 0.2  # Medium-precision stage
++                    stage_weight = 0.3  # Medium-precision stage
+                 else:
+-                    stage_weight = 0.1  # Coarse stage
+-                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
++                    stage_weight = 0.15  # Coarse stage
++                # Scale by inverse of current error with minimum threshold to avoid division issues
++                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.005))
          self.prev_error = current_error

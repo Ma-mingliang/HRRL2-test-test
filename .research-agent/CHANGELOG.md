@@ -6228,3 +6228,29 @@ c_curriculum_subgoal_reward_openreview_v3kavlfvrd, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T08:52:42.280327+00:00] v0609 - ✗ REJECTED
+
+**Candidate ID:** `reward_c002`
+**Description:** Enhanced curriculum subgoal reward with stage-based weighting and safety gating (rationale: The current subgoal reward uses a fixed scaling factor (0.1) regardless of precision stage. By implementing stage-based weighting (0.1/0.2/0.3 for coarse/medium/high-precision), we create a curriculum that progressively rewards higher precision as the agent improves. This aligns with the research idea of 'reward stage progress and subgoal completion before exposing the full task objective.' The safety gating is maintained through the existing error reduction check. This should improve completion_rate and reduce lateral_error by encouraging the agent to first master coarse tracking before pursuing high precision.)
+
+### Reward Formula / Change
+```
+Enhanced curriculum subgoal reward with stage-based weighting and safety gating (rationale: The current subgoal reward uses a fixed scaling factor (0.1) regardless of precision stage. By implementing stage-based weighting (0.1/0.2/0.3 for coarse/medium/high-precision), we create a curriculum that progressively rewards higher precision as the agent improves. This aligns with the research idea of 'reward stage progress and subgoal completion before exposing the full task objective.' The safety gating is maintained through the existing error reduction check. This should improve completion_rate and reduce lateral_error by encouraging the agent to first master coarse tracking before pursuing high precision.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_leed5is4oi, c_curriculum_subgoal_reward_openreview_obpqdcwlfd
+
+---
+
