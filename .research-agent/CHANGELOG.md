@@ -5812,3 +5812,29 @@ e_hierarchical_reward_arxiv_2505_16410, e_hierarchical_reward_arxiv_2510_07181
 
 ---
 
+## [2026-06-08T05:53:43.869333+00:00] v0591 - ✗ REJECTED
+
+**Candidate ID:** `reward_c026`
+**Description:** Added hierarchical reward structure with separate goal progress and low-level control components (rationale: This modification implements the hierarchical reward structure from research idea E_hierarchical_reward. By separating goal progress (high-level) from tracking control (low-level), we create clearer learning signals. The goal progress reward provides stronger incentives for achieving precision targets, while the tracking reward maintains smooth control. This should improve completion rate and reduce lateral error by giving the agent clearer objectives at different abstraction levels, while the existing control penalties prevent reward hacking.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure with separate goal progress and low-level control components (rationale: This modification implements the hierarchical reward structure from research idea E_hierarchical_reward. By separating goal progress (high-level) from tracking control (low-level), we create clearer learning signals. The goal progress reward provides stronger incentives for achieving precision targets, while the tracking reward maintains smooth control. This should improve completion rate and reduce lateral error by giving the agent clearer objectives at different abstraction levels, while the existing control penalties prevent reward hacking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_arxiv_2602_04454, e_hierarchical_reward_arxiv_2602_18582
+
+---
+
