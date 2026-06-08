@@ -1,0 +1,16 @@
+--- a/env.py
++++ b/env.py
+@@ -962,4 +962,10 @@
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive dynamic weighting for improvement reward
++        # Weight increases with error magnitude to prioritize error reduction when far from target
++        base_improvement_weight = 1.0
++        max_improvement_weight = 2.5
++        improvement_weight = base_improvement_weight + (max_improvement_weight - base_improvement_weight) * (1 - math.exp(-8 * current_error))
++        improvement_weight = min(improvement_weight, max_improvement_weight)
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)

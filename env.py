@@ -961,14 +961,14 @@ class Attitude_control_stage1(gym.Env):
         
         gamma = 0.99
         # Adaptive dynamic weighting for improvement reward
-        base_gamma = 0.99
-        max_gamma = 1.5
-        # Smooth exponential schedule: gamma increases with error magnitude
-        gamma_weight = base_gamma + (max_gamma - base_gamma) * (1 - math.exp(-5 * current_error))
-        gamma_weight = min(gamma_weight, max_gamma)
+        # Weight increases with error magnitude to prioritize error reduction when far from target
+        base_improvement_weight = 1.0
+        max_improvement_weight = 2.5
+        improvement_weight = base_improvement_weight + (max_improvement_weight - base_improvement_weight) * (1 - math.exp(-8 * current_error))
+        improvement_weight = min(improvement_weight, max_improvement_weight)
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
-        improvement_reward = gamma_weight * potential_current - potential_last
+        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
