@@ -937,13 +937,14 @@ class Attitude_control_stage1(gym.Env):
         
         # 1. 核心跟踪奖励
         max_penalty = 2.0
-        # Adaptive weighting: higher weight for larger errors to encourage faster convergence
-        if current_error > 0.1:
-            error_weight = 2.0  # Stronger penalty for large errors
-        elif current_error > 0.02:
-            error_weight = 1.5  # Moderate penalty for medium errors
-        else:
-            error_weight = 1.0  # Standard penalty for small errors
+        # Adaptive dynamic weighting: smooth schedule based on error magnitude
+        # Implements D_adaptive_dynamic_reward with safety gating
+        base_weight = 1.0
+        max_weight = 3.0
+        # Smooth exponential schedule: weight increases with error magnitude
+        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))
+        # Safety gating: cap weight to prevent reward hacking
+        error_weight = min(error_weight, max_weight)
         tracking_reward = -error_weight * min(current_error**2, max_penalty)
         
         # 2. 高精度奖励

@@ -38,7 +38,23 @@
     "pre_run_stash": null,
     "dirty_worktree_policy": "abort"
   },
-  "current_best": null,
+  "current_best": {
+    "candidate_id": "reward_c004",
+    "optimizer": "reward",
+    "description": "Added adaptive weighting for tracking reward based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea with a simple schedule that increases tracking penalty as error decreases to encourage precision. (rationale: The baseline metrics show excellent completion (100%) but very low lateral error (0.0041). The current tracking reward uses uniform weighting regardless of precision stage. By implementing adaptive weighting from the D_adaptive_dynamic_reward research idea, we increase the tracking penalty weight as error decreases (2.0x for <0.005, 1.5x for <0.02, 1.0x otherwise). This creates stronger incentive for the agent to maintain high precision once it achieves it, potentially reducing the already low error further while maintaining the stable completion rate. The change is minimal and only affects one component.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -938,5 +938,12 @@\n         # 1. 核心跟踪奖励\n         max_penalty = 2.0\n-        tracking_reward = -min(current_error**2, max_penalty)\n+        # Adaptive weighting: increase tracking penalty as error decreases\n+        if current_error < 0.005:\n+            tracking_weight = 2.0  # High precision stage\n+        elif current_error < 0.02:\n+            tracking_weight = 1.5  # Medium precision stage\n+        else:\n+            tracking_weight = 1.0  # Coarse stage\n+        ",
+    "source_idea": "{\"source_method_ids\": [\"d_adaptive_dynamic_reward_openreview_hz9gu1io12\", \"d_adaptive_dynamic_reward_openreview_rgvqh3gjea\"], \"source_categories\": [\"D_adaptive_dynamic_reward\"], \"source_papers\": [\"openreview:hZ9gu1iO12\", \"openreview:rgVqH3gjeA\"], \"source_idea\": \"pool_methods\"}",
+    "status": "rejected",
+    "full_eval_result": {
+      "metrics": {},
+      "failed": true,
+      "seeds": [
+        42
+      ]
+    },
+    "rejection_reason": null,
+    "timestamp": "2026-06-08T09:42:37.158564+00:00"
+  },
   "candidate_queue": [],
   "needs_more_evidence": [],
   "literature": {
@@ -427,32 +443,32 @@
       "applied_at": "2026-06-08T09:07:23.603070+00:00"
     },
     {
+      "candidate_id": "reward_c001",
+      "applied_at": "2026-06-08T09:13:45.975875+00:00"
+    },
+    {
+      "candidate_id": "reward_c002",
+      "applied_at": "2026-06-08T09:21:34.150967+00:00"
+    },
+    {
+      "candidate_id": "reward_c003",
+      "applied_at": "2026-06-08T09:28:45.679385+00:00"
+    },
+    {
       "candidate_id": "reward_c004",
-      "applied_at": "2026-06-08T09:13:25.406389+00:00"
+      "applied_at": "2026-06-08T09:35:58.057174+00:00"
     },
     {
       "candidate_id": "reward_c005",
-      "applied_at": "2026-06-08T09:20:27.781132+00:00"
+      "applied_at": "2026-06-08T09:43:08.584435+00:00"
     },
     {
       "candidate_id": "reward_c006",
-      "applied_at": "2026-06-08T09:27:51.629395+00:00"
+      "applied_at": "2026-06-08T09:49:56.158446+00:00"
     },
     {
       "candidate_id": "reward_c007",
-      "applied_at": "2026-06-08T09:34:38.068055+00:00"
-    },
-    {
-      "candidate_id": "reward_c008",
-      "applied_at": "2026-06-08T09:41:06.083405+00:00"
-    },
-    {
-      "candidate_id": "reward_c009",
-      "applied_at": "2026-06-08T09:48:11.255600+00:00"
-    },
-    {
-      "candidate_id": "reward_c010",
-      "applied_at": "2026-06-08T09:54:42.628035+00:00"
+      "applied_at": "2026-06-08T09:57:02.671714+00:00"
     }
   ],
   "baseline_fair_eval": {

@@ -6702,3 +6702,29 @@ d_adaptive_dynamic_reward_arxiv_2408_03029, d_adaptive_dynamic_reward_openreview
 
 ---
 
+## [2026-06-08T10:01:22.103722+00:00] v0620 - ✗ REJECTED
+
+**Candidate ID:** `reward_c010`
+**Description:** Added adaptive weighting for the improvement reward component based on current error magnitude, making the reward more responsive to error reduction at different precision levels. (rationale: The current improvement reward uses a fixed gamma=0.99, which may not be optimal across different error magnitudes. By making gamma adaptive based on current error, we can: 1) Encourage faster convergence when errors are large (lower gamma makes immediate improvements more valuable), 2) Maintain stability for small errors (higher gamma preserves long-term planning). This aligns with the D_adaptive_dynamic_reward research idea by adapting reward component weights based on error statistics, which should improve training efficiency and final precision without changing the core algorithm.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting for the improvement reward component based on current error magnitude, making the reward more responsive to error reduction at different precision levels. (rationale: The current improvement reward uses a fixed gamma=0.99, which may not be optimal across different error magnitudes. By making gamma adaptive based on current error, we can: 1) Encourage faster convergence when errors are large (lower gamma makes immediate improvements more valuable), 2) Maintain stability for small errors (higher gamma preserves long-term planning). This aligns with the D_adaptive_dynamic_reward research idea by adapting reward component weights based on error statistics, which should improve training efficiency and final precision without changing the core algorithm.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_d3wjfs6z2k, d_adaptive_dynamic_reward_openreview_eea3cqe2u1
+
+---
+
