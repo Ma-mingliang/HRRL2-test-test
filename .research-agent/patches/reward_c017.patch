@@ -1,18 +1,21 @@
 --- a/env.py
 +++ b/env.py
-@@ -951,6 +951,12 @@
-         # 3. 平顺性惩罚
-         smoothness_penalty = -0.05 * angular_velocity
-         
-+        # 3.5 Safety constraint: penalize excessive angular velocity
-+        safety_penalty = 0.0
-+        max_safe_angular_velocity = 2.0  # rad/s threshold
-+        if angular_velocity > max_safe_angular_velocity:
-+            violation = angular_velocity - max_safe_angular_velocity
-+            safety_penalty = -0.5 * violation  # Strong penalty for unsafe oscillations
-         
-         # 4. 改进奖励
-         gamma = 0.99
-@@ -963,1 +969,1 @@
--        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
-+        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty
+@@ -976,15 +976,17 @@
+         # 7. Curriculum subgoal reward - encourage progressive improvement
+         subgoal_reward = 0.0
+         if hasattr(self, 'prev_error') and self.prev_error is not None:
+             # Reward for reducing error toward subgoal thresholds
+             error_reduction = self.prev_error - current_error
+             if error_reduction > 0:
+                 # Stage-based weighting with safety gating
+                 if current_error < 0.005:
+                     stage_weight = 0.3  # High-precision stage
+                 elif current_error < 0.02:
+                     stage_weight = 0.2  # Medium-precision stage
+                 else:
+                     stage_weight = 0.1  # Coarse stage
+-                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
++                # Dynamic scaling: stronger signal for larger errors
++                error_scale = 1.0 + 2.0 * min(current_error, 0.1)
++                subgoal_reward = stage_weight * error_reduction * error_scale * (1.0 / (current_error + 0.001))
+         self.prev_error = current_error

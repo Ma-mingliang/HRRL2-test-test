@@ -935,20 +935,15 @@ class Attitude_control_stage1(gym.Env):
         current_error = abs(state_raw[0])
         angular_velocity = abs(state_raw[2])
         
+        
         # 1. 核心跟踪奖励
         max_penalty = 2.0
-        # Adaptive dynamic weighting: smooth schedule based on error magnitude
-        # Implements D_adaptive_dynamic_reward with safety gating
-        base_weight = 1.0
-        max_weight = 3.0
-        # Smooth exponential schedule: weight increases with error magnitude
-        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))
-        # Safety gating: cap weight to prevent reward hacking
-        error_weight = min(error_weight, max_weight)
+        # Simplified adaptive weighting: linear scaling with error magnitude
+        # More stable than exponential, reduces risk of reward hacking
+        error_weight = 1.0 + 2.0 * min(current_error, 0.5)  # Cap at 0.5 to prevent extreme weights
         tracking_reward = -error_weight * min(current_error**2, max_penalty)
         
         # 2. 高精度奖励
-        bonus_reward = 0.0
         if current_error < 0.005:
             bonus_reward = 1.0
         elif current_error < 0.01:
@@ -957,23 +952,12 @@ class Attitude_control_stage1(gym.Env):
             bonus_reward = 0.2
         
         # 3. 平顺性惩罚
-        # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
-        
-        # 3b. Stability bonus for low angular velocity when error is small
-        stability_bonus = 0.0
-        if current_error < 0.01 and angular_velocity < 0.1:
-            # Encourage maintaining stability near target
-            stability_bonus = 0.1 * (0.1 - angular_velocity) / 0.1
         
         gamma = 0.99
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
-        self.prev_error = current_error
-        
-        reward = tracking_reward + bonus_reward + smoothness_penalty + stability_bonus + improvement_reward + action_penalty + residual_penalty + subgoal_reward
-        
-        return reward
+        improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
