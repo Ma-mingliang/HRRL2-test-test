@@ -10327,3 +10327,31 @@ c_curriculum_subgoal_reward_openreview_b6awzauzpv, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T17:53:48.595073+00:00] v0686 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c044`
+**Description:** Added a curriculum stage progression system that tracks the agent's current stage and provides stage-specific rewards for achieving subgoals, with safety gating to prevent reward hacking. (rationale: The current implementation already has a curriculum subgoal reward, but it lacks explicit stage tracking. By adding a persistent stage variable (self.current_stage), we create a clearer curriculum progression system. This allows the agent to understand which precision level it's currently operating at and provides more consistent stage-based rewards. The modification maintains the same safety gating through error thresholds but makes the curriculum progression more explicit and trackable, which should improve learning stability and help the agent progress through precision levels more systematically.)
+
+### Reward Formula / Change
+```
+Added a curriculum stage progression system that tracks the agent's current stage and provides stage-specific rewards for achieving subgoals, with safety gating to prevent reward hacking. (rationale: The current implementation already has a curriculum subgoal reward, but it lacks explicit stage tracking. By adding a persistent stage variable (self.current_stage), we create a clearer curriculum progression system. This allows the agent to understand which precision level it's currently operating at and provides more consistent stage-based rewards. The modification maintains the same safety gating through error thresholds but makes the curriculum progression more explicit and trackable, which should improve learning stability and help the agent progress through precision levels more systematically.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 988.1264
+- **lateral_error:** 0.0041
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_r7ppkxmovk, c_curriculum_subgoal_reward_arxiv_2104_06410
+
+---
+
