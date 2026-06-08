@@ -7172,3 +7172,29 @@ d_adaptive_dynamic_reward_openreview_fdms41jxqq, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T10:35:49.408787+00:00] v0624 - ✗ REJECTED
+
+**Candidate ID:** `reward_c014`
+**Description:** Added adaptive weighting to the improvement reward component based on current error magnitude, implementing D_adaptive_dynamic_reward with safety gating (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases with error, the agent receives stronger incentives to reduce large errors quickly, which should improve convergence speed and final tracking precision. The exponential schedule ensures smooth transitions and the safety gating prevents reward hacking. This aligns with the D_adaptive_dynamic_reward research idea while maintaining the existing reward structure.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on current error magnitude, implementing D_adaptive_dynamic_reward with safety gating (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases with error, the agent receives stronger incentives to reduce large errors quickly, which should improve convergence speed and final tracking precision. The exponential schedule ensures smooth transitions and the safety gating prevents reward hacking. This aligns with the D_adaptive_dynamic_reward research idea while maintaining the existing reward structure.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_vbwm1rimjo
+
+---
+
