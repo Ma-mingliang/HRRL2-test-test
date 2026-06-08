@@ -973,22 +973,8 @@ class Attitude_control_stage1(gym.Env):
             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
         self.prev_residual = target_handle_angle
         
-        # 8. Learned preference reward (H_learned_preference_reward)
-        # Simple exponential moving average model of past rewards
-        if not hasattr(self, 'reward_history'):
-            self.reward_history = []
-        self.reward_history.append(tracking_reward + bonus_reward + smoothness_penalty + improvement_reward)
-        if len(self.reward_history) > 100:
-            self.reward_history.pop(0)
-        preference_reward = 0.0
-        if len(self.reward_history) >= 10:
-            avg_reward = np.mean(self.reward_history[-10:])
-            # Safety gating: only apply preference reward when performance is stable
-            if avg_reward > -0.5:  # Threshold for stable performance
-                preference_reward = 0.1 * (avg_reward - np.mean(self.reward_history))
-        
         # 7. Curriculum subgoal reward - encourage progressive improvement
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward + preference_reward
+        subgoal_reward = 0.0
         if hasattr(self, 'prev_error') and self.prev_error is not None:
             # Reward for reducing error toward subgoal thresholds
             error_reduction = self.prev_error - current_error

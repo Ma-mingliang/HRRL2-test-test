@@ -8582,3 +8582,55 @@ h_learned_preference_reward_arxiv_2309_16074, h_learned_preference_reward_arxiv_
 
 ---
 
+## [2026-06-08T11:38:32.491665+00:00] v0637 - ✗ REJECTED
+
+**Candidate ID:** `reward_c027`
+**Description:** Added a learned preference reward component that uses a simple exponential moving average of past rewards to model implicit preferences, with safety gating to prevent reward hacking (rationale: The current reward function achieves perfect completion but has very low lateral error (0.0041). Adding a learned preference reward component can help refine the policy by modeling implicit preferences from the agent's own successful behavior. The exponential moving average creates a simple preference model that rewards consistency with past successful performance. Safety gating prevents reward hacking by only applying the preference reward when performance is stable (avg_reward > -0.5). This should help reduce the small remaining lateral error by encouraging the agent to maintain its already successful patterns while potentially discovering more efficient trajectories.)
+
+### Reward Formula / Change
+```
+Added a learned preference reward component that uses a simple exponential moving average of past rewards to model implicit preferences, with safety gating to prevent reward hacking (rationale: The current reward function achieves perfect completion but has very low lateral error (0.0041). Adding a learned preference reward component can help refine the policy by modeling implicit preferences from the agent's own successful behavior. The exponential moving average creates a simple preference model that rewards consistency with past successful performance. Safety gating prevents reward hacking by only applying the preference reward when performance is stable (avg_reward > -0.5). This should help reduce the small remaining lateral error by encouraging the agent to maintain its already successful patterns while potentially discovering more efficient trajectories.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+h_learned_preference_reward_arxiv_2512_23703, h_learned_preference_reward_openreview_7lfmnvnmfj
+
+---
+
+## [2026-06-08T11:39:03.138470+00:00] v0636 - ✗ REJECTED
+
+**Candidate ID:** `reward_c022`
+**Description:** No-op candidate (LLM unavailable)
+
+### Reward Formula / Change
+```
+No-op candidate (LLM unavailable)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty_patch
+
+### Source Methods
+h_learned_preference_reward_openreview_cvsstdteoe, h_learned_preference_reward_arxiv_2002_09089
+
+---
+

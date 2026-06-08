@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 68,
-    "full_evals_run": 64
+    "candidates_proposed": 65,
+    "full_evals_run": 65
   },
   "stop_reason": null,
   "progress": null,
@@ -511,12 +511,20 @@
       "applied_at": "2026-06-08T11:13:32.640647+00:00"
     },
     {
-      "candidate_id": "reward_c020",
-      "applied_at": "2026-06-08T11:20:32.151212+00:00"
+      "candidate_id": "reward_c023",
+      "applied_at": "2026-06-08T11:21:33.267392+00:00"
     },
     {
-      "candidate_id": "reward_c027",
-      "applied_at": "2026-06-08T11:37:57.380818+00:00"
+      "candidate_id": "reward_c024",
+      "applied_at": "2026-06-08T11:22:51.242291+00:00"
+    },
+    {
+      "candidate_id": "reward_c015",
+      "applied_at": "2026-06-08T11:30:31.482406+00:00"
+    },
+    {
+      "candidate_id": "reward_c016",
+      "applied_at": "2026-06-08T11:34:29.294355+00:00"
     }
   ],
   "baseline_fair_eval": {
