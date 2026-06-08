@@ -6640,3 +6640,34 @@ d_adaptive_dynamic_reward_arxiv_2408_03029, d_adaptive_dynamic_reward_openreview
 
 ---
 
+## [2026-06-08T09:56:22.552140+00:00] v0620 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Added adaptive weighting to the improvement reward component based on current error magnitude, making the reward more responsive to error reduction at different precision levels. (rationale: The current improvement reward uses uniform weighting regardless of error magnitude. By adding adaptive weighting to the potential function, we make the improvement signal stronger when errors are large (encouraging faster convergence) and standard when errors are small (focusing on precision). This aligns with the research idea of adapting reward component weights based on objective errors, and should help the agent prioritize error reduction more effectively across different precision stages. The modification is minimal and only affects the improvement reward calculation.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on current error magnitude, making the reward more responsive to error reduction at different precision levels. (rationale: The current improvement reward uses uniform weighting regardless of error magnitude. By adding adaptive weighting to the potential function, we make the improvement signal stronger when errors are large (encouraging faster convergence) and standard when errors are small (focusing on precision). This aligns with the research idea of adapting reward component weights based on objective errors, and should help the agent prioritize error reduction more effectively across different precision stages. The modification is minimal and only affects the improvement reward calculation.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 960.2356
+- **lateral_error:** 0.0050
+
+### Rejection Reason
+Score -0.0313 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_arxiv_2408_03029, d_adaptive_dynamic_reward_openreview_6klpzcuq2d
+
+---
+

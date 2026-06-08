@@ -1,12 +1,17 @@
 --- a/env.py
 +++ b/env.py
-@@ -938,3 +938,8 @@
-         # 1. 核心跟踪奖励
-         max_penalty = 2.0
--        tracking_reward = -min(current_error**2, max_penalty)
-+        # Adaptive weighting: higher weight for larger errors to accelerate learning
-+        if current_error > 0.05:
-+            error_weight = 2.0  # Stronger penalty for large errors
+@@ -960,5 +960,12 @@
+         
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
++        # Adaptive weighting for improvement reward based on error magnitude
++        if current_error > 0.1:
++            improvement_weight = 2.0  # Stronger improvement signal for large errors
++        elif current_error > 0.02:
++            improvement_weight = 1.5  # Moderate improvement signal
 +        else:
-+            error_weight = 1.0  # Standard penalty for small errors
-+        tracking_reward = -error_weight * min(current_error**2, max_penalty)
++            improvement_weight = 1.0  # Standard improvement signal
++        potential_current = -improvement_weight * current_error
++        potential_last = -improvement_weight * abs(state_last_raw[0])
+         improvement_reward = gamma * potential_current - potential_last
