@@ -1,16 +1,19 @@
 --- a/env.py
 +++ b/env.py
-@@ -940,11 +940,7 @@
+@@ -940,11 +940,8 @@
          # 1. 核心跟踪奖励
          max_penalty = 2.0
-         # Adaptive dynamic weighting: smooth schedule based on error magnitude
-         # Implements D_adaptive_dynamic_reward with safety gating
+-        # Adaptive dynamic weighting: smooth schedule based on error magnitude
+-        # Implements D_adaptive_dynamic_reward with safety gating
 -        base_weight = 1.0
 -        max_weight = 3.0
 -        # Smooth exponential schedule: weight increases with error magnitude
 -        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))
 -        # Safety gating: cap weight to prevent reward hacking
 -        error_weight = min(error_weight, max_weight)
++        # Adaptive dynamic weighting: linear schedule based on error magnitude
++        base_weight = 1.0
++        max_weight = 3.0
 +        # Linear schedule: weight increases linearly with error magnitude
-+        error_weight = 1.0 + 2.0 * min(current_error, 0.5)
++        error_weight = base_weight + (max_weight - base_weight) * min(current_error * 10, 1.0)
          tracking_reward = -error_weight * min(current_error**2, max_penalty)

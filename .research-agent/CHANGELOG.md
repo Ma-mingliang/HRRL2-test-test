@@ -7782,3 +7782,29 @@ h_learned_preference_reward_openreview_tjhhb6cscw, h_learned_preference_reward_o
 
 ---
 
+## [2026-06-08T11:09:40.545561+00:00] v0629 - ✗ REJECTED
+
+**Candidate ID:** `reward_c019`
+**Description:** Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more responsive to high angular velocities (rationale: The current reward function shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward value (930.85) suggests there's room for improvement in control smoothness. By making the smoothness penalty more responsive to error magnitude (higher penalty when error is small, lower when error is large), we encourage smoother control precisely when the agent is close to the target. The stability bonus specifically rewards maintaining low angular velocity when error is already small, which should reduce oscillations and improve control quality without sacrificing tracking performance. This addresses the research idea of using LLM-generated refinements by adding a targeted, safety-gated improvement that focuses on control quality metrics.)
+
+### Reward Formula / Change
+```
+Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more responsive to high angular velocities (rationale: The current reward function shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward value (930.85) suggests there's room for improvement in control smoothness. By making the smoothness penalty more responsive to error magnitude (higher penalty when error is small, lower when error is large), we encourage smoother control precisely when the agent is close to the target. The stability bonus specifically rewards maintaining low angular velocity when error is already small, which should reduce oscillations and improve control quality without sacrificing tracking performance. This addresses the research idea of using LLM-generated refinements by adding a targeted, safety-gated improvement that focuses on control quality metrics.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_q01nzxiwlt, g_llm_reward_generation_openreview_bm6mwnd9uh
+
+---
+
