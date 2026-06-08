@@ -965,7 +965,6 @@ class Attitude_control_stage1(gym.Env):
         base_improvement_weight = 1.0
         max_improvement_weight = 2.5
         improvement_weight = base_improvement_weight + (max_improvement_weight - base_improvement_weight) * (1 - math.exp(-8 * current_error))
-        # Safety gating: cap weight to prevent reward hacking
         improvement_weight = min(improvement_weight, max_improvement_weight)
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
