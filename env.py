@@ -957,28 +957,29 @@ class Attitude_control_stage1(gym.Env):
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+        
         # 6. 残差动作惩罚（基于研究想法）
         residual_penalty = 0.0
         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
         self.prev_residual = target_handle_angle
+        self.prev_residual = target_handle_angle
         
-        # 7. 课程学习子目标奖励
+        # 7. Curriculum subgoal reward - encourage progressive improvement
         subgoal_reward = 0.0
-        if hasattr(self, 'current_stage') and hasattr(self, 'prev_error'):
-            stage_weights = [0.1, 0.3, 0.5, 0.8]  # 权重随阶段增加
-            if self.current_stage < len(stage_weights):
-                progress = abs(self.prev_error) - current_error
-                subgoal_reward = stage_weights[self.current_stage] * progress
+        if hasattr(self, 'prev_error') and self.prev_error is not None:
+            # Reward for reducing error toward subgoal thresholds
+            error_reduction = self.prev_error - current_error
+            if error_reduction > 0:
+                # Scale reward based on how close we are to high-precision zone
+                subgoal_reward = 0.1 * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + subgoal_reward
         
         return reward
-
     def reset(self, seed=None, options=None):
         """重置环境"""
         super().reset(seed=seed)
