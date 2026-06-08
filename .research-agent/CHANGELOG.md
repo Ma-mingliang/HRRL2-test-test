@@ -5448,3 +5448,29 @@ b_safety_constraint_reward_openreview_hqwhxvzcmj, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-08T05:11:29.371763+00:00] v0577 - ✗ REJECTED
+
+**Candidate ID:** `reward_c012`
+**Description:** Added safety constraint penalty for excessive angular velocity to prevent dangerous oscillations (rationale: The current reward function has a linear smoothness penalty that may not sufficiently discourage dangerous oscillations. Adding a safety constraint penalty with a threshold (max_safe_angular_velocity = 2.0) creates a stronger deterrent when angular velocity exceeds safe limits. This implements the B_safety_constraint_reward idea by gating the penalty with a constraint violation condition. The penalty is proportional to the violation magnitude, which should help prevent reward hacking while maintaining task performance. This should improve safety metrics without significantly impacting the already good completion rate and lateral error.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive angular velocity to prevent dangerous oscillations (rationale: The current reward function has a linear smoothness penalty that may not sufficiently discourage dangerous oscillations. Adding a safety constraint penalty with a threshold (max_safe_angular_velocity = 2.0) creates a stronger deterrent when angular velocity exceeds safe limits. This implements the B_safety_constraint_reward idea by gating the penalty with a constraint violation condition. The penalty is proportional to the violation magnitude, which should help prevent reward hacking while maintaining task performance. This should improve safety metrics without significantly impacting the already good completion rate and lateral error.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_dju2kvsdts, b_safety_constraint_reward_openreview_rgvqh3gjea
+
+---
+
