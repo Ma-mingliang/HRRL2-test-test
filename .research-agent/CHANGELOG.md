@@ -10103,3 +10103,31 @@ f_residual_aware_reward_openreview_tcz7uwkrtt, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-08T16:59:34.122935+00:00] v0678 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c036`
+**Description:** Enhanced curriculum subgoal reward with better stage weighting and progress scaling to improve convergence and precision (rationale: The current curriculum subgoal reward has low stage weights (0.1-0.3) that may not provide sufficient gradient for learning. By increasing weights, especially for high-precision stage (0.3→0.5), and adding error-magnitude scaling, we: 1) Provide stronger learning signal for fine-tuning near target, 2) Encourage faster initial convergence with better coarse-stage reward, 3) Maintain safety gating while improving reward density. This should reduce lateral_error (currently 0.0041) by giving clearer guidance for precision improvement.)
+
+### Reward Formula / Change
+```
+Enhanced curriculum subgoal reward with better stage weighting and progress scaling to improve convergence and precision (rationale: The current curriculum subgoal reward has low stage weights (0.1-0.3) that may not provide sufficient gradient for learning. By increasing weights, especially for high-precision stage (0.3→0.5), and adding error-magnitude scaling, we: 1) Provide stronger learning signal for fine-tuning near target, 2) Encourage faster initial convergence with better coarse-stage reward, 3) Maintain safety gating while improving reward density. This should reduce lateral_error (currently 0.0041) by giving clearer guidance for precision improvement.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 935.7039
+- **lateral_error:** 0.0032
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_hqwhxvzcmj, c_curriculum_subgoal_reward_openreview_dpkak1oh3x
+
+---
+

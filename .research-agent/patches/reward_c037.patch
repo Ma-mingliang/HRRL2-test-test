@@ -1,25 +1,23 @@
 --- a/env.py
 +++ b/env.py
-@@ -968,17 +968,8 @@
-         # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)
-         # Reward progress toward intermediate waypoints to encourage exploration
+@@ -976,14 +976,20 @@
+         # 7. Curriculum subgoal reward - encourage progressive improvement
          subgoal_reward = 0.0
--        # Initialize subgoal tracking if not present
--        if not hasattr(self, 'prev_subgoal_error'):
--            self.prev_subgoal_error = current_error
--        # Reward progress toward current subgoal with adaptive scaling
--        subgoal_progress = self.prev_subgoal_error - current_error
--        # Adaptive scaling: reduce subgoal weight when close to target to prevent reward hacking
--        # and increase when far to encourage exploration
--        if current_error > 0.1:
--            subgoal_weight = 0.5  # Stronger encouragement for exploration when far
--        else:
--            subgoal_weight = 0.1  # Weaker when close to prevent gaming
--        subgoal_reward = subgoal_weight * subgoal_progress
--        self.prev_subgoal_error = current_error
--        self.prev_subgoal_error = current_error
-+        # Simple progress reward toward target
-+        if hasattr(self, 'prev_subgoal_error'):
-+            subgoal_progress = self.prev_subgoal_error - current_error
-+            subgoal_reward = 0.3 * subgoal_progress
-+        self.prev_subgoal_error = current_error
+         if hasattr(self, 'prev_error') and self.prev_error is not None:
+             # Reward for reducing error toward subgoal thresholds
+             error_reduction = self.prev_error - current_error
+             if error_reduction > 0:
+                 # Stage-based weighting with safety gating
+                 if current_error < 0.005:
+                     stage_weight = 0.3  # High-precision stage
++                    # Bonus for reaching high-precision stage
++                    if self.prev_error >= 0.005:
++                        subgoal_reward += 0.5  # Stage completion bonus
+                 elif current_error < 0.02:
+                     stage_weight = 0.2  # Medium-precision stage
++                    # Bonus for reaching medium-precision stage
++                    if self.prev_error >= 0.02:
++                        subgoal_reward += 0.3  # Stage completion bonus
+                 else:
+                     stage_weight = 0.1  # Coarse stage
+                 subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
