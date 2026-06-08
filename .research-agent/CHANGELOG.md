@@ -10727,3 +10727,31 @@ g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T19:20:23.448577+00:00] v0699 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c057`
+**Description:** Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more sensitive at high velocities (rationale: The current reward function already tracks error well (lateral_error: 0.0041), but adding a stability bonus encourages the agent to maintain smooth control when near the target. This addresses the research idea of preventing reward hacking by ensuring the agent doesn't just minimize error through jerky movements. The bonus is gated to only apply when error is small (<0.01) and angular velocity is low (<0.1), preventing exploitation. This should improve completion_rate by encouraging more stable tracking behavior.)
+
+### Reward Formula / Change
+```
+Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more sensitive at high velocities (rationale: The current reward function already tracks error well (lateral_error: 0.0041), but adding a stability bonus encourages the agent to maintain smooth control when near the target. This addresses the research idea of preventing reward hacking by ensuring the agent doesn't just minimize error through jerky movements. The bonus is gated to only apply when error is small (<0.01) and angular velocity is low (<0.1), preventing exploitation. This should improve completion_rate by encouraging more stable tracking behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 988.1264
+- **lateral_error:** 0.0041
+
+### Source Methods
+g_llm_reward_generation_openreview_obpqdcwlfd, g_llm_reward_generation_openreview_tdfrn1tbgh
+
+---
+

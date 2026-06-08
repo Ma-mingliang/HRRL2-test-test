@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c044",
+    "candidate_id": "reward_c057",
     "optimizer": "reward",
-    "description": "Added a curriculum stage progression system that tracks the agent's current stage and provides stage-specific rewards for achieving subgoals, with safety gating to prevent reward hacking. (rationale: The current implementation already has a curriculum subgoal reward, but it lacks explicit stage tracking. By adding a persistent stage variable (self.current_stage), we create a clearer curriculum progression system. This allows the agent to understand which precision level it's currently operating at and provides more consistent stage-based rewards. The modification maintains the same safety gating through error thresholds but makes the curriculum progression more explicit and trackable, which should improve learning stability and help the agent progress through precision levels more systematically.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -976,15 +976,21 @@\n         # 7. Curriculum subgoal reward - encourage progressive improvement\n         subgoal_reward = 0.0\n         if hasattr(self, 'prev_error') and self.prev_error is not None:\n-            # Reward for reducing error toward subgoal thresholds\n-            error_reduction = self.prev_error - current_error\n-            if error_reduction > 0:\n-                # Stage-based weighting with safety gating\n-                if current_error < 0.005:\n-  ",
-    "source_idea": "{\"source_method_ids\": [\"c_curriculum_subgoal_reward_openreview_r7ppkxmovk\", \"c_curriculum_subgoal_reward_arxiv_2104_06410\"], \"source_categories\": [\"C_curriculum_subgoal_reward\"], \"source_papers\": [\"openreview:r7PpkXMoVk\", \"arxiv:2104.06410\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more sensitive at high velocities (rationale: The current reward function already tracks error well (lateral_error: 0.0041), but adding a stability bonus encourages the agent to maintain smooth control when near the target. This addresses the research idea of preventing reward hacking by ensuring the agent doesn't just minimize error through jerky movements. The bonus is gated to only apply when error is small (<0.01) and angular velocity is low (<0.1), preventing exploitation. This should improve completion_rate by encouraging more stable tracking behavior.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -959,4 +959,9 @@\n         # 3. 平顺性惩罚\n-        smoothness_penalty = -0.05 * angular_velocity\n+        smoothness_penalty = -0.05 * angular_velocity\n+        \n+        # 3.1 Stability bonus for maintaining low angular velocity when error is small\n+        stability_bonus = 0.0\n+        if current_error < 0.01 and angular_velocity < 0.1:\n+            stability_bonus = 0.2 * (0.1 - angular_velocity) / 0.1\n         \n         gamma = 0.99",
+    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_obpqdcwlfd\", \"g_llm_reward_generation_openreview_tdfrn1tbgh\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:OBpQdCWLfd\", \"openreview:TDfrN1TbGH\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T17:53:48.591173+00:00"
+    "timestamp": "2026-06-08T19:20:23.444775+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 129,
-    "full_evals_run": 122
+    "candidates_proposed": 130,
+    "full_evals_run": 123
   },
   "stop_reason": null,
   "progress": null,
@@ -745,6 +745,10 @@
     {
       "candidate_id": "reward_c057",
       "applied_at": "2026-06-08T19:14:05.390080+00:00"
+    },
+    {
+      "candidate_id": "reward_c058",
+      "applied_at": "2026-06-08T19:20:38.433959+00:00"
     }
   ],
   "baseline_fair_eval": {

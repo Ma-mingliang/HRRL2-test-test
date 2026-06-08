@@ -959,10 +959,10 @@ class Attitude_control_stage1(gym.Env):
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
-        # 3.1 Stability bonus for maintaining low angular velocity when error is small
+        # 3.1 Stability bonus for low angular velocity when error is small
         stability_bonus = 0.0
         if current_error < 0.01 and angular_velocity < 0.1:
-            stability_bonus = 0.2 * (0.1 - angular_velocity) / 0.1
+            stability_bonus = 0.1 * (0.1 - angular_velocity) / 0.1
         
         gamma = 0.99
         potential_current = -current_error
