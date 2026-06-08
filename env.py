@@ -976,6 +976,19 @@ class Attitude_control_stage1(gym.Env):
         # 7. Curriculum subgoal reward - encourage progressive improvement
         subgoal_reward = 0.0
         if hasattr(self, 'prev_error') and self.prev_error is not None:
+            # 8. Learned preference reward (H_learned_preference_reward)
+            # Simple proxy: reward consistency based on recent performance
+            if not hasattr(self, 'reward_history'):
+                self.reward_history = []
+            self.reward_history.append(reward)
+            if len(self.reward_history) > 10:
+                self.reward_history.pop(0)
+            avg_reward = np.mean(self.reward_history) if self.reward_history else 0
+            # Preference signal: reward consistency with safety gating
+            consistency_bonus = 0.1 * max(0, avg_reward - reward) if avg_reward > reward else 0
+            # Safety gating: cap bonus to prevent reward hacking
+            consistency_bonus = min(consistency_bonus, 0.5)
+            reward += consistency_bonus
             # Reward for reducing error toward subgoal thresholds
             error_reduction = self.prev_error - current_error
             if error_reduction > 0:
