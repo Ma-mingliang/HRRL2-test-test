@@ -961,12 +961,13 @@ class Attitude_control_stage1(gym.Env):
         
         gamma = 0.99
         # Adaptive weighting for improvement reward based on error magnitude
-        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-10 * current_error))
-        improvement_weight = min(improvement_weight, 3.0)
+        # Higher weight when error is large to encourage faster convergence
+        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-20 * current_error))
+        improvement_weight = min(improvement_weight, 3.0)  # Safety cap
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
         improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
-
+        
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         

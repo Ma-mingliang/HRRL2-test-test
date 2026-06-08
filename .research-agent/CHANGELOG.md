@@ -6963,3 +6963,93 @@ d_adaptive_dynamic_reward_openreview_1egvvwfsdd, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T10:23:01.907517+00:00] v0623 - ✗ REJECTED
+
+**Candidate ID:** `reward_c004`
+**Description:** Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating to prevent reward hacking. (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases with error magnitude, we prioritize error reduction more strongly when the system is far from the target (large errors), while maintaining gentler corrections near the target (small errors). This implements the D_adaptive_dynamic_reward research idea with safety gating (min/max bounds) to prevent reward hacking. The exponential schedule ensures smooth transitions between weight levels. This should improve tracking performance by providing stronger learning signals when errors are large, potentially reducing lateral_error further while maintaining the high completion_rate.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating to prevent reward hacking. (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases with error magnitude, we prioritize error reduction more strongly when the system is far from the target (large errors), while maintaining gentler corrections near the target (small errors). This implements the D_adaptive_dynamic_reward research idea with safety gating (min/max bounds) to prevent reward hacking. The exponential schedule ensures smooth transitions between weight levels. This should improve tracking performance by providing stronger learning signals when errors are large, potentially reducing lateral_error further while maintaining the high completion_rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 952.1674
+- **lateral_error:** 0.0063
+
+### Rejection Reason
+Score -0.0982 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_1egvvwfsdd, d_adaptive_dynamic_reward_openreview_ed1vrqpfua
+
+---
+
+## [2026-06-08T10:23:09.498409+00:00] v0623 - ✗ REJECTED
+
+**Candidate ID:** `reward_c009`
+**Description:** Added adaptive weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward concept from research ideas (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are larger, we encourage more aggressive error reduction during early training or when errors are significant, while maintaining stability when errors are small. This aligns with the D_adaptive_dynamic_reward concept and should help reduce the lateral error (currently 0.0041) more efficiently while maintaining the high completion rate.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward concept from research ideas (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are larger, we encourage more aggressive error reduction during early training or when errors are significant, while maintaining stability when errors are small. This aligns with the D_adaptive_dynamic_reward concept and should help reduce the lateral error (currently 0.0041) more efficiently while maintaining the high completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 897.0725
+- **lateral_error:** 0.0076
+
+### Rejection Reason
+Score -0.1852 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_1egvvwfsdd, d_adaptive_dynamic_reward_openreview_ed1vrqpfua
+
+---
+
+## [2026-06-08T10:23:30.878277+00:00] v0624 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c003`
+**Description:** Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward idea for the improvement term (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are larger, we encourage more aggressive error reduction during early training when errors are high, while maintaining gentler corrections during fine-tuning. This aligns with the D_adaptive_dynamic_reward research idea and should help reduce the lateral error (currently 0.0041) by providing stronger incentives for improvement when needed, without destabilizing the system during precision phases.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward idea for the improvement term (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are larger, we encourage more aggressive error reduction during early training when errors are high, while maintaining gentler corrections during fine-tuning. This aligns with the D_adaptive_dynamic_reward research idea and should help reduce the lateral error (currently 0.0041) by providing stronger incentives for improvement when needed, without destabilizing the system during precision phases.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 983.3706
+- **lateral_error:** 0.0035
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_1egvvwfsdd, d_adaptive_dynamic_reward_openreview_ed1vrqpfua
+
+---
+

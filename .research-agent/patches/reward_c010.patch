@@ -1,17 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,4 +960,11 @@
+@@ -962,4 +962,8 @@
          gamma = 0.99
 -        potential_current = -current_error
 -        potential_last = -abs(state_last_raw[0])
 -        improvement_reward = gamma * potential_current - potential_last
-+        # Adaptive gamma based on error magnitude
-+        if current_error > 0.1:
-+            adaptive_gamma = 0.95  # Less discounting for large errors
-+        elif current_error > 0.02:
-+            adaptive_gamma = 0.98  # Moderate discounting
-+        else:
-+            adaptive_gamma = 0.99  # Standard discounting for small errors
++        # Adaptive weighting for improvement reward based on error magnitude
++        # Higher weight when error is large to encourage faster convergence
++        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-5 * current_error))
++        improvement_weight = min(improvement_weight, 3.0)  # Safety cap
 +        potential_current = -current_error
 +        potential_last = -abs(state_last_raw[0])
-+        improvement_reward = adaptive_gamma * potential_current - potential_last
++        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)

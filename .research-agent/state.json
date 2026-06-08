@@ -38,23 +38,7 @@
     "pre_run_stash": null,
     "dirty_worktree_policy": "abort"
   },
-  "current_best": {
-    "candidate_id": "reward_c002",
-    "optimizer": "reward",
-    "description": "Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward idea for the improvement term (rationale: The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but the improvement reward currently uses a fixed weight. By adding adaptive weighting to the improvement term, we can encourage faster convergence when errors are large while maintaining precision when errors are small. This implements the D_adaptive_dynamic_reward idea specifically for the improvement component, which should help the agent learn more efficiently during early training while preserving high-precision performance in later stages. The exponential schedule ensures smooth transitions and the safety cap prevents reward hacking.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,4 +962,8 @@\n         gamma = 0.99\n-        potential_current = -current_error\n-        potential_last = -abs(state_last_raw[0])\n-        improvement_reward = gamma * potential_current - potential_last\n+        # Adaptive weighting for improvement reward based on error magnitude\n+        # Higher weight when error is large to encourage faster convergence\n+        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-10 * current_error))\n+        improvement_weight = mi",
-    "source_idea": "{\"source_method_ids\": [\"d_adaptive_dynamic_reward_openreview_pt1sssy1ta\", \"d_adaptive_dynamic_reward_openreview_s7rdnnujy6\"], \"source_categories\": [\"D_adaptive_dynamic_reward\"], \"source_papers\": [\"openreview:pT1SSsY1Ta\", \"openreview:s7RDnNUJy6\"], \"source_idea\": \"pool_methods\"}",
-    "status": "rejected",
-    "full_eval_result": {
-      "metrics": {},
-      "failed": true,
-      "seeds": [
-        42
-      ]
-    },
-    "rejection_reason": null,
-    "timestamp": "2026-06-08T10:12:45.579254+00:00"
-  },
+  "current_best": null,
   "candidate_queue": [],
   "needs_more_evidence": [],
   "literature": {
@@ -471,16 +455,16 @@
       "applied_at": "2026-06-08T09:54:42.628035+00:00"
     },
     {
-      "candidate_id": "reward_c001",
-      "applied_at": "2026-06-08T10:01:12.937346+00:00"
+      "candidate_id": "reward_c011",
+      "applied_at": "2026-06-08T10:01:33.545675+00:00"
     },
     {
-      "candidate_id": "reward_c002",
-      "applied_at": "2026-06-08T10:05:09.184631+00:00"
+      "candidate_id": "reward_c012",
+      "applied_at": "2026-06-08T10:08:54.931751+00:00"
     },
     {
-      "candidate_id": "reward_c003",
-      "applied_at": "2026-06-08T10:13:00.580139+00:00"
+      "candidate_id": "reward_c013",
+      "applied_at": "2026-06-08T10:18:05.622111+00:00"
     }
   ],
   "baseline_fair_eval": {
