@@ -953,12 +953,9 @@ class Attitude_control_stage1(gym.Env):
         
         # 4. 改进奖励
         gamma = 0.99
-        # Adaptive gamma based on error magnitude
-        adaptive_gamma = gamma if current_error < 0.01 else 0.95
-        potential_current = -current_error**0.8  # Sublinear scaling for large errors
-        potential_last = -abs(state_last_raw[0])**0.8
-        improvement_reward = adaptive_gamma * potential_current - potential_last
-        improvement_reward *= 2.0  # Scale up improvement signal
+        error_last = abs(state_last_raw[0])
+        error_improvement = error_last - current_error  # Positive when error decreases
+        improvement_reward = gamma * error_improvement
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
