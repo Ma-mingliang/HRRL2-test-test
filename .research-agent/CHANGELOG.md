@@ -9686,3 +9686,34 @@ e_hierarchical_reward_openreview_dpkak1oh3x, e_hierarchical_reward_openreview_a3
 
 ---
 
+## [2026-06-08T15:29:06.017663+00:00] v0664 - ✗ REJECTED
+
+**Candidate ID:** `reward_c022`
+**Description:** Added hierarchical reward structure separating goal progress (manager) from low-level tracking (worker) with safety gating (rationale: This implements the hierarchical reward structure from research ideas, separating goal progress (manager) from low-level control (worker). The manager reward focuses on high-level objectives (subgoal progress and precision bonuses), while the worker reward handles tracking and smoothness. The safety gate prevents reward hacking by heavily penalizing large errors. This structure should improve goal-directed behavior while maintaining stable control, potentially reducing the lateral error (currently 0.0041) by encouraging more systematic progress toward precision targets.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure separating goal progress (manager) from low-level tracking (worker) with safety gating (rationale: This implements the hierarchical reward structure from research ideas, separating goal progress (manager) from low-level control (worker). The manager reward focuses on high-level objectives (subgoal progress and precision bonuses), while the worker reward handles tracking and smoothness. The safety gate prevents reward hacking by heavily penalizing large errors. This structure should improve goal-directed behavior while maintaining stable control, potentially reducing the lateral error (currently 0.0041) by encouraging more systematic progress toward precision targets.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 885.8395
+- **lateral_error:** 0.0079
+
+### Rejection Reason
+Score -0.2047 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_openreview_umvicbadkk, e_hierarchical_reward_openreview_3napba3fn3
+
+---
+
