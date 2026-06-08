@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c002",
+    "candidate_id": "reward_c003",
     "optimizer": "reward",
-    "description": "Enhanced the potential-based reward shaping term with adaptive gamma scaling based on error magnitude to improve convergence stability (rationale: The current potential-based reward uses a fixed gamma=0.99, which may be too conservative for large errors. By adapting gamma based on error magnitude (0.95 for errors > 0.02, 0.99 otherwise), we encourage faster error reduction during coarse tracking while maintaining stability during fine tracking. This aligns with the research idea's emphasis on using potential differences while preventing reward hacking through adaptive scaling. The change is minimal (5 lines added) and preserves the potential-based structure while improving convergence behavior.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,4 +962,9 @@\n         gamma = 0.99\n-        potential_current = -current_error\n-        potential_last = -abs(state_last_raw[0])\n-        improvement_reward = gamma * potential_current - potential_last\n+        # Adaptive gamma: higher discount for larger errors to encourage faster reduction\n+        if current_error > 0.02:\n+            adaptive_gamma = 0.95  # More aggressive for coarse tracking\n+        else:\n+            adaptive_gamma = 0.99  # Standard for ",
-    "source_idea": "{\"source_method_ids\": [\"a_potential_based_reward_openreview_tjhhb6cscw\", \"a_potential_based_reward_openreview_hz9gu1io12\"], \"source_categories\": [\"A_potential_based_reward\"], \"source_papers\": [\"openreview:TJhHb6CscW\", \"openreview:hZ9gu1iO12\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Enhanced the potential-based reward shaping term with adaptive scaling based on error magnitude to better encourage error reduction while maintaining stability (rationale: The current potential-based reward uses a simple linear potential function. By scaling the potential with error magnitude, we create stronger incentives for reducing large errors while maintaining stability for small errors. This adaptive scaling encourages faster convergence when far from the target while preserving fine-grained control near the goal. The scaling is capped at 0.1 error to prevent reward hacking and maintain safety. This modification aligns with the research idea of using potential differences as shaping terms while adding adaptive behavior based on current performance.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,4 +962,9 @@\n         gamma = 0.99\n-        potential_current = -current_error\n-        potential_last = -abs(state_last_raw[0])\n-        improvement_reward = gamma * potential_current - potential_last\n+        # Adaptive potential scaling: stronger incentive for larger errors\n+        # Implements A_potential_based_reward with safety gating\n+        base_potential = -current_error\n+        # Scale potential by error magnitude to encourage faster reduction of lar",
+    "source_idea": "{\"source_method_ids\": [\"a_potential_based_reward_openreview_ubnujziy2o\", \"a_potential_based_reward_openreview_v3kavlfvrd\"], \"source_categories\": [\"A_potential_based_reward\"], \"source_papers\": [\"openreview:ubnUjzIy2O\", \"openreview:v3kaVLFvRD\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T13:47:02.669029+00:00"
+    "timestamp": "2026-06-08T13:54:30.857822+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 75,
-    "full_evals_run": 69
+    "candidates_proposed": 76,
+    "full_evals_run": 70
   },
   "stop_reason": null,
   "progress": null,
@@ -533,6 +533,10 @@
     {
       "candidate_id": "reward_c003",
       "applied_at": "2026-06-08T13:47:17.660547+00:00"
+    },
+    {
+      "candidate_id": "reward_c004",
+      "applied_at": "2026-06-08T13:54:46.220166+00:00"
     }
   ],
   "baseline_fair_eval": {

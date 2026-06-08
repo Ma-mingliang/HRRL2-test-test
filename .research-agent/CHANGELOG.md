@@ -9158,3 +9158,31 @@ a_potential_based_reward_openreview_tjhhb6cscw, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-08T13:54:30.861001+00:00] v0645 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c003`
+**Description:** Enhanced the potential-based reward shaping term with adaptive scaling based on error magnitude to better encourage error reduction while maintaining stability (rationale: The current potential-based reward uses a simple linear potential function. By scaling the potential with error magnitude, we create stronger incentives for reducing large errors while maintaining stability for small errors. This adaptive scaling encourages faster convergence when far from the target while preserving fine-grained control near the goal. The scaling is capped at 0.1 error to prevent reward hacking and maintain safety. This modification aligns with the research idea of using potential differences as shaping terms while adding adaptive behavior based on current performance.)
+
+### Reward Formula / Change
+```
+Enhanced the potential-based reward shaping term with adaptive scaling based on error magnitude to better encourage error reduction while maintaining stability (rationale: The current potential-based reward uses a simple linear potential function. By scaling the potential with error magnitude, we create stronger incentives for reducing large errors while maintaining stability for small errors. This adaptive scaling encourages faster convergence when far from the target while preserving fine-grained control near the goal. The scaling is capped at 0.1 error to prevent reward hacking and maintain safety. This modification aligns with the research idea of using potential differences as shaping terms while adding adaptive behavior based on current performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 993.1152
+- **lateral_error:** 0.0038
+
+### Source Methods
+a_potential_based_reward_openreview_ubnujziy2o, a_potential_based_reward_openreview_v3kavlfvrd
+
+---
+

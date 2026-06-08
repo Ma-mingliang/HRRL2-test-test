@@ -960,14 +960,19 @@ class Attitude_control_stage1(gym.Env):
         smoothness_penalty = -0.05 * angular_velocity
         
         gamma = 0.99
-        # Adaptive potential scaling: stronger incentive for larger errors
-        # Implements A_potential_based_reward with safety gating
-        base_potential = -current_error
-        # Scale potential by error magnitude to encourage faster reduction of large errors
-        error_scale = 1.0 + 2.0 * min(current_error, 0.1)  # Cap scaling at 0.1 error
-        potential_current = base_potential * error_scale
-        potential_last = -abs(state_last_raw[0]) * (1.0 + 2.0 * min(abs(state_last_raw[0]), 0.1))
+        potential_current = -current_error
+        potential_last = -abs(state_last_raw[0])
         improvement_reward = gamma * potential_current - potential_last
+        
+        # 4. Potential-based reward shaping for consistent improvement
+        # Encourages sustained error reduction rather than just immediate improvement
+        if hasattr(self, 'prev_improvement') and self.prev_improvement is not None:
+            # Reward for maintaining positive improvement trend
+            if improvement_reward > 0 and self.prev_improvement > 0:
+                improvement_reward *= 1.2  # 20% bonus for consistent improvement
+            # Safety gating: cap improvement reward to prevent exploitation
+            improvement_reward = min(improvement_reward, 0.5)
+        self.prev_improvement = improvement_reward
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)

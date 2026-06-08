@@ -1,14 +1,19 @@
 --- a/env.py
 +++ b/env.py
-@@ -962,4 +962,8 @@
+@@ -962,6 +962,16 @@
          gamma = 0.99
--        potential_current = -current_error
--        potential_last = -abs(state_last_raw[0])
--        improvement_reward = gamma * potential_current - potential_last
-+        # Adaptive weighting for improvement reward based on error magnitude
-+        # Higher weight when error is large to encourage faster convergence
-+        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-20 * current_error))
-+        improvement_weight = min(improvement_weight, 3.0)  # Safety cap
-+        potential_current = -current_error
-+        potential_last = -abs(state_last_raw[0])
-+        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
+         potential_current = -current_error
+         potential_last = -abs(state_last_raw[0])
+         improvement_reward = gamma * potential_current - potential_last
++        
++        # 4. Potential-based reward shaping for consistent improvement
++        # Encourages sustained error reduction rather than just immediate improvement
++        if hasattr(self, 'prev_improvement') and self.prev_improvement is not None:
++            # Reward for maintaining positive improvement trend
++            if improvement_reward > 0 and self.prev_improvement > 0:
++                improvement_reward *= 1.2  # 20% bonus for consistent improvement
++            # Safety gating: cap improvement reward to prevent exploitation
++            improvement_reward = min(improvement_reward, 0.5)
++        self.prev_improvement = improvement_reward
+         
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
