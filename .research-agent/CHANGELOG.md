@@ -5708,3 +5708,29 @@ e_hierarchical_reward_openreview_dpkak1oh3x, e_hierarchical_reward_openreview_a3
 
 ---
 
+## [2026-06-08T05:30:54.206853+00:00] v0587 - ✗ REJECTED
+
+**Candidate ID:** `reward_c022`
+**Description:** Added hierarchical reward structure separating goal progress (high-level) from tracking control (low-level) with safety gating (rationale: This modification implements hierarchical reward structure as suggested in research ideas. It separates high-level goal progress (manager_reward) from low-level tracking control (worker_reward), adds safety gating to prevent unsafe behavior, and maintains the existing control cost penalties. The goal progress reward encourages the agent to reach the target state, while the tracking reward maintains precise control. Safety gating reduces rewards when error becomes too large, preventing reward hacking. This should improve both goal completion and tracking precision while maintaining safe operation.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure separating goal progress (high-level) from tracking control (low-level) with safety gating (rationale: This modification implements hierarchical reward structure as suggested in research ideas. It separates high-level goal progress (manager_reward) from low-level tracking control (worker_reward), adds safety gating to prevent unsafe behavior, and maintains the existing control cost penalties. The goal progress reward encourages the agent to reach the target state, while the tracking reward maintains precise control. Safety gating reduces rewards when error becomes too large, preventing reward hacking. This should improve both goal completion and tracking precision while maintaining safe operation.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_openreview_umvicbadkk, e_hierarchical_reward_openreview_3napba3fn3
+
+---
+

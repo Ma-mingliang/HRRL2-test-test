@@ -935,46 +935,32 @@ class Attitude_control_stage1(gym.Env):
         current_error = abs(state_raw[0])
         angular_velocity = abs(state_raw[2])
         
-        # 1. 高层目标进度奖励 (manager_reward)
+        # 1. 高层目标奖励 (Manager Reward)
         goal_progress_reward = 0.0
-        if current_error < 0.01:  # 目标达成阈值
-            goal_progress_reward = 2.0  # 高奖励鼓励目标完成
-        elif current_error < 0.05:  # 接近目标
-            goal_progress_reward = 1.0 * (0.05 - current_error) / 0.04
+        if current_error < 0.001:  # 高精度目标达成
+            goal_progress_reward = 2.0
+        elif current_error < 0.005:  # 良好目标进度
+            goal_progress_reward = 1.0
+        elif current_error < 0.01:  # 基本目标进度
+            goal_progress_reward = 0.5
         
-        # 2. 低层跟踪控制奖励 (worker_reward)
+        # 2. 低层跟踪奖励 (Worker Reward)
         max_penalty = 2.0
         tracking_reward = -min(current_error**2, max_penalty)
         
-        # 3. 高精度奖励
-        bonus_reward = 0.0
-        if current_error < 0.005:
-            bonus_reward = 1.0
-        elif current_error < 0.01:
-            bonus_reward = 0.5
-        elif current_error < 0.02:
-            bonus_reward = 0.2
-        
-        # 4. 平顺性惩罚
+        # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
-        # 5. 改进奖励
+        # 4. 改进奖励
         gamma = 0.99
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
         improvement_reward = gamma * potential_current - potential_last
         
-        # 6. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+        # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
-        # 7. 安全门控：当误差过大时降低总奖励
-        safety_gate = 1.0
-        if current_error > 0.1:  # 安全阈值
-            safety_gate = max(0.1, 1.0 - (current_error - 0.1) * 2.0)
-        
-        # 分层奖励组合：高层目标 + 低层控制 - 控制成本
-        reward = (goal_progress_reward + tracking_reward + bonus_reward + 
-                 smoothness_penalty + improvement_reward + action_penalty) * safety_gate
+        reward = goal_progress_reward + tracking_reward + smoothness_penalty + improvement_reward + action_penalty
         
         return reward
 
