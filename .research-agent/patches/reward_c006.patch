@@ -1,17 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,5 +960,12 @@
-         
+@@ -962,4 +962,8 @@
          gamma = 0.99
 -        potential_current = -current_error
 -        potential_last = -abs(state_last_raw[0])
-+        # Adaptive weighting for improvement reward based on error magnitude
-+        if current_error > 0.1:
-+            improvement_weight = 2.0  # Stronger improvement signal for large errors
-+        elif current_error > 0.02:
-+            improvement_weight = 1.5  # Moderate improvement signal
-+        else:
-+            improvement_weight = 1.0  # Standard improvement signal
-+        potential_current = -improvement_weight * current_error
-+        potential_last = -improvement_weight * abs(state_last_raw[0])
-         improvement_reward = gamma * potential_current - potential_last
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive dynamic weighting for improvement reward
++        # Weight increases with error magnitude to prioritize error reduction when error is large
++        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-10 * current_error))
++        improvement_weight = min(improvement_weight, 3.0)  # Safety gating
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
