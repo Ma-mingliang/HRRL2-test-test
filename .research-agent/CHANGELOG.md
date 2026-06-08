@@ -6046,3 +6046,29 @@ f_residual_aware_reward_openreview_dzmd1pbtc5, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-08T08:15:39.343790+00:00] v0601 - ✗ REJECTED
+
+**Candidate ID:** `reward_c002`
+**Description:** Added residual action penalty to reward function based on research idea F_residual_aware_reward (rationale: The current residual penalty only penalizes change in residual action (roughness) but not its magnitude. Adding a term to penalize ||u_residual||^2 as suggested in the research idea will encourage smaller residual corrections, which should improve action smoothness and reduce potential reward hacking. The combined penalty (magnitude + roughness) aligns with the formula: reward -= lambda_res * ||u_residual||^2 + lambda_smooth * norm(u_res - prev_u_res). This should improve action_smoothness metric while maintaining tracking performance.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to reward function based on research idea F_residual_aware_reward (rationale: The current residual penalty only penalizes change in residual action (roughness) but not its magnitude. Adding a term to penalize ||u_residual||^2 as suggested in the research idea will encourage smaller residual corrections, which should improve action smoothness and reduce potential reward hacking. The combined penalty (magnitude + roughness) aligns with the formula: reward -= lambda_res * ||u_residual||^2 + lambda_smooth * norm(u_res - prev_u_res). This should improve action_smoothness metric while maintaining tracking performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_tcz7uwkrtt, f_residual_aware_reward_openreview_vk9j25hi1o
+
+---
+
