@@ -9214,3 +9214,34 @@ a_potential_based_reward_arxiv_2502_01307, a_potential_based_reward_openreview_a
 
 ---
 
+## [2026-06-08T14:11:58.588263+00:00] v0647 - ✗ REJECTED
+
+**Candidate ID:** `reward_c005`
+**Description:** Enhanced the potential-based reward shaping term with adaptive gamma scaling based on error magnitude to better preserve policy incentives while improving tracking performance (rationale: The current potential-based reward uses a fixed gamma=0.99, which may not sufficiently incentivize rapid error reduction when errors are large. By adaptively scaling gamma based on error magnitude (from 0.99 to 1.0), we create stronger incentives for error reduction when tracking is poor, while maintaining the standard discounting when near target. This should improve convergence speed and final tracking accuracy (lateral_error metric) while preserving the theoretical guarantees of potential-based shaping. The safety cap prevents gamma from exceeding 1.0, avoiding reward hacking.)
+
+### Reward Formula / Change
+```
+Enhanced the potential-based reward shaping term with adaptive gamma scaling based on error magnitude to better preserve policy incentives while improving tracking performance (rationale: The current potential-based reward uses a fixed gamma=0.99, which may not sufficiently incentivize rapid error reduction when errors are large. By adaptively scaling gamma based on error magnitude (from 0.99 to 1.0), we create stronger incentives for error reduction when tracking is poor, while maintaining the standard discounting when near target. This should improve convergence speed and final tracking accuracy (lateral_error metric) while preserving the theoretical guarantees of potential-based shaping. The safety cap prevents gamma from exceeding 1.0, avoiding reward hacking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 827.4896
+- **lateral_error:** 0.0103
+
+### Rejection Reason
+Score -0.3469 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_hu7hujemiw, a_potential_based_reward_openreview_lxfl2g3yxb
+
+---
+
