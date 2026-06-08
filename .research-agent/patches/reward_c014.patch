@@ -1,16 +1,24 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,10 +960,12 @@
-         # 8. Residual action penalty (from research idea F_residual_aware_reward)
-         # Penalize large residual actions to encourage smooth corrections
-         residual_penalty = 0.0
-         residual_smoothness_penalty = 0.0
-         if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
--            residual_penalty = -0.1 * np.sum(self.last_residual_action**2)
-+            # Scale penalty based on tracking error - more penalty when error is large
-+            error_scale = 1.0 + 2.0 * min(current_error, 1.0)
-+            residual_penalty = -0.2 * error_scale * np.sum(self.last_residual_action**2)
-             # Add smoothness penalty for residual action changes
-             if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
-                 residual_smoothness_penalty = -0.05 * np.sum((self.last_residual_action - self.prev_residual_action)**2)
-             self.prev_residual_action = self.last_residual_action.copy()
+@@ -951,7 +951,12 @@
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
+         
+-        # 4. 改进奖励
++        # 4. 安全约束惩罚 - 防止过度振荡
++        safety_penalty = 0.0
++        if angular_velocity > 2.0:  # 超过安全阈值
++            safety_penalty = -0.5 * (angular_velocity - 2.0)  # 线性惩罚
++        
++        # 5. 改进奖励
+         gamma = 0.99
+         potential_current = -current_error
+         potential_last = -abs(state_last_raw[0])
+@@ -960,6 +965,6 @@
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+         
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty
+         
+         return reward
