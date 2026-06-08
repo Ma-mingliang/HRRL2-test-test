@@ -5370,3 +5370,29 @@ a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_2
 
 ---
 
+## [2026-06-08T05:05:15.281935+00:00] v0574 - ✗ REJECTED
+
+**Candidate ID:** `reward_c009`
+**Description:** Enhanced potential-based reward shaping with adaptive scaling and stability penalty (rationale: The current potential-based reward uses uniform scaling which may not sufficiently incentivize fine-grained tracking improvements. By introducing adaptive scaling (higher weight for small errors) and a stability bonus for consistent improvements, the agent receives stronger gradient signals for precision tracking while maintaining the theoretical guarantees of potential-based shaping. This should reduce lateral error from 0.0041 while preserving the 100% completion rate, as the modifications only enhance existing reward components without introducing new constraints.)
+
+### Reward Formula / Change
+```
+Enhanced potential-based reward shaping with adaptive scaling and stability penalty (rationale: The current potential-based reward uses uniform scaling which may not sufficiently incentivize fine-grained tracking improvements. By introducing adaptive scaling (higher weight for small errors) and a stability bonus for consistent improvements, the agent receives stronger gradient signals for precision tracking while maintaining the theoretical guarantees of potential-based shaping. This should reduce lateral error from 0.0041 while preserving the 100% completion rate, as the modifications only enhance existing reward components without introducing new constraints.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2605_01787, a_potential_based_reward_openreview_0iouiel5nm
+
+---
+

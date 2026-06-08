@@ -1,13 +1,15 @@
 --- a/env.py
 +++ b/env.py
-@@ -940,5 +940,8 @@
-         # 2. Potential-based reward shaping (preserves optimal policy)
-         # Phi(s) = -k * |error|, so gamma*Phi(s') - Phi(s) = k*(|e_t| - gamma*|e_t+1|)
+@@ -954,4 +954,9 @@
          gamma = 0.99
--        k_phi = 2.0
--        potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
-+        # Adaptive scaling: increase shaping magnitude when error is large
-+        base_k_phi = 2.0
-+        error_scale = 1.0 + 2.0 * min(current_error, 1.0)  # Scale up to 3x when error > 0.5
-+        k_phi = base_k_phi * error_scale
-+        potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Improved potential-based shaping with better scaling
++        potential_current = -current_error**2
++        potential_last = -abs(state_last_raw[0])**2
++        improvement_reward = gamma * potential_current - potential_last
++        
++        # Stability bonus for low angular velocity when tracking well
++        if current_error < 0.01 and angular_velocity < 0.1:
++            improvement_reward += 0.1

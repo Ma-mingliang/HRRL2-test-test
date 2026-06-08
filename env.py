@@ -951,19 +951,16 @@ class Attitude_control_stage1(gym.Env):
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
-        # 4. 改进奖励
         gamma = 0.99
-        # Adaptive scaling based on error magnitude
-        if current_error < 0.01:
-            alpha = 3.0  # Higher weight for small errors
-        else:
-            alpha = 1.0  # Standard weight for larger errors
-        potential_current = -alpha * current_error
-        potential_last = -alpha * abs(state_last_raw[0])
+        # Improved potential-based shaping with better scaling
+        potential_current = -current_error**2
+        potential_last = -abs(state_last_raw[0])**2
         improvement_reward = gamma * potential_current - potential_last
-        # Stability bonus for consistent improvement
-        if improvement_reward > 0:
-            improvement_reward *= 1.2
+        
+        # Stability bonus for low angular velocity when tracking well
+        if current_error < 0.01 and angular_velocity < 0.1:
+            improvement_reward += 0.1
+        improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
