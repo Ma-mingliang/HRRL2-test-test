@@ -970,7 +970,10 @@ class Attitude_control_stage1(gym.Env):
         # 6. 残差动作惩罚（基于研究想法）
         residual_penalty = 0.0
         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
-            residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
+            # Penalize residual magnitude and roughness
+            residual_magnitude_penalty = -0.01 * target_handle_angle**2
+            residual_smoothness_penalty = -0.005 * (target_handle_angle - self.prev_residual)**2
+            residual_penalty = residual_magnitude_penalty + residual_smoothness_penalty
         self.prev_residual = target_handle_angle
         
         # 7. Curriculum subgoal reward - encourage progressive improvement
@@ -987,20 +990,9 @@ class Attitude_control_stage1(gym.Env):
                 else:
                     stage_weight = 0.1  # Coarse stage
                 subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
-        
-        # 8. Hierarchical reward: separate goal progress (manager) from tracking (worker)
-        # Goal progress reward encourages overall improvement direction
-        goal_progress_reward = 0.0
-        if hasattr(self, 'prev_error') and self.prev_error is not None:
-            if current_error < self.prev_error:
-                # Reward for moving toward zero error (goal)
-                goal_progress_reward = 0.1 * (self.prev_error - current_error) / (self.prev_error + 0.001)
-            # Safety gating: penalize if error increases significantly
-            elif current_error > self.prev_error * 1.5:
-                goal_progress_reward = -0.05
         self.prev_error = current_error
         
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward + goal_progress_reward
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
         
         return reward
     def reset(self, seed=None, options=None):

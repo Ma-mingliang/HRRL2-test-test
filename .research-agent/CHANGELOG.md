@@ -9858,3 +9858,34 @@ e_hierarchical_reward_arxiv_2603_16060, e_hierarchical_reward_arxiv_2604_10812
 
 ---
 
+## [2026-06-08T16:05:55.793739+00:00] v0670 - ✗ REJECTED
+
+**Candidate ID:** `reward_c028`
+**Description:** Added hierarchical reward structure separating goal progress (manager) from tracking precision (worker) with safety gating (rationale: This implements the hierarchical reward idea by adding a goal progress reward component that encourages overall error reduction direction (manager level) while maintaining the existing tracking precision rewards (worker level). The safety gating prevents reward hacking by penalizing significant error increases. This separation should improve learning stability by providing clearer signals at different abstraction levels, potentially improving the lateral error metric while maintaining completion rate.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure separating goal progress (manager) from tracking precision (worker) with safety gating (rationale: This implements the hierarchical reward idea by adding a goal progress reward component that encourages overall error reduction direction (manager level) while maintaining the existing tracking precision rewards (worker level). The safety gating prevents reward hacking by penalizing significant error increases. This separation should improve learning stability by providing clearer signals at different abstraction levels, potentially improving the lateral error metric while maintaining completion rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 986.8170
+- **lateral_error:** 0.0049
+
+### Rejection Reason
+Score -0.0150 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_openreview_a0cecoe9bp, e_hierarchical_reward_openreview_lz6dt5udzq
+
+---
+
