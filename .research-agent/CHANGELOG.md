@@ -6821,3 +6821,29 @@ d_adaptive_dynamic_reward_openreview_d3wjfs6z2k, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T10:08:41.511680+00:00] v0621 - ✗ REJECTED
+
+**Candidate ID:** `reward_c011`
+**Description:** Added adaptive weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward concept for the potential-based reward term (rationale: The current improvement reward uses a fixed weight of 1.0 for the potential-based reward. By adding adaptive weighting that increases when errors are larger, we encourage more aggressive error reduction during early training while maintaining stability during fine-tuning. This implements the D_adaptive_dynamic_reward concept specifically for the improvement reward component, which should help the agent converge faster to the high-precision bonus thresholds (<0.005, <0.01, <0.02) while avoiding reward hacking through the safety cap. The exponential schedule ensures smooth transitions between weight levels.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward concept for the potential-based reward term (rationale: The current improvement reward uses a fixed weight of 1.0 for the potential-based reward. By adding adaptive weighting that increases when errors are larger, we encourage more aggressive error reduction during early training while maintaining stability during fine-tuning. This implements the D_adaptive_dynamic_reward concept specifically for the improvement reward component, which should help the agent converge faster to the high-precision bonus thresholds (<0.005, <0.01, <0.02) while avoiding reward hacking through the safety cap. The exponential schedule ensures smooth transitions between weight levels.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_pt1sssy1ta, d_adaptive_dynamic_reward_openreview_s7rdnnujy6
+
+---
+
