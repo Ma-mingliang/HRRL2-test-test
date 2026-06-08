@@ -9603,3 +9603,29 @@ b_safety_constraint_reward_openreview_uqrs6vfcsd, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-08T15:14:48.607659+00:00] v0661 - ✗ REJECTED
+
+**Candidate ID:** `reward_c019`
+**Description:** Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows perfect completion rate (1.0) and low lateral error (0.0041), but the reward is very high (930.85) with zero standard deviation, suggesting potential reward hacking or insufficient safety constraints. Adding a safety penalty for excessive angular velocity (a common safety constraint in control systems) will: 1) Prevent unsafe oscillations that could destabilize the system, 2) Encourage smoother control actions, 3) Align with the B_safety_constraint_reward research idea by gating task reward with explicit safety penalties, 4) Potentially reduce reward variance by penalizing risky behaviors while maintaining task performance.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows perfect completion rate (1.0) and low lateral error (0.0041), but the reward is very high (930.85) with zero standard deviation, suggesting potential reward hacking or insufficient safety constraints. Adding a safety penalty for excessive angular velocity (a common safety constraint in control systems) will: 1) Prevent unsafe oscillations that could destabilize the system, 2) Encourage smoother control actions, 3) Align with the B_safety_constraint_reward research idea by gating task reward with explicit safety penalties, 4) Potentially reduce reward variance by penalizing risky behaviors while maintaining task performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_cawunem1je, b_safety_constraint_reward_openreview_pnhypbc4z7
+
+---
+
