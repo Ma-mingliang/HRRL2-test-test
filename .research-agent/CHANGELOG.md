@@ -10386,3 +10386,34 @@ c_curriculum_subgoal_reward_openreview_dhoxjoy1sp, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T18:07:04.478295+00:00] v0688 - ✗ REJECTED
+
+**Candidate ID:** `reward_c046`
+**Description:** Added adaptive dynamic weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current improvement reward uses a fixed gamma=0.99, which may not adapt well to different error magnitudes. By implementing adaptive dynamic weighting for the improvement reward component, we can increase the emphasis on improvement when errors are large (encouraging faster convergence) while maintaining stability when errors are small. This follows the D_adaptive_dynamic_reward research idea with safety gating (capping gamma_weight at max_gamma) to prevent reward hacking. The smooth exponential schedule ensures gradual transitions, and the modification is minimal (only 5 lines added) while targeting a specific component that directly influences learning dynamics.)
+
+### Reward Formula / Change
+```
+Added adaptive dynamic weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current improvement reward uses a fixed gamma=0.99, which may not adapt well to different error magnitudes. By implementing adaptive dynamic weighting for the improvement reward component, we can increase the emphasis on improvement when errors are large (encouraging faster convergence) while maintaining stability when errors are small. This follows the D_adaptive_dynamic_reward research idea with safety gating (capping gamma_weight at max_gamma) to prevent reward hacking. The smooth exponential schedule ensures gradual transitions, and the modification is minimal (only 5 lines added) while targeting a specific component that directly influences learning dynamics.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 965.0435
+- **lateral_error:** 0.0055
+
+### Rejection Reason
+Score -0.0536 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_6lm1jxxlxb, d_adaptive_dynamic_reward_openreview_mhratccbtk
+
+---
+
