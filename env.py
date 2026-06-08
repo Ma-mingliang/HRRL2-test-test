@@ -973,11 +973,11 @@ class Attitude_control_stage1(gym.Env):
             if error_reduction > 0:
                 # Stage-based weighting with safety gating
                 if current_error < 0.005:
-                    stage_weight = 0.5  # High-precision stage - stronger incentive for fine-tuning
+                    stage_weight = 0.5  # High-precision stage - stronger incentive
                 elif current_error < 0.02:
-                    stage_weight = 0.3  # Medium-precision stage - moderate incentive
+                    stage_weight = 0.3  # Medium-precision stage
                 else:
-                    stage_weight = 0.15  # Coarse stage - slight increase for initial progress
+                    stage_weight = 0.15  # Coarse stage - slightly increased
                 subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
