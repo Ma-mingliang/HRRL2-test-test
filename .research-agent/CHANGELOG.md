@@ -10187,3 +10187,31 @@ c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T17:19:37.401244+00:00] v0681 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c039`
+**Description:** Added curriculum stage progression tracking with explicit stage transitions and completion bonuses to better implement the C_curriculum_subgoal_reward research idea (rationale: The current curriculum subgoal reward only provides incremental progress rewards. Adding explicit stage completion bonuses (0.5 for high-precision, 0.3 for medium-precision) creates clearer milestones that encourage the agent to progress through curriculum stages. This should improve learning efficiency by providing stronger signals for stage transitions, which aligns with the C_curriculum_subgoal_reward research idea. The bonuses are one-time rewards that won't cause reward hacking since they're gated by stage thresholds and only awarded once per stage transition.)
+
+### Reward Formula / Change
+```
+Added curriculum stage progression tracking with explicit stage transitions and completion bonuses to better implement the C_curriculum_subgoal_reward research idea (rationale: The current curriculum subgoal reward only provides incremental progress rewards. Adding explicit stage completion bonuses (0.5 for high-precision, 0.3 for medium-precision) creates clearer milestones that encourage the agent to progress through curriculum stages. This should improve learning efficiency by providing stronger signals for stage transitions, which aligns with the C_curriculum_subgoal_reward research idea. The bonuses are one-time rewards that won't cause reward hacking since they're gated by stage thresholds and only awarded once per stage transition.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 988.1264
+- **lateral_error:** 0.0041
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_hz9gu1io12, c_curriculum_subgoal_reward_openreview_rgvqh3gjea
+
+---
+

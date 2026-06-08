@@ -1,11 +1,20 @@
 --- a/env.py
 +++ b/env.py
-@@ -943,4 +943,7 @@
-         # Adaptive scaling: increase shaping magnitude when error is large
-         base_k_phi = 2.0
--        k_phi = base_k_phi
-+        # Scale up shaping when error is large to encourage faster convergence
-+        # Scale down when error is small to avoid overshooting
-+        error_scale = min(3.0, 1.0 + 2.0 * current_error)
-+        k_phi = base_k_phi * error_scale
-         potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
+@@ -976,15 +976,15 @@
+         # 7. Curriculum subgoal reward - encourage progressive improvement
+         subgoal_reward = 0.0
+         if hasattr(self, 'prev_error') and self.prev_error is not None:
+             # Reward for reducing error toward subgoal thresholds
+             error_reduction = self.prev_error - current_error
+-            if error_reduction > 0:
++            if error_reduction > 0 and current_error > 0.001:  # Safety gate for very small errors
+                 # Stage-based weighting with safety gating
+                 if current_error < 0.005:
+                     stage_weight = 0.3  # High-precision stage
+                 elif current_error < 0.02:
+                     stage_weight = 0.2  # Medium-precision stage
+                 else:
+                     stage_weight = 0.1  # Coarse stage
+-                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
++                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.01))  # More stable scaling
+         self.prev_error = current_error
