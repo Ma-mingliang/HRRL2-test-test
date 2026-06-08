@@ -6202,3 +6202,29 @@ c_curriculum_subgoal_reward_openreview_hz9gu1io12, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T08:46:16.556277+00:00] v0608 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Enhanced curriculum subgoal reward with stage-based weighting and safer scaling (rationale: The current subgoal reward uses inverse error scaling (1/(current_error+0.001)) which can cause reward hacking when errors are very small, leading to unstable learning. By implementing stage-based weighting, we provide consistent rewards for progress within each precision stage while avoiding extreme scaling. This aligns with the curriculum subgoal research idea by rewarding stage progress with appropriate weights, preventing proxy metrics from dominating task success. The modification maintains the core improvement tracking while making rewards more predictable and stable.)
+
+### Reward Formula / Change
+```
+Enhanced curriculum subgoal reward with stage-based weighting and safer scaling (rationale: The current subgoal reward uses inverse error scaling (1/(current_error+0.001)) which can cause reward hacking when errors are very small, leading to unstable learning. By implementing stage-based weighting, we provide consistent rewards for progress within each precision stage while avoiding extreme scaling. This aligns with the curriculum subgoal research idea by rewarding stage progress with appropriate weights, preventing proxy metrics from dominating task success. The modification maintains the core improvement tracking while making rewards more predictable and stable.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_v3kavlfvrd, c_curriculum_subgoal_reward_openreview_5t1vmqldr8
+
+---
+
