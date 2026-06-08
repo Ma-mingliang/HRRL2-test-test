@@ -935,32 +935,32 @@ class Attitude_control_stage1(gym.Env):
         current_error = abs(state_raw[0])
         angular_velocity = abs(state_raw[2])
         
-        # 1. 高层目标奖励 (Manager Reward)
-        goal_progress_reward = 0.0
-        if current_error < 0.001:  # 高精度目标达成
-            goal_progress_reward = 2.0
-        elif current_error < 0.005:  # 良好目标进度
-            goal_progress_reward = 1.0
-        elif current_error < 0.01:  # 基本目标进度
-            goal_progress_reward = 0.5
+        # 1. 高层目标进度奖励 (manager_reward)
+        # 基于误差减少的进度奖励，鼓励持续改进
+        error_reduction = abs(state_last_raw[0]) - current_error
+        goal_progress_reward = 2.0 * error_reduction  # 奖励误差减少
         
-        # 2. 低层跟踪奖励 (Worker Reward)
+        # 2. 低层跟踪奖励 (worker_reward)
+        # 核心跟踪奖励 + 高精度奖励
         max_penalty = 2.0
         tracking_reward = -min(current_error**2, max_penalty)
         
-        # 3. 平顺性惩罚
+        bonus_reward = 0.0
+        if current_error < 0.005:
+            bonus_reward = 1.0
+        elif current_error < 0.01:
+            bonus_reward = 0.5
+        elif current_error < 0.02:
+            bonus_reward = 0.2
+        
+        # 3. 控制成本惩罚 (control_cost)
+        # 平顺性惩罚 + 动作惩罚
         smoothness_penalty = -0.05 * angular_velocity
-        
-        # 4. 改进奖励
-        gamma = 0.99
-        potential_current = -current_error
-        potential_last = -abs(state_last_raw[0])
-        improvement_reward = gamma * potential_current - potential_last
-        
-        # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+        control_cost = smoothness_penalty + action_penalty
         
-        reward = goal_progress_reward + tracking_reward + smoothness_penalty + improvement_reward + action_penalty
+        # 4. 组合奖励: manager_reward + worker_reward - control_cost
+        reward = goal_progress_reward + (tracking_reward + bonus_reward) + control_cost
         
         return reward
 

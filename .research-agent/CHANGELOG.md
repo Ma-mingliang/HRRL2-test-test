@@ -5734,3 +5734,29 @@ e_hierarchical_reward_openreview_umvicbadkk, e_hierarchical_reward_openreview_3n
 
 ---
 
+## [2026-06-08T05:36:19.759070+00:00] v0588 - ✗ REJECTED
+
+**Candidate ID:** `reward_c023`
+**Description:** Added hierarchical reward structure separating goal progress from low-level control, with explicit goal achievement bonus and improved scaling (rationale: This modification implements the hierarchical reward structure from research ideas, separating high-level goal progress (manager reward) from low-level tracking control (worker reward). The goal_progress_reward provides stronger incentives for achieving precise tracking targets, while the tracking_reward maintains continuous feedback for error reduction. This structure should improve completion_rate by providing clearer goal-oriented signals while maintaining the existing lateral_error performance. The explicit goal achievement bonus (2.0 for <0.001 error) creates a stronger attractor for high-precision performance.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure separating goal progress from low-level control, with explicit goal achievement bonus and improved scaling (rationale: This modification implements the hierarchical reward structure from research ideas, separating high-level goal progress (manager reward) from low-level tracking control (worker reward). The goal_progress_reward provides stronger incentives for achieving precise tracking targets, while the tracking_reward maintains continuous feedback for error reduction. This structure should improve completion_rate by providing clearer goal-oriented signals while maintaining the existing lateral_error performance. The explicit goal achievement bonus (2.0 for <0.001 error) creates a stronger attractor for high-precision performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_openreview_snxieztsff, e_hierarchical_reward_openreview_tecql4fld0
+
+---
+
