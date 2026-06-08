@@ -1,16 +1,16 @@
 --- a/env.py
 +++ b/env.py
-@@ -938,5 +938,12 @@
-         # 1. 核心跟踪奖励
-         max_penalty = 2.0
--        tracking_reward = -min(current_error**2, max_penalty)
-+        # Adaptive weighting: increase tracking penalty as error decreases
-+        if current_error < 0.005:
-+            tracking_weight = 2.0  # High precision stage
-+        elif current_error < 0.02:
-+            tracking_weight = 1.5  # Medium precision stage
-+        else:
-+            tracking_weight = 1.0  # Coarse stage
-+        tracking_reward = -tracking_weight * min(current_error**2, max_penalty)
-         
-         # 2. 高精度奖励
+@@ -962,4 +962,10 @@
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive dynamic weighting for improvement reward
++        # Weight increases with error magnitude to prioritize error reduction when far from target
++        base_improvement_weight = 1.0
++        max_improvement_weight = 2.5
++        improvement_weight = base_improvement_weight + (max_improvement_weight - base_improvement_weight) * (1 - math.exp(-8 * current_error))
++        improvement_weight = min(improvement_weight, max_improvement_weight)
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)

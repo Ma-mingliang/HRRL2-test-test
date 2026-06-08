@@ -52,8 +52,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 52,
-    "full_evals_run": 52
+    "candidates_proposed": 53,
+    "full_evals_run": 53
   },
   "stop_reason": null,
   "progress": null,
@@ -455,12 +455,12 @@
       "applied_at": "2026-06-08T09:54:42.628035+00:00"
     },
     {
-      "candidate_id": "reward_c001",
-      "applied_at": "2026-06-08T10:01:12.937346+00:00"
+      "candidate_id": "reward_c011",
+      "applied_at": "2026-06-08T10:01:33.545675+00:00"
     },
     {
-      "candidate_id": "reward_c003",
-      "applied_at": "2026-06-08T10:04:20.045942+00:00"
+      "candidate_id": "reward_c012",
+      "applied_at": "2026-06-08T10:08:54.931751+00:00"
     }
   ],
   "baseline_fair_eval": {
