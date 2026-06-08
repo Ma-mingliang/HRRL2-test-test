@@ -973,20 +973,8 @@ class Attitude_control_stage1(gym.Env):
             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
         self.prev_residual = target_handle_angle
         
-        # 8. Learned preference reward (simplified proxy)
-        # Use exponential moving average of past rewards as preference signal
-        preference_reward = 0.0
-        if not hasattr(self, 'reward_ema'):
-            self.reward_ema = 0.0
-        # Update EMA with current reward estimate
-        current_reward_estimate = tracking_reward + bonus_reward + smoothness_penalty
-        self.reward_ema = 0.95 * self.reward_ema + 0.05 * current_reward_estimate
-        # Preference reward: encourage consistency with learned preference
-        preference_reward = 0.1 * (current_reward_estimate - self.reward_ema)
-        # Safety gating: cap preference reward magnitude
-        preference_reward = np.clip(preference_reward, -0.5, 0.5)
-        
         # 7. Curriculum subgoal reward - encourage progressive improvement
+        subgoal_reward = 0.0
         if hasattr(self, 'prev_error') and self.prev_error is not None:
             # Reward for reducing error toward subgoal thresholds
             error_reduction = self.prev_error - current_error

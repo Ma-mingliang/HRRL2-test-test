@@ -8296,3 +8296,29 @@ g_llm_reward_generation_openreview_u07fuaqgct
 
 ---
 
+## [2026-06-08T11:30:12.892977+00:00] v0633 - ✗ REJECTED
+
+**Candidate ID:** `reward_c014`
+**Description:** Added a learned preference reward component that uses a simple exponential moving average of past rewards to estimate a preference signal, with safety gating to prevent reward hacking (rationale: This implements a simplified version of the H_learned_preference_reward idea by using an exponential moving average as a proxy for learned preferences. The EMA captures the agent's typical performance, and deviations from this baseline are rewarded/penalized. This encourages consistency and smooth improvement while the safety gating prevents reward hacking. Since the baseline already shows excellent performance (lateral_error: 0.0041), this should help maintain high performance while potentially improving robustness by rewarding consistent behavior rather than just absolute error reduction.)
+
+### Reward Formula / Change
+```
+Added a learned preference reward component that uses a simple exponential moving average of past rewards to estimate a preference signal, with safety gating to prevent reward hacking (rationale: This implements a simplified version of the H_learned_preference_reward idea by using an exponential moving average as a proxy for learned preferences. The EMA captures the agent's typical performance, and deviations from this baseline are rewarded/penalized. This encourages consistency and smooth improvement while the safety gating prevents reward hacking. Since the baseline already shows excellent performance (lateral_error: 0.0041), this should help maintain high performance while potentially improving robustness by rewarding consistent behavior rather than just absolute error reduction.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+h_learned_preference_reward_openreview_tjhhb6cscw, h_learned_preference_reward_openreview_fnrjcd0s1l
+
+---
+
