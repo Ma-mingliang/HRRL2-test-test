@@ -6446,3 +6446,29 @@ d_adaptive_dynamic_reward_openreview_6lm1jxxlxb, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T09:34:22.726072+00:00] v0616 - ✗ REJECTED
+
+**Candidate ID:** `reward_c006`
+**Description:** Added adaptive weighting for tracking reward based on current error magnitude, implementing the D_adaptive_dynamic_reward concept with error-dependent scaling (rationale: The baseline shows excellent completion rate (1.0) and low lateral error (0.0041), but reward is constant (std: 0.0000), suggesting the agent may be stuck in a local optimum. By adaptively scaling the tracking reward weight based on error magnitude, we implement the D_adaptive_dynamic_reward concept: when error is large (>0.05), we increase tracking emphasis (weight=2.0) to encourage faster convergence; when error is medium (0.02-0.05), moderate emphasis (1.5); and normal emphasis (1.0) for fine tracking. This creates a curriculum-like effect where the reward function dynamically adjusts its focus based on current performance, potentially helping escape plateaus and improve convergence speed while maintaining the existing high-precision bonuses.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting for tracking reward based on current error magnitude, implementing the D_adaptive_dynamic_reward concept with error-dependent scaling (rationale: The baseline shows excellent completion rate (1.0) and low lateral error (0.0041), but reward is constant (std: 0.0000), suggesting the agent may be stuck in a local optimum. By adaptively scaling the tracking reward weight based on error magnitude, we implement the D_adaptive_dynamic_reward concept: when error is large (>0.05), we increase tracking emphasis (weight=2.0) to encourage faster convergence; when error is medium (0.02-0.05), moderate emphasis (1.5); and normal emphasis (1.0) for fine tracking. This creates a curriculum-like effect where the reward function dynamically adjusts its focus based on current performance, potentially helping escape plateaus and improve convergence speed while maintaining the existing high-precision bonuses.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_a3xff0pglu, d_adaptive_dynamic_reward_openreview_dju2kvsdts
+
+---
+
