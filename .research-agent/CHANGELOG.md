@@ -7451,3 +7451,55 @@ g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T10:52:37.447859+00:00] v0627 - ✗ REJECTED
+
+**Candidate ID:** `reward_c013`
+**Description:** Simplify the reward function by removing the complex adaptive weighting and curriculum subgoal components, replacing them with a more direct error-based reward structure that focuses on the core tracking objective. (rationale: The current reward function is overly complex with multiple interacting components that may be causing conflicting signals. The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), suggesting the agent has already learned the task well. Simplifying the reward by removing the adaptive weighting and curriculum subgoal components will: 1) Make the reward signal clearer and more direct, 2) Reduce potential reward hacking from complex interactions, 3) Maintain the core tracking objective while removing unnecessary complexity. The new structure uses linear penalty for small errors (encouraging precision) and quadratic for larger errors (preventing large deviations), which should maintain performance while being more interpretable.)
+
+### Reward Formula / Change
+```
+Simplify the reward function by removing the complex adaptive weighting and curriculum subgoal components, replacing them with a more direct error-based reward structure that focuses on the core tracking objective. (rationale: The current reward function is overly complex with multiple interacting components that may be causing conflicting signals. The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), suggesting the agent has already learned the task well. Simplifying the reward by removing the adaptive weighting and curriculum subgoal components will: 1) Make the reward signal clearer and more direct, 2) Reduce potential reward hacking from complex interactions, 3) Maintain the core tracking objective while removing unnecessary complexity. The new structure uses linear penalty for small errors (encouraging precision) and quadratic for larger errors (preventing large deviations), which should maintain performance while being more interpretable.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_obpqdcwlfd, g_llm_reward_generation_openreview_tdfrn1tbgh
+
+---
+
+## [2026-06-08T10:52:50.165745+00:00] v0627 - ✗ REJECTED
+
+**Candidate ID:** `reward_c017`
+**Description:** Added a dynamic scaling factor to the subgoal reward that increases with error magnitude to provide stronger learning signals for larger errors while maintaining precision focus for small errors. (rationale: The current subgoal reward uses a simple inverse scaling (1/(current_error+0.001)) which can be too aggressive for very small errors and insufficient for larger ones. By adding a dynamic scaling factor that increases with error magnitude (1 + 2*min(error, 0.1)), we provide stronger learning signals when errors are larger (encouraging faster initial convergence) while maintaining precision focus for small errors. This should improve training efficiency without sacrificing final accuracy, potentially reducing the lateral error from 0.0041 to even smaller values.)
+
+### Reward Formula / Change
+```
+Added a dynamic scaling factor to the subgoal reward that increases with error magnitude to provide stronger learning signals for larger errors while maintaining precision focus for small errors. (rationale: The current subgoal reward uses a simple inverse scaling (1/(current_error+0.001)) which can be too aggressive for very small errors and insufficient for larger ones. By adding a dynamic scaling factor that increases with error magnitude (1 + 2*min(error, 0.1)), we provide stronger learning signals when errors are larger (encouraging faster initial convergence) while maintaining precision focus for small errors. This should improve training efficiency without sacrificing final accuracy, potentially reducing the lateral error from 0.0041 to even smaller values.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openreview_gbwovfgek8
+
+---
+

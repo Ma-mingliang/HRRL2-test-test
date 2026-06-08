@@ -936,21 +936,15 @@ class Attitude_control_stage1(gym.Env):
         angular_velocity = abs(state_raw[2])
         
         # 1. 核心跟踪奖励
-        # Simple quadratic penalty with linear scaling for small errors
-        if current_error < 0.01:
-            tracking_reward = -100 * current_error  # Linear penalty for small errors
-        else:
-            tracking_reward = -10 * current_error**2  # Quadratic penalty for larger errors
-        
-        # 2. 高精度奖励
-        # 6. 残差动作惩罚（基于研究想法）
-        residual_penalty = 0.0
-        if hasattr(self, 'prev_residual') and self.prev_residual is not None:
-            residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
-        self.prev_residual = target_handle_angle
-        
-        
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
+        max_penalty = 2.0
+        # 1. 核心跟踪奖励
+        max_penalty = 2.0
+        # Adaptive dynamic weighting: linear scaling based on error magnitude
+        base_weight = 1.0
+        max_weight = 3.0
+        # Linear schedule: weight increases proportionally with error
+        error_weight = base_weight + (max_weight - base_weight) * min(current_error * 10, 1.0)
+        tracking_reward = -error_weight * min(current_error**2, max_penalty)
         bonus_reward = 0.0
         if current_error < 0.005:
             bonus_reward = 1.0

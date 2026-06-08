@@ -1,23 +1,19 @@
 --- a/env.py
 +++ b/env.py
-@@ -950,6 +950,12 @@
-         # 3. 平顺性惩罚
-         smoothness_penalty = -0.05 * angular_velocity
-         
-+        # 3.5 安全约束惩罚：防止过度振荡
-+        safety_penalty = 0.0
-+        angular_velocity_threshold = 2.0  # 弧度/秒
-+        if angular_velocity > angular_velocity_threshold:
-+            safety_penalty = -0.5 * (angular_velocity - angular_velocity_threshold)
-+        
-         # 4. 改进奖励
-         gamma = 0.99
-         potential_current = -current_error
-@@ -960,6 +966,6 @@
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
-         
--        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
-+        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty
-         
-         return reward
+@@ -940,11 +940,8 @@
+         # 1. 核心跟踪奖励
+         max_penalty = 2.0
+-        # Adaptive dynamic weighting: smooth schedule based on error magnitude
+-        # Implements D_adaptive_dynamic_reward with safety gating
+-        base_weight = 1.0
+-        max_weight = 3.0
+-        # Smooth exponential schedule: weight increases with error magnitude
+-        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))
+-        # Safety gating: cap weight to prevent reward hacking
+-        error_weight = min(error_weight, max_weight)
++        # Adaptive dynamic weighting: linear scaling based on error magnitude
++        base_weight = 1.0
++        max_weight = 3.0
++        # Linear schedule: weight increases proportionally with error
++        error_weight = base_weight + (max_weight - base_weight) * min(current_error * 10, 1.0)
+         tracking_reward = -error_weight * min(current_error**2, max_penalty)
