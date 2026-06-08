@@ -6332,3 +6332,29 @@ c_curriculum_subgoal_reward_openreview_r7ppkxmovk, c_curriculum_subgoal_reward_a
 
 ---
 
+## [2026-06-08T09:20:12.707933+00:00] v0614 - ✗ REJECTED
+
+**Candidate ID:** `reward_c004`
+**Description:** Enhanced curriculum subgoal reward with better stage weighting and safety gating to encourage progressive improvement while avoiding reward hacking (rationale: The current subgoal reward uses (1.0 / (current_error + 0.001)) which can create very large rewards when error is small, potentially causing reward hacking. By capping this scaling factor with min(1.0, 0.1 / (current_error + 0.001)), we prevent excessive rewards at small errors while still providing meaningful incentives. The increased stage weights (0.5 for high-precision, 0.3 for medium) provide stronger motivation for achieving precise tracking, which should help reduce the lateral error from 0.0041 toward even smaller values. This modification maintains the curriculum structure while making the reward more stable and focused on genuine improvement.)
+
+### Reward Formula / Change
+```
+Enhanced curriculum subgoal reward with better stage weighting and safety gating to encourage progressive improvement while avoiding reward hacking (rationale: The current subgoal reward uses (1.0 / (current_error + 0.001)) which can create very large rewards when error is small, potentially causing reward hacking. By capping this scaling factor with min(1.0, 0.1 / (current_error + 0.001)), we prevent excessive rewards at small errors while still providing meaningful incentives. The increased stage weights (0.5 for high-precision, 0.3 for medium) provide stronger motivation for achieving precise tracking, which should help reduce the lateral error from 0.0041 toward even smaller values. This modification maintains the curriculum structure while making the reward more stable and focused on genuine improvement.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_dhoxjoy1sp, c_curriculum_subgoal_reward_openreview_n4x7a4gg7t
+
+---
+

@@ -973,13 +973,14 @@ class Attitude_control_stage1(gym.Env):
             if error_reduction > 0:
                 # Stage-based weighting with safety gating
                 if current_error < 0.005:
-                    stage_weight = 0.5  # High-precision stage - increased reward
+                    stage_weight = 0.3  # High-precision stage
                 elif current_error < 0.02:
-                    stage_weight = 0.3  # Medium-precision stage - increased reward
+                    stage_weight = 0.2  # Medium-precision stage
                 else:
-                    stage_weight = 0.15  # Coarse stage - slightly increased
-                # Scale by inverse of current error with minimum threshold
-                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.0005))
+                    stage_weight = 0.1  # Coarse stage
+                # Adaptive scaling: increase weight when error is small to encourage precision
+                adaptive_scale = 1.0 + 2.0 * max(0, 0.02 - current_error) / 0.02
+                subgoal_reward = stage_weight * adaptive_scale * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
