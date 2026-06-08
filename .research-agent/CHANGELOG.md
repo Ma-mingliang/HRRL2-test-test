@@ -10603,3 +10603,34 @@ d_adaptive_dynamic_reward_openreview_pt1sssy1ta, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T18:53:38.070648+00:00] v0695 - ✗ REJECTED
+
+**Candidate ID:** `reward_c053`
+**Description:** Added adaptive dynamic weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current improvement reward uses a fixed gamma=0.99, which may not be optimal across different error magnitudes. By adapting gamma based on error magnitude (higher gamma for larger errors), we can: 1) Encourage more aggressive improvement when far from target, 2) Maintain stability when close to target, 3) Implement the D_adaptive_dynamic_reward research idea with safety gating to prevent reward hacking. This should help reduce lateral_error (currently 0.0041) by providing stronger improvement incentives when needed while maintaining the high completion_rate.)
+
+### Reward Formula / Change
+```
+Added adaptive dynamic weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current improvement reward uses a fixed gamma=0.99, which may not be optimal across different error magnitudes. By adapting gamma based on error magnitude (higher gamma for larger errors), we can: 1) Encourage more aggressive improvement when far from target, 2) Maintain stability when close to target, 3) Implement the D_adaptive_dynamic_reward research idea with safety gating to prevent reward hacking. This should help reduce lateral_error (currently 0.0041) by providing stronger improvement incentives when needed while maintaining the high completion_rate.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 965.0435
+- **lateral_error:** 0.0055
+
+### Rejection Reason
+Score -0.0536 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_1egvvwfsdd, d_adaptive_dynamic_reward_openreview_ed1vrqpfua
+
+---
+
