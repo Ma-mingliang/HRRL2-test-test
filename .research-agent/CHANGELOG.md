@@ -5240,3 +5240,29 @@ a_potential_based_reward_openreview_ubnujziy2o, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-08T04:37:20.756446+00:00] v0569 - ✗ REJECTED
+
+**Candidate ID:** `reward_c004`
+**Description:** Modified the potential-based reward to use absolute error difference instead of potential difference, and added a scaling factor to make the improvement reward more meaningful (rationale: The current potential-based reward uses gamma * (-current_error) - (-error_last) = gamma * error_last - gamma * current_error - error_last = (gamma-1) * error_last - gamma * current_error, which is confusing and doesn't directly reward improvement. By using error_improvement = error_last - current_error, we directly reward when error decreases (positive value) and penalize when error increases (negative value). The gamma factor scales this appropriately. This should encourage the agent to actively reduce tracking error rather than just maintaining low error, potentially improving convergence speed and final performance.)
+
+### Reward Formula / Change
+```
+Modified the potential-based reward to use absolute error difference instead of potential difference, and added a scaling factor to make the improvement reward more meaningful (rationale: The current potential-based reward uses gamma * (-current_error) - (-error_last) = gamma * error_last - gamma * current_error - error_last = (gamma-1) * error_last - gamma * current_error, which is confusing and doesn't directly reward improvement. By using error_improvement = error_last - current_error, we directly reward when error decreases (positive value) and penalize when error increases (negative value). The gamma factor scales this appropriately. This should encourage the agent to actively reduce tracking error rather than just maintaining low error, potentially improving convergence speed and final performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_arxiv_2502_01307, a_potential_based_reward_openreview_anosgmzrdv
+
+---
+
