@@ -10448,3 +10448,34 @@ d_adaptive_dynamic_reward_openreview_a3xff0pglu, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T18:20:22.843783+00:00] v0690 - ✗ REJECTED
+
+**Candidate ID:** `reward_c048`
+**Description:** Added adaptive dynamic weighting to the subgoal reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current subgoal reward uses fixed stage weights that don't adapt to error magnitude. By adding adaptive dynamic weighting, we increase the reward for reducing larger errors (coarse stage) while maintaining safety gating. This implements the D_adaptive_dynamic_reward research idea specifically for the subgoal component, which should encourage faster error reduction when far from target while preserving precision near the goal. The exponential schedule ensures smooth transitions and the cap prevents reward hacking.)
+
+### Reward Formula / Change
+```
+Added adaptive dynamic weighting to the subgoal reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current subgoal reward uses fixed stage weights that don't adapt to error magnitude. By adding adaptive dynamic weighting, we increase the reward for reducing larger errors (coarse stage) while maintaining safety gating. This implements the D_adaptive_dynamic_reward research idea specifically for the subgoal component, which should encourage faster error reduction when far from target while preserving precision near the goal. The exponential schedule ensures smooth transitions and the cap prevents reward hacking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 918.4382
+- **lateral_error:** 0.0060
+
+### Rejection Reason
+Score -0.0980 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_hz9gu1io12, d_adaptive_dynamic_reward_openreview_rgvqh3gjea
+
+---
+

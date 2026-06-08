@@ -960,9 +960,16 @@ class Attitude_control_stage1(gym.Env):
         smoothness_penalty = -0.05 * angular_velocity
         
         gamma = 0.99
+        # Adaptive dynamic weighting for improvement reward
+        # Weight increases with error magnitude to prioritize error reduction when far from target
+        base_improvement_weight = 1.0
+        max_improvement_weight = 2.5
+        improvement_weight = base_improvement_weight + (max_improvement_weight - base_improvement_weight) * (1 - math.exp(-8 * current_error))
+        # Safety gating: cap weight to prevent reward hacking
+        improvement_weight = min(improvement_weight, max_improvement_weight)
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
-        improvement_reward = gamma * potential_current - potential_last
+        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
@@ -986,11 +993,7 @@ class Attitude_control_stage1(gym.Env):
                     stage_weight = 0.2  # Medium-precision stage
                 else:
                     stage_weight = 0.1  # Coarse stage
-                # Adaptive dynamic weighting for subgoal reward
-                # Weight increases with error magnitude to prioritize coarse corrections
-                adaptive_weight = 1.0 + 2.0 * (1 - math.exp(-5 * current_error))
-                adaptive_weight = min(adaptive_weight, 3.0)  # Safety cap
-                subgoal_reward = stage_weight * adaptive_weight * error_reduction * (1.0 / (current_error + 0.001))
+                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
