@@ -959,6 +959,11 @@ class Attitude_control_stage1(gym.Env):
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
+        # 3.1 Stability bonus for maintaining low angular velocity when error is small
+        stability_bonus = 0.0
+        if current_error < 0.01 and angular_velocity < 0.1:
+            stability_bonus = 0.2 * (0.1 - angular_velocity) / 0.1
+        
         gamma = 0.99
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
@@ -986,9 +991,7 @@ class Attitude_control_stage1(gym.Env):
                     stage_weight = 0.2  # Medium-precision stage
                 else:
                     stage_weight = 0.1  # Coarse stage
-                # Safety gate: cap the reward to prevent reward hacking
-                raw_subgoal = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
-                subgoal_reward = min(raw_subgoal, 0.5)  # Cap at 0.5 to prevent excessive rewards
+                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward

@@ -10696,3 +10696,34 @@ d_adaptive_dynamic_reward_openreview_vbwm1rimjo
 
 ---
 
+## [2026-06-08T19:13:53.426369+00:00] v0698 - ✗ REJECTED
+
+**Candidate ID:** `reward_c056`
+**Description:** Added a safety gate to the subgoal reward to prevent reward hacking when error reduction is large relative to current error (rationale: The current subgoal reward formula can produce very large rewards when error reduction is significant relative to current error (small denominator). This creates potential for reward hacking where the agent might exploit large error reductions rather than maintaining stable tracking. Adding a safety cap of 0.5 prevents excessive rewards while still encouraging progressive improvement. This aligns with the research idea's emphasis on gating against unsafe behavior and reward hacking.)
+
+### Reward Formula / Change
+```
+Added a safety gate to the subgoal reward to prevent reward hacking when error reduction is large relative to current error (rationale: The current subgoal reward formula can produce very large rewards when error reduction is significant relative to current error (small denominator). This creates potential for reward hacking where the agent might exploit large error reductions rather than maintaining stable tracking. Adding a safety cap of 0.5 prevents excessive rewards while still encouraging progressive improvement. This aligns with the research idea's emphasis on gating against unsafe behavior and reward hacking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 954.2625
+- **lateral_error:** 0.0044
+
+### Rejection Reason
+Score -0.0046 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openreview_ieduruo55f
+
+---
+
