@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c009",
+    "candidate_id": "reward_c002",
     "optimizer": "reward",
-    "description": "Simplified the adaptive weight calculation to be more stable and reduced the maximum weight to prevent over-penalization (rationale: The current adaptive weight calculation uses an exponential function that can produce unstable gradients and may over-penalize large errors. By simplifying to a linear ramp with a lower maximum weight (2.0 instead of 3.0), we create more stable learning dynamics. The linear ramp with min(1.0, error*10) still provides adaptive weighting but with smoother gradients. This should help maintain the excellent completion rate (1.0) while potentially improving training stability and reducing variance in the reward signal.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -940,11 +940,7 @@\n         # 1. 核心跟踪奖励\n         max_penalty = 2.0\n-        # Adaptive dynamic weighting: smooth schedule based on error magnitude\n-        # Implements D_adaptive_dynamic_reward with safety gating\n-        base_weight = 1.0\n-        max_weight = 3.0\n-        # Smooth exponential schedule: weight increases with error magnitude\n-        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))\n-        # Safety gating",
-    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_cmn54vpksz\", \"g_llm_reward_generation_openreview_gbwovfgek8\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:cmN54vPKsz\", \"openreview:gBwovFgeK8\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Enhanced the potential-based reward shaping term with adaptive gamma scaling based on error magnitude to improve convergence stability (rationale: The current potential-based reward uses a fixed gamma=0.99, which may be too conservative for large errors. By adapting gamma based on error magnitude (0.95 for errors > 0.02, 0.99 otherwise), we encourage faster error reduction during coarse tracking while maintaining stability during fine tracking. This aligns with the research idea's emphasis on using potential differences while preventing reward hacking through adaptive scaling. The change is minimal (5 lines added) and preserves the potential-based structure while improving convergence behavior.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,4 +962,9 @@\n         gamma = 0.99\n-        potential_current = -current_error\n-        potential_last = -abs(state_last_raw[0])\n-        improvement_reward = gamma * potential_current - potential_last\n+        # Adaptive gamma: higher discount for larger errors to encourage faster reduction\n+        if current_error > 0.02:\n+            adaptive_gamma = 0.95  # More aggressive for coarse tracking\n+        else:\n+            adaptive_gamma = 0.99  # Standard for ",
+    "source_idea": "{\"source_method_ids\": [\"a_potential_based_reward_openreview_tjhhb6cscw\", \"a_potential_based_reward_openreview_hz9gu1io12\"], \"source_categories\": [\"A_potential_based_reward\"], \"source_papers\": [\"openreview:TJhHb6CscW\", \"openreview:hZ9gu1iO12\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T11:08:51.359373+00:00"
+    "timestamp": "2026-06-08T13:47:02.669029+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 74,
-    "full_evals_run": 68
+    "candidates_proposed": 75,
+    "full_evals_run": 69
   },
   "stop_reason": null,
   "progress": null,
@@ -529,6 +529,10 @@
     {
       "candidate_id": "reward_c002",
       "applied_at": "2026-06-08T13:39:02.768390+00:00"
+    },
+    {
+      "candidate_id": "reward_c003",
+      "applied_at": "2026-06-08T13:47:17.660547+00:00"
     }
   ],
   "baseline_fair_eval": {

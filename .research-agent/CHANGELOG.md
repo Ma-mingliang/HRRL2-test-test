@@ -9130,3 +9130,31 @@ a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-08T13:47:02.673770+00:00] v0644 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c002`
+**Description:** Enhanced the potential-based reward shaping term with adaptive gamma scaling based on error magnitude to improve convergence stability (rationale: The current potential-based reward uses a fixed gamma=0.99, which may be too conservative for large errors. By adapting gamma based on error magnitude (0.95 for errors > 0.02, 0.99 otherwise), we encourage faster error reduction during coarse tracking while maintaining stability during fine tracking. This aligns with the research idea's emphasis on using potential differences while preventing reward hacking through adaptive scaling. The change is minimal (5 lines added) and preserves the potential-based structure while improving convergence behavior.)
+
+### Reward Formula / Change
+```
+Enhanced the potential-based reward shaping term with adaptive gamma scaling based on error magnitude to improve convergence stability (rationale: The current potential-based reward uses a fixed gamma=0.99, which may be too conservative for large errors. By adapting gamma based on error magnitude (0.95 for errors > 0.02, 0.99 otherwise), we encourage faster error reduction during coarse tracking while maintaining stability during fine tracking. This aligns with the research idea's emphasis on using potential differences while preventing reward hacking through adaptive scaling. The change is minimal (5 lines added) and preserves the potential-based structure while improving convergence behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 1021.3449
+- **lateral_error:** 0.0032
+
+### Source Methods
+a_potential_based_reward_openreview_tjhhb6cscw, a_potential_based_reward_openreview_hz9gu1io12
+
+---
+

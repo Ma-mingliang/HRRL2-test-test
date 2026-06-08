@@ -1,14 +1,15 @@
 --- a/env.py
 +++ b/env.py
-@@ -962,4 +962,8 @@
+@@ -962,4 +962,9 @@
          gamma = 0.99
 -        potential_current = -current_error
 -        potential_last = -abs(state_last_raw[0])
 -        improvement_reward = gamma * potential_current - potential_last
-+        # Adaptive weighting for improvement reward based on error magnitude
-+        # Higher weight when error is large to encourage faster convergence
-+        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-10 * current_error))
-+        improvement_weight = min(improvement_weight, 3.0)  # Safety cap
-+        potential_current = -current_error
-+        potential_last = -abs(state_last_raw[0])
-+        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
++        # Adaptive potential scaling: stronger incentive for larger errors
++        # Implements A_potential_based_reward with safety gating
++        base_potential = -current_error
++        # Scale potential by error magnitude to encourage faster reduction of large errors
++        error_scale = 1.0 + 2.0 * min(current_error, 0.1)  # Cap scaling at 0.1 error
++        potential_current = base_potential * error_scale
++        potential_last = -abs(state_last_raw[0]) * (1.0 + 2.0 * min(abs(state_last_raw[0]), 0.1))
++        improvement_reward = gamma * potential_current - potential_last

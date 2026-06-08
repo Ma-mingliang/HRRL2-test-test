@@ -960,14 +960,14 @@ class Attitude_control_stage1(gym.Env):
         smoothness_penalty = -0.05 * angular_velocity
         
         gamma = 0.99
-        # Adaptive gamma: higher discount for larger errors to encourage faster reduction
-        if current_error > 0.02:
-            adaptive_gamma = 0.95  # More aggressive for coarse tracking
-        else:
-            adaptive_gamma = 0.99  # Standard for fine tracking
-        potential_current = -current_error
-        potential_last = -abs(state_last_raw[0])
-        improvement_reward = adaptive_gamma * potential_current - potential_last
+        # Adaptive potential scaling: stronger incentive for larger errors
+        # Implements A_potential_based_reward with safety gating
+        base_potential = -current_error
+        # Scale potential by error magnitude to encourage faster reduction of large errors
+        error_scale = 1.0 + 2.0 * min(current_error, 0.1)  # Cap scaling at 0.1 error
+        potential_current = base_potential * error_scale
+        potential_last = -abs(state_last_raw[0]) * (1.0 + 2.0 * min(abs(state_last_raw[0]), 0.1))
+        improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
