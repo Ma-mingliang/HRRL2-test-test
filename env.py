@@ -939,10 +939,10 @@ class Attitude_control_stage1(gym.Env):
         max_penalty = 2.0
         # 1. 核心跟踪奖励
         max_penalty = 2.0
-        # Adaptive dynamic weighting: smooth schedule based on error magnitude
-        # Implements D_adaptive_dynamic_reward with safety gating
-        # Linear schedule: weight increases linearly with error magnitude
-        error_weight = 1.0 + 2.0 * min(current_error, 0.5)
+        # Simplified adaptive weighting with lower maximum
+        base_weight = 1.0
+        max_weight = 2.0
+        error_weight = base_weight + (max_weight - base_weight) * min(1.0, current_error * 10)
         tracking_reward = -error_weight * min(current_error**2, max_penalty)
         bonus_reward = 0.0
         if current_error < 0.005:

@@ -7557,3 +7557,34 @@ g_llm_reward_generation_openreview_g9ylcfd8bq, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T10:59:49.440151+00:00] v0627 - ✗ REJECTED
+
+**Candidate ID:** `reward_c008`
+**Description:** Simplified the adaptive weight calculation to be more stable and reduced the maximum weight to prevent over-penalization (rationale: The current adaptive weight calculation uses a maximum weight of 3.0 which may be too aggressive, potentially causing unstable learning. By reducing the maximum weight to 2.5 (1.0 + 1.5) and using a gentler exponential decay (8 instead of 10), we create a more stable reward signal that still adapts to error magnitude but with less extreme variations. This should help prevent reward hacking while maintaining good tracking performance, potentially improving the consistency of the completion rate and reducing the standard deviation of metrics.)
+
+### Reward Formula / Change
+```
+Simplified the adaptive weight calculation to be more stable and reduced the maximum weight to prevent over-penalization (rationale: The current adaptive weight calculation uses a maximum weight of 3.0 which may be too aggressive, potentially causing unstable learning. By reducing the maximum weight to 2.5 (1.0 + 1.5) and using a gentler exponential decay (8 instead of 10), we create a more stable reward signal that still adapts to error magnitude but with less extreme variations. This should help prevent reward hacking while maintaining good tracking performance, potentially improving the consistency of the completion rate and reducing the standard deviation of metrics.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 966.8028
+- **lateral_error:** 0.0050
+
+### Rejection Reason
+Score -0.0285 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_obpqdcwlfd, g_llm_reward_generation_openreview_tdfrn1tbgh
+
+---
+
