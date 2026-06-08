@@ -7503,3 +7503,31 @@ g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T10:54:50.749056+00:00] v0629 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c008`
+**Description:** Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more sensitive at low errors (rationale: The baseline shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward is very high (930.85) with zero std, suggesting potential reward hacking or insufficient exploration. Adding a stability bonus encourages the agent to maintain smooth control when already tracking well, which should improve robustness and reduce oscillations. This small addition (5 lines) targets the specific scenario where error is already low, promoting smoother behavior without disrupting the existing reward structure.)
+
+### Reward Formula / Change
+```
+Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more sensitive at low errors (rationale: The baseline shows excellent completion rate (1.0) and low lateral error (0.0041), but the reward is very high (930.85) with zero std, suggesting potential reward hacking or insufficient exploration. Adding a stability bonus encourages the agent to maintain smooth control when already tracking well, which should improve robustness and reduce oscillations. This small addition (5 lines) targets the specific scenario where error is already low, promoting smoother behavior without disrupting the existing reward structure.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 988.0771
+- **lateral_error:** 0.0041
+
+### Source Methods
+g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openreview_gbwovfgek8
+
+---
+
