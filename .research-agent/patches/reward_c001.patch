@@ -10,14 +10,14 @@
                  # Stage-based weighting with safety gating
                  if current_error < 0.005:
 -                    stage_weight = 0.3  # High-precision stage
-+                    stage_weight = 0.5  # High-precision stage - stronger reward for fine tuning
++                    stage_weight = 0.5  # High-precision stage - increased reward
                  elif current_error < 0.02:
 -                    stage_weight = 0.2  # Medium-precision stage
-+                    stage_weight = 0.3  # Medium-precision stage
++                    stage_weight = 0.3  # Medium-precision stage - increased reward
                  else:
 -                    stage_weight = 0.1  # Coarse stage
 -                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
-+                    stage_weight = 0.15  # Coarse stage
-+                # Scale by inverse of current error with minimum threshold to avoid division issues
-+                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.005))
++                    stage_weight = 0.15  # Coarse stage - slightly increased
++                # Scale by inverse of current error with minimum threshold
++                subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.0005))
          self.prev_error = current_error
