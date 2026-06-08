@@ -6020,3 +6020,29 @@ f_residual_aware_reward_openreview_pech3gfc9d, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-08T08:09:53.747184+00:00] v0600 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Added residual action penalty to reward function to encourage smoother residual control actions (rationale: The current code has a bug where residual_penalty is calculated but then overwritten in the final reward calculation (line 969 overwrites line 968). By fixing this and slightly increasing the residual penalty coefficient from 0.01 to 0.02, we properly implement the residual-aware reward from the research ideas. This should improve action smoothness and reduce residual action magnitude, which aligns with the goal of keeping the classical controller intact while penalizing residual action roughness. The increased penalty will encourage the policy to produce smoother residual adjustments, potentially improving tracking stability and reducing oscillations.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to reward function to encourage smoother residual control actions (rationale: The current code has a bug where residual_penalty is calculated but then overwritten in the final reward calculation (line 969 overwrites line 968). By fixing this and slightly increasing the residual penalty coefficient from 0.01 to 0.02, we properly implement the residual-aware reward from the research ideas. This should improve action smoothness and reduce residual action magnitude, which aligns with the goal of keeping the classical controller intact while penalizing residual action roughness. The increased penalty will encourage the policy to produce smoother residual adjustments, potentially improving tracking stability and reducing oscillations.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_dzmd1pbtc5, f_residual_aware_reward_openreview_mjarxzke30
+
+---
+

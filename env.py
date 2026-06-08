@@ -957,12 +957,14 @@ class Attitude_control_stage1(gym.Env):
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+        # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
         # 6. 残差动作惩罚（基于研究想法）
         residual_penalty = 0.0
         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
-            residual_penalty = -0.02 * (target_handle_angle - self.prev_residual)**2
+            # Penalize residual action magnitude and roughness
+            residual_penalty = -0.01 * target_handle_angle**2 - 0.005 * (target_handle_angle - self.prev_residual)**2
         self.prev_residual = target_handle_angle
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty
