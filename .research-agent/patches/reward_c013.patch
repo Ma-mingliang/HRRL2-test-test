@@ -1,18 +1,13 @@
 --- a/env.py
 +++ b/env.py
-@@ -950,6 +950,12 @@
-         # 3. 平顺性惩罚
-         smoothness_penalty = -0.05 * angular_velocity
-         
-+        # 3.5 安全约束惩罚：防止过度振荡
-+        safety_penalty = 0.0
-+        max_safe_angular_velocity = 2.0  # 最大安全角速度阈值
-+        if angular_velocity > max_safe_angular_velocity:
-+            safety_penalty = -0.5 * (angular_velocity - max_safe_angular_velocity)
-+        
-         # 4. 改进奖励
+@@ -962,5 +962,8 @@
          gamma = 0.99
-         potential_current = -current_error
-@@ -963,1 +969,1 @@
--        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
-+        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive weighting for improvement reward based on error magnitude
++        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-10 * current_error))
++        improvement_weight = min(improvement_weight, 3.0)
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
