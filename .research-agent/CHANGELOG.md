@@ -7943,3 +7943,60 @@ g_llm_reward_generation_openreview_drp7qvunut, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T11:12:32.849277+00:00] v0629 - ✗ REJECTED
+
+**Candidate ID:** `reward_c010`
+**Description:** Simplified the adaptive weight calculation to use a linear schedule instead of exponential, making the reward function more predictable and easier to tune (rationale: The current exponential weight schedule (1 - exp(-10 * error)) creates a very steep transition near zero error, which can cause unstable learning. A linear schedule provides more consistent gradient signals across the error range, making the reward function easier to optimize. This should improve training stability while maintaining the adaptive weighting behavior that encourages stronger correction for larger errors.)
+
+### Reward Formula / Change
+```
+Simplified the adaptive weight calculation to use a linear schedule instead of exponential, making the reward function more predictable and easier to tune (rationale: The current exponential weight schedule (1 - exp(-10 * error)) creates a very steep transition near zero error, which can cause unstable learning. A linear schedule provides more consistent gradient signals across the error range, making the reward function easier to optimize. This should improve training stability while maintaining the adaptive weighting behavior that encourages stronger correction for larger errors.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 284.2872
+- **lateral_error:** 0.0150
+
+### Rejection Reason
+Score -0.8095 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_g9ylcfd8bq, g_llm_reward_generation_openreview_iqnzibspz5
+
+---
+
+## [2026-06-08T11:12:54.578111+00:00] v0636 - ✗ REJECTED
+
+**Candidate ID:** `reward_c015`
+**Description:** No-op candidate (LLM unavailable)
+
+### Reward Formula / Change
+```
+No-op candidate (LLM unavailable)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty_patch
+
+### Source Methods
+h_learned_preference_reward_openreview_yfatkag5c9, h_learned_preference_reward_arxiv_2012_08824
+
+---
+
