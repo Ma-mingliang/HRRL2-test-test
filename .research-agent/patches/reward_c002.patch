@@ -1,14 +1,15 @@
 --- a/env.py
 +++ b/env.py
-@@ -962,4 +962,8 @@
+@@ -962,4 +962,9 @@
          gamma = 0.99
 -        potential_current = -current_error
 -        potential_last = -abs(state_last_raw[0])
 -        improvement_reward = gamma * potential_current - potential_last
-+        # Adaptive weighting for improvement reward based on error magnitude
-+        # Higher weight when error is large to encourage faster convergence
-+        improvement_weight = 1.0 + 2.0 * (1 - math.exp(-10 * current_error))
-+        improvement_weight = min(improvement_weight, 3.0)
++        # Adaptive gamma: higher discount for larger errors to encourage faster reduction
++        if current_error > 0.02:
++            adaptive_gamma = 0.95  # More aggressive for coarse tracking
++        else:
++            adaptive_gamma = 0.99  # Standard for fine tracking
 +        potential_current = -current_error
 +        potential_last = -abs(state_last_raw[0])
-+        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
++        improvement_reward = adaptive_gamma * potential_current - potential_last

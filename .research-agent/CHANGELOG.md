@@ -9104,3 +9104,29 @@ h_learned_preference_reward_openreview_titcv6pzia, h_learned_preference_reward_o
 
 ---
 
+## [2026-06-08T13:38:46.569838+00:00] v0643 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Added a potential-based reward shaping term that rewards error reduction while preserving policy incentives, with safety gating to prevent reward hacking (rationale: The current reward function already has potential-based improvement_reward (lines 962-965), but it uses a fixed gamma=0.99 which may not be optimal. Adding a separate potential_shaping term with a smaller coefficient (0.1) provides a more direct error reduction signal that complements the existing shaping. This should help the agent learn faster error reduction while the safety gating (only rewarding positive improvements) prevents reward hacking. The baseline shows good performance (lateral_error: 0.0041), so this refinement should help achieve even better precision.)
+
+### Reward Formula / Change
+```
+Added a potential-based reward shaping term that rewards error reduction while preserving policy incentives, with safety gating to prevent reward hacking (rationale: The current reward function already has potential-based improvement_reward (lines 962-965), but it uses a fixed gamma=0.99 which may not be optimal. Adding a separate potential_shaping term with a smaller coefficient (0.1) provides a more direct error reduction signal that complements the existing shaping. This should help the agent learn faster error reduction while the safety gating (only rewarding positive improvements) prevents reward hacking. The baseline shows good performance (lateral_error: 0.0041), so this refinement should help achieve even better precision.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openreview_6lm1jxxlxb
+
+---
+

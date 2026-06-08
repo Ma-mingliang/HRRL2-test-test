@@ -957,26 +957,17 @@ class Attitude_control_stage1(gym.Env):
             bonus_reward = 0.2
         
         # 3. 平顺性惩罚
-        # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
-        # 4. Potential-based reward shaping (error reduction)
-        # Implements A_potential_based_reward with safety gating
-        potential_shaping = 0.0
-        if hasattr(self, 'prev_error') and self.prev_error is not None:
-            error_reduction = self.prev_error - current_error
-            # Only reward positive improvements, cap to prevent reward hacking
-            if error_reduction > 0:
-                potential_shaping = 0.1 * error_reduction
-        
         gamma = 0.99
+        # Adaptive gamma: higher discount for larger errors to encourage faster reduction
+        if current_error > 0.02:
+            adaptive_gamma = 0.95  # More aggressive for coarse tracking
+        else:
+            adaptive_gamma = 0.99  # Standard for fine tracking
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
-        self.prev_error = current_error
-        
-        reward = tracking_reward + bonus_reward + smoothness_penalty + potential_shaping + improvement_reward + action_penalty + residual_penalty + subgoal_reward
-        
-        return reward
+        improvement_reward = adaptive_gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
