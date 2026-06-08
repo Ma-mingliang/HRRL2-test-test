@@ -10417,3 +10417,34 @@ d_adaptive_dynamic_reward_openreview_6lm1jxxlxb, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T18:13:41.006831+00:00] v0689 - ✗ REJECTED
+
+**Candidate ID:** `reward_c047`
+**Description:** Added adaptive weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward concept from research ideas (rationale: The current improvement reward uses fixed weighting (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are large, we encourage faster convergence during coarse tracking phases while maintaining precision during fine-tuning. This implements the D_adaptive_dynamic_reward concept from research ideas, with safety gating to prevent reward hacking. The exponential schedule ensures smooth transitions between weight levels, and the cap prevents excessive weighting that could destabilize learning.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward concept from research ideas (rationale: The current improvement reward uses fixed weighting (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are large, we encourage faster convergence during coarse tracking phases while maintaining precision during fine-tuning. This implements the D_adaptive_dynamic_reward concept from research ideas, with safety gating to prevent reward hacking. The exponential schedule ensures smooth transitions between weight levels, and the cap prevents excessive weighting that could destabilize learning.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 945.5357
+- **lateral_error:** 0.0055
+
+### Rejection Reason
+Score -0.0620 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_a3xff0pglu, d_adaptive_dynamic_reward_openreview_dju2kvsdts
+
+---
+
