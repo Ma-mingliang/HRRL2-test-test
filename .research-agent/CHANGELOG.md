@@ -5760,3 +5760,29 @@ e_hierarchical_reward_openreview_snxieztsff, e_hierarchical_reward_openreview_te
 
 ---
 
+## [2026-06-08T05:42:19.529112+00:00] v0589 - ✗ REJECTED
+
+**Candidate ID:** `reward_c024`
+**Description:** Added hierarchical reward structure separating goal progress from low-level control, with explicit goal progress reward and control cost penalty (rationale: This modification implements the hierarchical reward structure from research idea E_hierarchical_reward. By separating goal progress (error reduction) from low-level tracking, the agent gets clearer learning signals: 1) Goal progress reward encourages continuous improvement rather than just absolute error minimization, 2) Low-level tracking reward maintains precise control, 3) Control cost penalty explicitly discourages excessive actions. This structure should improve completion rate and reduce lateral error by providing more structured learning signals while maintaining the existing reward components.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure separating goal progress from low-level control, with explicit goal progress reward and control cost penalty (rationale: This modification implements the hierarchical reward structure from research idea E_hierarchical_reward. By separating goal progress (error reduction) from low-level tracking, the agent gets clearer learning signals: 1) Goal progress reward encourages continuous improvement rather than just absolute error minimization, 2) Low-level tracking reward maintains precise control, 3) Control cost penalty explicitly discourages excessive actions. This structure should improve completion rate and reduce lateral error by providing more structured learning signals while maintaining the existing reward components.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_openreview_vlz97qbjr2, e_hierarchical_reward_openreview_pw5ysjy11s
+
+---
+
