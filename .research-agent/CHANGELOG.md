@@ -6124,3 +6124,29 @@ c_curriculum_subgoal_reward_openreview_mhratccbtk, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T08:27:19.835889+00:00] v0604 - ✗ REJECTED
+
+**Candidate ID:** `reward_c005`
+**Description:** Added curriculum-based subgoal reward to encourage progressive improvement in tracking accuracy (rationale: The current reward function shows excellent completion rate (1.0) but very low lateral error (0.0041). Adding a curriculum-based subgoal reward encourages the agent to progressively reduce error toward high-precision zones. The subgoal reward scales inversely with current error, providing stronger incentives as the agent approaches high-precision thresholds. This should help maintain and potentially improve the already excellent tracking performance while providing more nuanced feedback for fine-tuning behavior.)
+
+### Reward Formula / Change
+```
+Added curriculum-based subgoal reward to encourage progressive improvement in tracking accuracy (rationale: The current reward function shows excellent completion rate (1.0) but very low lateral error (0.0041). Adding a curriculum-based subgoal reward encourages the agent to progressively reduce error toward high-precision zones. The subgoal reward scales inversely with current error, providing stronger incentives as the agent approaches high-precision thresholds. This should help maintain and potentially improve the already excellent tracking performance while providing more nuanced feedback for fine-tuning behavior.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_openreview_dju2kvsdts
+
+---
+
