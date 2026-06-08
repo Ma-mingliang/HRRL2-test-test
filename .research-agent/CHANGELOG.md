@@ -6472,3 +6472,34 @@ d_adaptive_dynamic_reward_openreview_a3xff0pglu, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T09:35:41.439307+00:00] v0617 - ✗ REJECTED
+
+**Candidate ID:** `reward_c003`
+**Description:** Added adaptive weighting for tracking reward based on current error magnitude, making the reward more sensitive to large errors early in training and more precise for small errors later. (rationale: The current reward function uses a fixed weight for tracking error. By adapting the weight based on error magnitude, we implement the research idea of adaptive dynamic rewards. Large errors (>0.1) get stronger penalties to encourage faster convergence, medium errors (0.02-0.1) get moderate penalties, and small errors (<0.02) get standard penalties to maintain precision. This should improve training efficiency by making the agent more responsive to large deviations while maintaining fine control for small errors, potentially reducing the lateral error from 0.0041 to even smaller values.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting for tracking reward based on current error magnitude, making the reward more sensitive to large errors early in training and more precise for small errors later. (rationale: The current reward function uses a fixed weight for tracking error. By adapting the weight based on error magnitude, we implement the research idea of adaptive dynamic rewards. Large errors (>0.1) get stronger penalties to encourage faster convergence, medium errors (0.02-0.1) get moderate penalties, and small errors (<0.02) get standard penalties to maintain precision. This should improve training efficiency by making the agent more responsive to large deviations while maintaining fine control for small errors, potentially reducing the lateral error from 0.0041 to even smaller values.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 0.0000
+- **reward:** 0.0000
+- **lateral_error:** 0.3989
+
+### Rejection Reason
+Hard threshold violated: completion_rate
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_a3xff0pglu, d_adaptive_dynamic_reward_openreview_dju2kvsdts
+
+---
+
