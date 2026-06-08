@@ -9335,3 +9335,31 @@ a_potential_based_reward_arxiv_2404_07826, a_potential_based_reward_arxiv_2512_2
 
 ---
 
+## [2026-06-08T14:44:37.434072+00:00] v0651 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c009`
+**Description:** Enhanced potential-based reward shaping with adaptive gamma and safety gating to better leverage the research idea while preventing reward hacking (rationale: The current potential-based reward uses a fixed gamma=0.99, which may not adapt well to different error magnitudes. By making gamma adaptive (increasing toward 1.0 as error grows), we provide stronger shaping signals when far from target, accelerating initial learning. The safety gating prevents reward hacking by dampening negative improvements (when error increases), which aligns with the research idea's warning about proxy metrics dominating task success. This should improve convergence speed while maintaining the existing completion_rate and reducing lateral_error variance.)
+
+### Reward Formula / Change
+```
+Enhanced potential-based reward shaping with adaptive gamma and safety gating to better leverage the research idea while preventing reward hacking (rationale: The current potential-based reward uses a fixed gamma=0.99, which may not adapt well to different error magnitudes. By making gamma adaptive (increasing toward 1.0 as error grows), we provide stronger shaping signals when far from target, accelerating initial learning. The safety gating prevents reward hacking by dampening negative improvements (when error increases), which aligns with the research idea's warning about proxy metrics dominating task success. This should improve convergence speed while maintaining the existing completion_rate and reducing lateral_error variance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 974.8522
+- **lateral_error:** 0.0036
+
+### Source Methods
+a_potential_based_reward_arxiv_2605_01787, a_potential_based_reward_openreview_0iouiel5nm
+
+---
+

@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c006",
+    "candidate_id": "reward_c009",
     "optimizer": "reward",
-    "description": "Added a potential-based shaping term that rewards error reduction while preserving policy incentives, with safety gating to prevent reward hacking (rationale: The current improvement_reward uses a potential-based approach but doesn't explicitly reward error reduction. Adding a direct shaping term for tracking improvement (k_phi * (|e_t-1| - |e_t|)) provides stronger gradient signal for error reduction while preserving policy invariance. The safety gating ensures we only reward positive improvement, preventing reward hacking. This should accelerate learning of precise tracking behavior, potentially reducing the lateral_error metric from 0.0041 while maintaining the 1.0 completion rate.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,6 +962,14 @@\n         gamma = 0.99\n         potential_current = -current_error\n         potential_last = -abs(state_last_raw[0])\n         improvement_reward = gamma * potential_current - potential_last\n+        \n+        # 4. Potential-based shaping term (A_potential_based_reward)\n+        # Encourages consistent error reduction while preserving optimal policy\n+        k_phi = 0.5\n+        tracking_improvement = abs(state_last_raw[0]) - abs(state_raw[0])\n+      ",
-    "source_idea": "{\"source_method_ids\": [\"a_potential_based_reward_arxiv_2012_08824\", \"a_potential_based_reward_openreview_3napba3fn3\"], \"source_categories\": [\"A_potential_based_reward\"], \"source_papers\": [\"arxiv:2012.08824\", \"openreview:3NAPbA3fN3\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Enhanced potential-based reward shaping with adaptive gamma and safety gating to better leverage the research idea while preventing reward hacking (rationale: The current potential-based reward uses a fixed gamma=0.99, which may not adapt well to different error magnitudes. By making gamma adaptive (increasing toward 1.0 as error grows), we provide stronger shaping signals when far from target, accelerating initial learning. The safety gating prevents reward hacking by dampening negative improvements (when error increases), which aligns with the research idea's warning about proxy metrics dominating task success. This should improve convergence speed while maintaining the existing completion_rate and reducing lateral_error variance.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,6 +962,10 @@\n         gamma = 0.99\n-        potential_current = -current_error\n-        potential_last = -abs(state_last_raw[0])\n-        improvement_reward = gamma * potential_current - potential_last\n+        # Adaptive gamma based on error magnitude for better convergence\n+        adaptive_gamma = gamma + (1.0 - gamma) * min(1.0, current_error * 10)\n+        potential_current = -current_error\n+        potential_last = -abs(state_last_raw[0])\n+        # Safety",
+    "source_idea": "{\"source_method_ids\": [\"a_potential_based_reward_arxiv_2605_01787\", \"a_potential_based_reward_openreview_0iouiel5nm\"], \"source_categories\": [\"A_potential_based_reward\"], \"source_papers\": [\"arxiv:2605.01787\", \"openreview:0iouIeL5Nm\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T14:18:46.314910+00:00"
+    "timestamp": "2026-06-08T14:44:37.429518+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 81,
-    "full_evals_run": 75
+    "candidates_proposed": 82,
+    "full_evals_run": 76
   },
   "stop_reason": null,
   "progress": null,
@@ -557,6 +557,10 @@
     {
       "candidate_id": "reward_c009",
       "applied_at": "2026-06-08T14:38:11.118101+00:00"
+    },
+    {
+      "candidate_id": "reward_c010",
+      "applied_at": "2026-06-08T14:44:57.397428+00:00"
     }
   ],
   "baseline_fair_eval": {
