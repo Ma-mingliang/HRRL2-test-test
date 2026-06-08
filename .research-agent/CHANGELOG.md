@@ -8026,3 +8026,107 @@ g_llm_reward_generation_openreview_q01nzxiwlt, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T11:13:44.665626+00:00] v0637 - ✗ REJECTED
+
+**Candidate ID:** `reward_c016`
+**Description:** Added a learned preference reward component that uses a simple linear model to weight tracking error and angular velocity based on historical performance patterns (rationale: The current reward function shows excellent completion rate (1.0) but has room to improve lateral error (0.0041). Adding a learned preference component that weights error reduction more heavily (1.2x) and velocity less (0.8x) should encourage the agent to prioritize precision over smoothness, potentially reducing the 0.0041 error further. The safety gate prevents extreme negative rewards while the learned weights simulate insights from human preferences or demonstrations. This minimal change maintains the existing structure while adding a preference-informed component.)
+
+### Reward Formula / Change
+```
+Added a learned preference reward component that uses a simple linear model to weight tracking error and angular velocity based on historical performance patterns (rationale: The current reward function shows excellent completion rate (1.0) but has room to improve lateral error (0.0041). Adding a learned preference component that weights error reduction more heavily (1.2x) and velocity less (0.8x) should encourage the agent to prioritize precision over smoothness, potentially reducing the 0.0041 error further. The safety gate prevents extreme negative rewards while the learned weights simulate insights from human preferences or demonstrations. This minimal change maintains the existing structure while adding a preference-informed component.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+h_learned_preference_reward_openreview_cvsstdteoe, h_learned_preference_reward_arxiv_2002_09089
+
+---
+
+## [2026-06-08T11:16:00.503357+00:00] v0638 - ✗ REJECTED
+
+**Candidate ID:** `reward_c017`
+**Description:** No-op candidate (LLM unavailable)
+
+### Reward Formula / Change
+```
+No-op candidate (LLM unavailable)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty_patch
+
+### Source Methods
+h_learned_preference_reward_arxiv_2309_16074, h_learned_preference_reward_arxiv_2502_20630
+
+---
+
+## [2026-06-08T11:17:54.705117+00:00] v0639 - ✗ REJECTED
+
+**Candidate ID:** `reward_c018`
+**Description:** No-op candidate (LLM unavailable)
+
+### Reward Formula / Change
+```
+No-op candidate (LLM unavailable)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty_patch
+
+### Source Methods
+h_learned_preference_reward_arxiv_2512_23703, h_learned_preference_reward_openreview_7lfmnvnmfj
+
+---
+
+## [2026-06-08T11:19:09.949410+00:00] v0631 - ✗ REJECTED
+
+**Candidate ID:** `reward_c021`
+**Description:** Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more sensitive at high speeds (rationale: The current reward function shows excellent tracking (lateral_error: 0.0041) but may be allowing excessive angular velocity. By making the smoothness penalty more sensitive when error is small (<0.01), we encourage the agent to maintain stability once it achieves good tracking. The stability bonus provides positive reinforcement for maintaining both low error AND low angular velocity simultaneously, which should improve overall control quality without sacrificing tracking performance.)
+
+### Reward Formula / Change
+```
+Added a stability bonus for maintaining low angular velocity when error is small, and adjusted the smoothness penalty to be more sensitive at high speeds (rationale: The current reward function shows excellent tracking (lateral_error: 0.0041) but may be allowing excessive angular velocity. By making the smoothness penalty more sensitive when error is small (<0.01), we encourage the agent to maintain stability once it achieves good tracking. The stability bonus provides positive reinforcement for maintaining both low error AND low angular velocity simultaneously, which should improve overall control quality without sacrificing tracking performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_u07fuaqgct
+
+---
+
