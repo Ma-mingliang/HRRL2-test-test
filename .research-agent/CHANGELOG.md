@@ -7676,3 +7676,55 @@ g_llm_reward_generation_openreview_q01nzxiwlt, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T11:05:48.660385+00:00] v0632 - ✗ REJECTED
+
+**Candidate ID:** `reward_c011`
+**Description:** Added a small stability bonus for maintaining low angular velocity when error is small, to encourage smoother control near target (rationale: The baseline shows excellent tracking (lateral_error: 0.0041) but the agent may still oscillate near the target. Adding a stability bonus when error is small (<0.01) and angular velocity is low (<0.1) encourages the agent to settle smoothly rather than overshoot. This should reduce oscillations and improve control quality without sacrificing tracking performance. The bonus is small (max 0.1) and only applies in the high-precision region, so it won't dominate other rewards.)
+
+### Reward Formula / Change
+```
+Added a small stability bonus for maintaining low angular velocity when error is small, to encourage smoother control near target (rationale: The baseline shows excellent tracking (lateral_error: 0.0041) but the agent may still oscillate near the target. Adding a stability bonus when error is small (<0.01) and angular velocity is low (<0.1) encourages the agent to settle smoothly rather than overshoot. This should reduce oscillations and improve control quality without sacrificing tracking performance. The bonus is small (max 0.1) and only applies in the high-precision region, so it won't dominate other rewards.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_drp7qvunut, g_llm_reward_generation_openreview_svmcdiqo2i
+
+---
+
+## [2026-06-08T11:06:47.834100+00:00] v0633 - ✗ REJECTED
+
+**Candidate ID:** `reward_c012`
+**Description:** Added a small stability bonus for maintaining low angular velocity when error is small, to encourage smoother control near the target (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041) but may benefit from encouraging smoother control near the target. Adding a stability bonus when error is small (<0.01) and angular velocity is low (<0.1) will incentivize the agent to not only reach the target but also maintain stable, smooth control once there. This should reduce oscillations and improve overall control quality without disrupting the existing reward structure.)
+
+### Reward Formula / Change
+```
+Added a small stability bonus for maintaining low angular velocity when error is small, to encourage smoother control near the target (rationale: The current reward function already has good tracking performance (lateral_error: 0.0041) but may benefit from encouraging smoother control near the target. Adding a stability bonus when error is small (<0.01) and angular velocity is low (<0.1) will incentivize the agent to not only reach the target but also maintain stable, smooth control once there. This should reduce oscillations and improve overall control quality without disrupting the existing reward structure.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_u07fuaqgct
+
+---
+
