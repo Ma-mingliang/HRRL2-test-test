@@ -7728,3 +7728,57 @@ g_llm_reward_generation_openreview_u07fuaqgct
 
 ---
 
+## [2026-06-08T11:08:51.359373+00:00] v0628 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c009`
+**Description:** Simplified the adaptive weight calculation to be more stable and reduced the maximum weight to prevent over-penalization (rationale: The current adaptive weight calculation uses an exponential function that can produce unstable gradients and may over-penalize large errors. By simplifying to a linear ramp with a lower maximum weight (2.0 instead of 3.0), we create more stable learning dynamics. The linear ramp with min(1.0, error*10) still provides adaptive weighting but with smoother gradients. This should help maintain the excellent completion rate (1.0) while potentially improving training stability and reducing variance in the reward signal.)
+
+### Reward Formula / Change
+```
+Simplified the adaptive weight calculation to be more stable and reduced the maximum weight to prevent over-penalization (rationale: The current adaptive weight calculation uses an exponential function that can produce unstable gradients and may over-penalize large errors. By simplifying to a linear ramp with a lower maximum weight (2.0 instead of 3.0), we create more stable learning dynamics. The linear ramp with min(1.0, error*10) still provides adaptive weighting but with smoother gradients. This should help maintain the excellent completion rate (1.0) while potentially improving training stability and reducing variance in the reward signal.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 975.1889
+- **lateral_error:** 0.0039
+
+### Source Methods
+g_llm_reward_generation_openreview_cmn54vpksz, g_llm_reward_generation_openreview_gbwovfgek8
+
+---
+
+## [2026-06-08T11:08:54.569377+00:00] v0634 - ✗ REJECTED
+
+**Candidate ID:** `reward_c013`
+**Description:** No-op candidate (LLM unavailable)
+
+### Reward Formula / Change
+```
+No-op candidate (LLM unavailable)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty_patch
+
+### Source Methods
+h_learned_preference_reward_openreview_tjhhb6cscw, h_learned_preference_reward_openreview_fnrjcd0s1l
+
+---
+

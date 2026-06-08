@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c007",
+    "candidate_id": "reward_c009",
     "optimizer": "reward",
-    "description": "Added a safety gate to the subgoal reward to prevent reward hacking when error reduction is minimal but current error is very small (rationale: The current subgoal reward can be exploited by making tiny error reductions when already near zero error, leading to reward hacking. Adding a minimum reduction threshold (0.001) ensures only meaningful improvements are rewarded, preventing the agent from gaming the system with negligible improvements. This should improve training stability and prevent the agent from focusing on trivial error reductions instead of maintaining high precision.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -976,14 +976,16 @@\n         # 7. Curriculum subgoal reward - encourage progressive improvement\n         subgoal_reward = 0.0\n         if hasattr(self, 'prev_error') and self.prev_error is not None:\n             # Reward for reducing error toward subgoal thresholds\n             error_reduction = self.prev_error - current_error\n-            if error_reduction > 0:\n+            # Safety gate: only reward meaningful reductions and avoid reward hacking near zero\n+        ",
-    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_dbuuzrhoqp\", \"g_llm_reward_generation_openreview_ieduruo55f\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:DbUuZrhOqp\", \"openreview:IEduRUO55F\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Simplified the adaptive weight calculation to be more stable and reduced the maximum weight to prevent over-penalization (rationale: The current adaptive weight calculation uses an exponential function that can produce unstable gradients and may over-penalize large errors. By simplifying to a linear ramp with a lower maximum weight (2.0 instead of 3.0), we create more stable learning dynamics. The linear ramp with min(1.0, error*10) still provides adaptive weighting but with smoother gradients. This should help maintain the excellent completion rate (1.0) while potentially improving training stability and reducing variance in the reward signal.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -940,11 +940,7 @@\n         # 1. 核心跟踪奖励\n         max_penalty = 2.0\n-        # Adaptive dynamic weighting: smooth schedule based on error magnitude\n-        # Implements D_adaptive_dynamic_reward with safety gating\n-        base_weight = 1.0\n-        max_weight = 3.0\n-        # Smooth exponential schedule: weight increases with error magnitude\n-        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))\n-        # Safety gating",
+    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_cmn54vpksz\", \"g_llm_reward_generation_openreview_gbwovfgek8\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:cmN54vPKsz\", \"openreview:gBwovFgeK8\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T10:50:43.780905+00:00"
+    "timestamp": "2026-06-08T11:08:51.359373+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
