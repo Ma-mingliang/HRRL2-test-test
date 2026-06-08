@@ -5890,3 +5890,29 @@ e_hierarchical_reward_openreview_a0cecoe9bp, e_hierarchical_reward_openreview_lz
 
 ---
 
+## [2026-06-08T06:09:48.966951+00:00] v0594 - ✗ REJECTED
+
+**Candidate ID:** `reward_c029`
+**Description:** Added residual action penalty to encourage smoother residual control outputs (rationale: The research idea suggests penalizing residual action magnitude and roughness. Since the current reward already penalizes absolute action magnitude (action_penalty), adding a penalty on action changes (residual_penalty) will encourage smoother control outputs. This should reduce action oscillations and improve tracking stability, potentially reducing the lateral_error metric while maintaining the high completion_rate. The penalty is small (-0.01 coefficient) to avoid dominating the task reward.)
+
+### Reward Formula / Change
+```
+Added residual action penalty to encourage smoother residual control outputs (rationale: The research idea suggests penalizing residual action magnitude and roughness. Since the current reward already penalizes absolute action magnitude (action_penalty), adding a penalty on action changes (residual_penalty) will encourage smoother control outputs. This should reduce action oscillations and improve tracking stability, potentially reducing the lateral_error metric while maintaining the high completion_rate. The penalty is small (-0.01 coefficient) to avoid dominating the task reward.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_dpkak1oh3x, f_residual_aware_reward_openreview_isxdqzvhox
+
+---
+
