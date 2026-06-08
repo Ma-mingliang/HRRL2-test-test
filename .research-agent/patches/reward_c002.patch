@@ -1,33 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -950,26 +950,7 @@
-         # 3. 平顺性惩罚
-         smoothness_penalty = -0.05 * angular_velocity
+@@ -954,7 +954,7 @@
+         # 4. 改进奖励
+-        improvement_reward = 0.0
+-        error_reduction = abs(state_last_raw[0]) - current_error
+-        if error_reduction > 0:
+-            improvement_reward = 0.3 * error_reduction
++        gamma = 0.99
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        improvement_reward = gamma * potential_current - potential_last
          
--        # 3.2. Velocity penalty for excessive angular velocity
--        velocity_penalty = 0.0
--        if angular_velocity > 0.1:
--            velocity_penalty = -0.1 * (angular_velocity - 0.1)
--        
--        # 3.3. Smoothness bonus for low angular velocity when tracking well
--        if current_error < 0.02 and angular_velocity < 0.1:
--            smoothness_bonus = 0.05 * (0.1 - angular_velocity) / 0.1
--        else:
--            smoothness_bonus = 0.0
--        
--        # 3.4. Addit
--        
--        # 3.4. Additional penalty for high angular velocity when tracking well
--        high_velocity_penalty = 0.0
--        if current_error < 0.01 and angular_velocity > 0.2:
--            high_velocity_penalty = -0.1 * (angular_velocity - 0.2)
--            smoothness_bonus = 0.05 * (0.1 - angular_velocity) / 0.1
--        
--        # 3.5. Additional oscillation penalty for high angular velocity
--        oscillation_penalty = 0.0
--        if angular_velocity > 0.2:
--            oscillation_penalty = -0.15 * (angular_velocity - 0.2)
-+        # 3.2. Velocity penalty for excessive angular velocity
-+        velocity_penalty = 0.0
-+        if angular_velocity > 0.1:
-+            velocity_penalty = -0.1 * (angular_velocity - 0.1)
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角

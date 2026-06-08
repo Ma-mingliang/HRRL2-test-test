@@ -5136,3 +5136,29 @@ g_llm_reward_generation_openreview_u07fuaqgct
 
 ---
 
+## [2026-06-08T03:31:44.533564+00:00] v0564 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Replace the improvement reward with a potential-based shaping term using gamma * Phi(s_next) - Phi(s) to better preserve policy incentives while maintaining error reduction motivation. (rationale: The current improvement reward only gives positive reward when error decreases, which can lead to suboptimal policies that avoid small improvements to maintain larger future rewards. The potential-based shaping term (gamma * Phi(s_next) - Phi(s)) preserves the optimal policy while still encouraging error reduction. This should improve training stability and potentially reduce lateral error further by providing more consistent gradient signals.)
+
+### Reward Formula / Change
+```
+Replace the improvement reward with a potential-based shaping term using gamma * Phi(s_next) - Phi(s) to better preserve policy incentives while maintaining error reduction motivation. (rationale: The current improvement reward only gives positive reward when error decreases, which can lead to suboptimal policies that avoid small improvements to maintain larger future rewards. The potential-based shaping term (gamma * Phi(s_next) - Phi(s)) preserves the optimal policy while still encouraging error reduction. This should improve training stability and potentially reduce lateral error further by providing more consistent gradient signals.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openreview_6lm1jxxlxb
+
+---
+

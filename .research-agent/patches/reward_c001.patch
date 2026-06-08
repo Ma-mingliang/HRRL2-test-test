@@ -1,14 +1,20 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,7 +954,7 @@
-         # 4. 改进奖励
--        improvement_reward = 0.0
--        error_reduction = abs(state_last_raw[0]) - current_error
--        if error_reduction > 0:
--            improvement_reward = 0.3 * error_reduction
-+        gamma = 0.99
-+        potential_current = -current_error
-+        potential_last = -abs(state_last_raw[0])
+@@ -954,4 +954,14 @@
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive potential scaling based on error magnitude
++        if current_error < 0.01:
++            potential_scale = 2.0  # Higher weight for small errors
++        else:
++            potential_scale = 1.0
++        
++        potential_current = -potential_scale * current_error
++        potential_last = -potential_scale * abs(state_last_raw[0])
 +        improvement_reward = gamma * potential_current - potential_last
-         
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
++        
++        # Safety gate: only apply improvement reward when tracking is stable
++        if abs(state_raw[2]) > 0.5:  # High angular velocity indicates instability
++            improvement_reward *= 0.5

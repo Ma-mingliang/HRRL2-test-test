@@ -52,8 +52,11 @@ git:
 optimizer:
   active_categories:
     - A_potential_based_reward
-    - F_residual_aware_reward
     - B_safety_constraint_reward
+    - E_hierarchical_reward
+    - F_residual_aware_reward
     - C_curriculum_subgoal_reward
+    - D_adaptive_dynamic_reward
     - G_llm_reward_generation
+    - H_learned_preference_reward
   methods_per_category: 2
