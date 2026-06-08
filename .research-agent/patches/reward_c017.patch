@@ -1,18 +1,18 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,8 +960,12 @@
-         # 8. Residual action penalty (from research idea F_residual_aware_reward)
-         # Penalize large residual actions to encourage smooth corrections
-         residual_penalty = 0.0
-         residual_smoothness_penalty = 0.0
-         if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
--            # Scale penalty based on tracking error - more penalty when error is large
--            # Use exponential scaling to make penalty more aggressive for large errors
--            error_scale = 1.0 + 3.0 * (1.0 - np.exp(-5.0 * current_error))
-+            # Scale penalty based on tracking error - more penalty when error is large
-+            # Use exponential scaling to make penalty more aggressive for large errors
-+            # Add additional scaling based on error magnitude for better gradient signal
-+            error_scale = 1.0 + 3.0 * (1.0 - np.exp(-5.0 * current_error))
-+            # Add additional scaling based on error magnitude for better gradient signal
-+            error_magnitude_scale = 1.0 + 2.0 * min(current_error, 1.0)
-+            residual_penalty = -0.2 * error_scale * error_magnitude_scale * np.sum(self.last_residual_action**2)
+@@ -951,6 +951,12 @@
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
+         
++        # 3.5 Safety constraint: penalize excessive angular velocity
++        safety_penalty = 0.0
++        max_safe_angular_velocity = 2.0  # rad/s threshold
++        if angular_velocity > max_safe_angular_velocity:
++            violation = angular_velocity - max_safe_angular_velocity
++            safety_penalty = -0.5 * violation  # Strong penalty for unsafe oscillations
+         
+         # 4. 改进奖励
+         gamma = 0.99
+@@ -963,1 +969,1 @@
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty

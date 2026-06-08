@@ -951,14 +951,20 @@ class Attitude_control_stage1(gym.Env):
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
+        # 3.5 Safety constraint: penalize excessive angular velocity
+        safety_penalty = 0.0
+        max_safe_angular_velocity = 2.0  # rad/s threshold
+        if angular_velocity > max_safe_angular_velocity:
+            violation = angular_velocity - max_safe_angular_velocity
+            safety_penalty = -0.5 * violation  # Strong penalty for unsafe oscillations
+        
         # 4. 改进奖励
         gamma = 0.99
-        potential_current = -current_error
+        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty
         potential_last = -abs(state_last_raw[0])
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
-        import math
         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
         
         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
