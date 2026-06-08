@@ -1,31 +1,61 @@
 --- a/env.py
 +++ b/env.py
-@@ -970,18 +970,14 @@
-         # 8. Residual action penalty (from research idea F_residual_aware_reward)
-         # Penalize large residual actions to encourage smooth corrections
-         residual_penalty = 0.0
-         residual_smoothness_penalty = 0.0
-         if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
-             # Scale penalty based on tracking error - more penalty when error is large
-             # Use exponential scaling to make penalty more aggressive for large errors
-             # Add additional scaling based on error magnitude for better gradient signal
-             error_scale = 1.0 + 3.0 * (1.0 - np.exp(-5.0 * current_error))
--            # Add additional scaling based on error magnitude for better gradient signal
--            error_magnitude_scale = 1.0 + 2.0 * min(current_error, 1.0)
--            residual_penalty = -0.2 * error_scale * error_magnitude_scale * np.sum(self.last_residual_action**2)
--            # Add additional scaling based on error magnitude for better gradient signal
--            error_magnitude_scale = 1.0 + 2.0 * min(current_error, 1.0)
--            residual_penalty = -0.2 * error_scale * error_magnitude_scale * np.sum(self.last_residual_action**2)
-+            error_magnitude_scale = 1.0 + 2.0 * min(current_error, 1.0)
-+            residual_penalty = -0.2 * error_scale * error_magnitude_scale * np.sum(self.last_residual_action**2)
-             # Add smoothness penalty for residual action changes
-             if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
-                 residual_smoothness_penalty = -0.05 * np.sum((self.last_residual_action - self.prev_residual_action)**2)
-@@ -986,6 +981,6 @@
-             self.prev_residual_action = self.last_residual_action.copy()
+@@ -930,36 +930,43 @@
+     def __calculate_reward(self, state_last, state, target_handle_angle=0.0):
+         """改进的奖励函数"""
+         state_last_raw = self.__observation_reduction(state_last)
+         state_raw = self.__observation_reduction(state)
          
--        reward = tracking_reward + potential_shaping + action_penalty + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty
-+        reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty
+         current_error = abs(state_raw[0])
+         angular_velocity = abs(state_raw[2])
          
-         # 7. Small bonus for maintaining very low tracking error
-         if current_error < 0.01:  # Very precise tracking
+-        # 1. 核心跟踪奖励
+-        max_penalty = 2.0
+-        tracking_reward = -min(current_error**2, max_penalty)
++        # 1. 目标进度奖励 (manager reward)
++        goal_progress_reward = 0.0
++        if current_error < 0.01:  # 目标达成阈值
++            goal_progress_reward = 2.0  # 高奖励鼓励目标达成
++        elif current_error < 0.05:
++            goal_progress_reward = 1.0 * (0.05 - current_error) / 0.04  # 渐进奖励
+         
+-        # 2. 高精度奖励
+-        bonus_reward = 0.0
+-        if current_error < 0.005:
+-            bonus_reward = 1.0
+-        elif current_error < 0.01:
+-            bonus_reward = 0.5
+-        elif current_error < 0.02:
+-            bonus_reward = 0.2
++        # 2. 低级跟踪奖励 (worker reward)
++        max_penalty = 2.0
++        tracking_reward = -min(current_error**2, max_penalty)
++        
++        # 3. 高精度奖励
++        bonus_reward = 0.0
++        if current_error < 0.005:
++            bonus_reward = 1.0
++        elif current_error < 0.01:
++            bonus_reward = 0.5
++        elif current_error < 0.02:
++            bonus_reward = 0.2
+         
+-        # 3. 平顺性惩罚
++        # 4. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
+         
+-        # 4. 改进奖励
++        # 5. 改进奖励
+         gamma = 0.99
+         potential_current = -current_error
+         potential_last = -abs(state_last_raw[0])
+         improvement_reward = gamma * potential_current - potential_last
+         
+-        # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
++        # 6. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+         action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+         
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        reward = goal_progress_reward + tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
+         
+         return reward
