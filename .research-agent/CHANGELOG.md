@@ -9497,3 +9497,29 @@ b_safety_constraint_reward_openreview_3zar4hakpw, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-08T15:05:36.020717+00:00] v0657 - ✗ REJECTED
+
+**Candidate ID:** `reward_c015`
+**Description:** Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows excellent tracking (lateral_error: 0.0041) but may have excessive oscillations. Adding a safety constraint penalty for angular velocity above a threshold (2.0 rad/s) implements the B_safety_constraint_reward research idea. This gates the task reward with explicit penalties for unsafe behavior (excessive oscillations), which should improve smoothness without sacrificing tracking performance. The penalty is only applied when the constraint is violated (angular_velocity > max_safe_angular_velocity), following the formula: reward -= lambda_violation * max(0, constraint_value).)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows excellent tracking (lateral_error: 0.0041) but may have excessive oscillations. Adding a safety constraint penalty for angular velocity above a threshold (2.0 rad/s) implements the B_safety_constraint_reward research idea. This gates the task reward with explicit penalties for unsafe behavior (excessive oscillations), which should improve smoothness without sacrificing tracking performance. The penalty is only applied when the constraint is violated (angular_velocity > max_safe_angular_velocity), following the formula: reward -= lambda_violation * max(0, constraint_value).)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_dbuuzrhoqp, b_safety_constraint_reward_openreview_rpws9kov0i
+
+---
+
