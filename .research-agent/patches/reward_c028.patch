@@ -1,18 +1,62 @@
 --- a/env.py
 +++ b/env.py
-@@ -964,5 +964,15 @@
-         velocity = abs(state_raw[3])  # v is velocity
-         velocity_reward = 0.1 * velocity  # Small positive reward for maintaining speed
-         angular_velocity = abs(state_raw[2])  # w0 is angular velocity
-+        
-+        # 9. Curriculum subgoal reward (from research idea C_curriculum_subgoal_reward)
-+        # Reward progress toward intermediate waypoints to encourage exploration
-+        # before focusing on precise final target tracking
-+        subgoal_reward = 0.0
-+        if hasattr(self, 'subgoal_stage') and hasattr(self, 'prev_subgoal_error'):
-+            # Reward progress toward current subgoal
-+            subgoal_progress = self.prev_subgoal_error - current_error
-+            subgoal_reward = 0.3 * subgoal_progress  # beta_stage = 0.3
-+            self.prev_subgoal_error = current_error
+@@ -930,36 +930,40 @@
+     def __calculate_reward(self, state_last, state, target_handle_angle=0.0):
+         """改进的奖励函数"""
+         state_last_raw = self.__observation_reduction(state_last)
+         state_raw = self.__observation_reduction(state)
          
-         reward = tracking_reward + potential_shaping + heading_penalty + velocity_reward + angular_penalty + residual_penalty + residual_smoothness_penalty + safety_penalty
+         current_error = abs(state_raw[0])
+         angular_velocity = abs(state_raw[2])
+         
+-        # 1. 核心跟踪奖励
+-        max_penalty = 2.0
+-        tracking_reward = -min(current_error**2, max_penalty)
++        # 1. 分层奖励结构：高层目标进度 + 低层控制奖励
++        # 高层奖励：目标进度（误差减少）
++        error_reduction = abs(state_last_raw[0]) - current_error
++        goal_progress_reward = 10.0 * error_reduction  # 鼓励误差持续减少
+         
+-        # 2. 高精度奖励
+-        bonus_reward = 0.0
+-        if current_error < 0.005:
+-            bonus_reward = 1.0
+-        elif current_error < 0.01:
+-            bonus_reward = 0.5
+-        elif current_error < 0.02:
+-            bonus_reward = 0.2
++        # 低层奖励：跟踪精度与控制平顺性
++        max_penalty = 2.0
++        tracking_reward = -min(current_error**2, max_penalty)
++        
++        # 高精度奖励（安全门控：仅在误差较小时给予）
++        bonus_reward = 0.0
++        if current_error < 0.005:
++            bonus_reward = 1.0
++        elif current_error < 0.01:
++            bonus_reward = 0.5
++        elif current_error < 0.02:
++            bonus_reward = 0.2
+         
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
+         
+-        # 4. 改进奖励
+-        gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # 4. 控制成本惩罚
++        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+         
+-        # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+-        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
++        # 5. 安全门控：当误差过大时降低高层奖励权重
++        safety_gate = 1.0 if current_error < 0.1 else 0.5
+         
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        reward = (safety_gate * goal_progress_reward + 
++                  tracking_reward + bonus_reward + 
++                  smoothness_penalty + action_penalty)
+         
+         return reward

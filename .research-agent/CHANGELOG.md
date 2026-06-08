@@ -5838,3 +5838,29 @@ e_hierarchical_reward_arxiv_2602_04454, e_hierarchical_reward_arxiv_2602_18582
 
 ---
 
+## [2026-06-08T05:59:03.139595+00:00] v0592 - ✗ REJECTED
+
+**Candidate ID:** `reward_c027`
+**Description:** Added hierarchical reward structure separating goal progress (high-level) from tracking precision (low-level) with explicit gating for safety (rationale: This implements the hierarchical reward structure from research ideas by separating goal progress (high-level) from precision tracking (low-level). The goal_progress_reward encourages continuous improvement toward the target, while precision_reward maintains the existing high-accuracy incentives. The safety gate (current_error < 0.02) prevents reward hacking by only allowing progress rewards when the system is in a safe operating region. This should improve completion_rate and reduce lateral_error by providing clearer learning signals for both high-level goal achievement and low-level control precision.)
+
+### Reward Formula / Change
+```
+Added hierarchical reward structure separating goal progress (high-level) from tracking precision (low-level) with explicit gating for safety (rationale: This implements the hierarchical reward structure from research ideas by separating goal progress (high-level) from precision tracking (low-level). The goal_progress_reward encourages continuous improvement toward the target, while precision_reward maintains the existing high-accuracy incentives. The safety gate (current_error < 0.02) prevents reward hacking by only allowing progress rewards when the system is in a safe operating region. This should improve completion_rate and reduce lateral_error by providing clearer learning signals for both high-level goal achievement and low-level control precision.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+e_hierarchical_reward_arxiv_2603_16060, e_hierarchical_reward_arxiv_2604_10812
+
+---
+
