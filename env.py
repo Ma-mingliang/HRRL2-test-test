@@ -973,8 +973,20 @@ class Attitude_control_stage1(gym.Env):
             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
         self.prev_residual = target_handle_angle
         
+        # 8. Learned preference reward (simplified proxy)
+        # Uses exponential moving average of past errors as preference signal
+        preference_reward = 0.0
+        if hasattr(self, 'error_history') and len(self.error_history) > 0:
+            avg_error = np.mean(self.error_history[-10:])  # Last 10 errors
+            # Reward for being better than historical average
+            preference_reward = 0.1 * (avg_error - current_error)
+            # Safety gating: cap reward magnitude
+            preference_reward = np.clip(preference_reward, -0.5, 0.5)
+        if not hasattr(self, 'error_history'):
+            self.error_history = []
+        self.error_history.append(current_error)
+        
         # 7. Curriculum subgoal reward - encourage progressive improvement
-        subgoal_reward = 0.0
         if hasattr(self, 'prev_error') and self.prev_error is not None:
             # Reward for reducing error toward subgoal thresholds
             error_reduction = self.prev_error - current_error
@@ -989,19 +1001,7 @@ class Attitude_control_stage1(gym.Env):
                 subgoal_reward = stage_weight * error_reduction * (1.0 / (current_error + 0.001))
         self.prev_error = current_error
         
-        # 8. Learned preference reward (simplified proxy)
-        # Use exponential moving average of past rewards as preference signal
-        if not hasattr(self, 'reward_ema'):
-            self.reward_ema = 0.0
-        # Update EMA with current reward components (excluding this component)
-        current_reward_estimate = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
-        self.reward_ema = 0.95 * self.reward_ema + 0.05 * current_reward_estimate
-        # Preference reward: encourage consistency with learned preference
-        preference_reward = 0.1 * (self.reward_ema - current_reward_estimate)
-        # Safety gating: cap preference reward magnitude
-        preference_reward = max(min(preference_reward, 0.5), -0.5)
-        
-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward + preference_reward
+        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
         
         return reward
     def reset(self, seed=None, options=None):

@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c062",
+    "candidate_id": "reward_c070",
     "optimizer": "reward",
-    "description": "Added adaptive scaling to the high-precision bonus reward based on angular velocity to encourage stable high-precision tracking (rationale: The current bonus reward gives fixed rewards for achieving low error thresholds, but doesn't account for stability during high-precision tracking. By scaling the bonus based on angular velocity, we encourage the agent to not only reach low error but maintain it with minimal oscillation. This addresses the research idea of using LLM-generated reward refinements by adding a stability-aware component that should improve both tracking precision and smoothness. The stability_factor ensures the bonus is never completely eliminated while providing stronger incentives for stable high-precision performance.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -950,8 +950,12 @@\n         # 2. 高精度奖励\n         bonus_reward = 0.0\n         if current_error < 0.005:\n-            bonus_reward = 1.0\n+            # Scale bonus by stability factor - higher bonus when angular velocity is low\n+            stability_factor = max(0.1, 1.0 - 2.0 * angular_velocity)\n+            bonus_reward = 1.0 * stability_factor\n         elif current_error < 0.01:\n-            bonus_reward = 0.5\n+            stability_factor = max(0.1, 1.0 - 1.5 * angu",
-    "source_idea": "{\"source_method_ids\": [\"g_llm_reward_generation_openreview_u07fuaqgct\"], \"source_categories\": [\"G_llm_reward_generation\"], \"source_papers\": [\"openreview:u07FUAQgcT\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added a learned preference reward component that uses a simple exponential moving average of past rewards to infer a preference signal, with safety gating to prevent reward hacking. (rationale: The current reward function achieves perfect completion but has very low lateral error (0.0041) with zero standard deviation, suggesting the agent may be over-optimizing for a specific pattern. Adding a learned preference component encourages consistency with the agent's own past performance, which can help smooth out reward signals and prevent overfitting to specific trajectories. The EMA-based approach is a simple proxy for a learned preference model that doesn't require external data. The safety gating prevents reward hacking by capping the preference reward magnitude. This should improve robustness and potentially reduce variance in performance.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -976,19 +976,31 @@\n         # 7. Curriculum subgoal reward - encourage progressive improvement\n         subgoal_reward = 0.0\n         if hasattr(self, 'prev_error') and self.prev_error is not None:\n             # Reward for reducing error toward subgoal thresholds\n             error_reduction = self.prev_error - current_error\n             if error_reduction > 0:\n                 # Stage-based weighting with safety gating\n                 if current_error < 0.005:\n   ",
+    "source_idea": "{\"source_method_ids\": [\"h_learned_preference_reward_openreview_kw0mzfvmb0\", \"h_learned_preference_reward_openreview_leed5is4oi\"], \"source_categories\": [\"H_learned_preference_reward\"], \"source_papers\": [\"openreview:KW0mzfVmb0\", \"openreview:LEed5Is4oi\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T19:49:00.639408+00:00"
+    "timestamp": "2026-06-08T20:10:05.303576+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 142,
-    "full_evals_run": 127
+    "candidates_proposed": 144,
+    "full_evals_run": 128
   },
   "stop_reason": null,
   "progress": null,
@@ -765,6 +765,10 @@
     {
       "candidate_id": "reward_c070",
       "applied_at": "2026-06-08T20:03:43.273780+00:00"
+    },
+    {
+      "candidate_id": "reward_c072",
+      "applied_at": "2026-06-08T20:12:17.605302+00:00"
     }
   ],
   "baseline_fair_eval": {

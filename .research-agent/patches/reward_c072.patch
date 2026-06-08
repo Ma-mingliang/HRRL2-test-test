@@ -1,0 +1,23 @@
+--- a/env.py
++++ b/env.py
+@@ -970,8 +970,20 @@
+         # 6. 残差动作惩罚（基于研究想法）
+         residual_penalty = 0.0
+         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
+             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
+         self.prev_residual = target_handle_angle
+         
++        # 8. Learned preference reward (simplified proxy)
++        # Uses exponential moving average of past errors as preference signal
++        preference_reward = 0.0
++        if hasattr(self, 'error_history') and len(self.error_history) > 0:
++            avg_error = np.mean(self.error_history[-10:])  # Last 10 errors
++            # Reward for being better than historical average
++            preference_reward = 0.1 * (avg_error - current_error)
++            # Safety gating: cap reward magnitude
++            preference_reward = np.clip(preference_reward, -0.5, 0.5)
++        if not hasattr(self, 'error_history'):
++            self.error_history = []
++        self.error_history.append(current_error)
+         
+         # 7. Curriculum subgoal reward - encourage progressive improvement
