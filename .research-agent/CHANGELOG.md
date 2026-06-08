@@ -7392,3 +7392,31 @@ g_llm_reward_generation_openreview_obpqdcwlfd, g_llm_reward_generation_openrevie
 
 ---
 
+## [2026-06-08T10:50:43.786730+00:00] v0626 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c007`
+**Description:** Added a safety gate to the subgoal reward to prevent reward hacking when error reduction is minimal but current error is very small (rationale: The current subgoal reward can be exploited by making tiny error reductions when already near zero error, leading to reward hacking. Adding a minimum reduction threshold (0.001) ensures only meaningful improvements are rewarded, preventing the agent from gaming the system with negligible improvements. This should improve training stability and prevent the agent from focusing on trivial error reductions instead of maintaining high precision.)
+
+### Reward Formula / Change
+```
+Added a safety gate to the subgoal reward to prevent reward hacking when error reduction is minimal but current error is very small (rationale: The current subgoal reward can be exploited by making tiny error reductions when already near zero error, leading to reward hacking. Adding a minimum reduction threshold (0.001) ensures only meaningful improvements are rewarded, preventing the agent from gaming the system with negligible improvements. This should improve training stability and prevent the agent from focusing on trivial error reductions instead of maintaining high precision.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 1011.4095
+- **lateral_error:** 0.0036
+
+### Source Methods
+g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openreview_ieduruo55f
+
+---
+
