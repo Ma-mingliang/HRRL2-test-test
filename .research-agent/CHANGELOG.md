@@ -10572,3 +10572,34 @@ d_adaptive_dynamic_reward_openreview_d3wjfs6z2k, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T18:47:03.683923+00:00] v0694 - ✗ REJECTED
+
+**Candidate ID:** `reward_c052`
+**Description:** Added adaptive dynamic weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating. (rationale: The current improvement reward uses a fixed gamma=0.99, which may not be optimal across different error magnitudes. By adapting gamma based on current error (higher gamma when error is larger), we encourage more aggressive improvement when far from target and more conservative improvement when close. This implements the D_adaptive_dynamic_reward research idea with safety gating to prevent reward hacking. The exponential schedule ensures smooth transitions, and the max_gamma cap prevents excessive weighting. This should improve training efficiency by dynamically adjusting the importance of improvement based on current performance.)
+
+### Reward Formula / Change
+```
+Added adaptive dynamic weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating. (rationale: The current improvement reward uses a fixed gamma=0.99, which may not be optimal across different error magnitudes. By adapting gamma based on current error (higher gamma when error is larger), we encourage more aggressive improvement when far from target and more conservative improvement when close. This implements the D_adaptive_dynamic_reward research idea with safety gating to prevent reward hacking. The exponential schedule ensures smooth transitions, and the max_gamma cap prevents excessive weighting. This should improve training efficiency by dynamically adjusting the importance of improvement based on current performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 968.5990
+- **lateral_error:** 0.0049
+
+### Rejection Reason
+Score -0.0228 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_pt1sssy1ta, d_adaptive_dynamic_reward_openreview_s7rdnnujy6
+
+---
+

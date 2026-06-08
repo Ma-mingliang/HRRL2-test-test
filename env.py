@@ -963,8 +963,8 @@ class Attitude_control_stage1(gym.Env):
         # Adaptive dynamic weighting for improvement reward
         base_gamma = 0.99
         max_gamma = 1.5
-        # Smooth exponential schedule: gamma increases with error magnitude
-        gamma = base_gamma + (max_gamma - base_gamma) * (1 - math.exp(-5 * current_error))
+        # Smooth schedule: gamma increases with error magnitude
+        gamma = base_gamma + (max_gamma - base_gamma) * (1 - math.exp(-10 * current_error))
         gamma = min(gamma, max_gamma)  # Safety gating
         potential_current = -current_error
         potential_last = -abs(state_last_raw[0])

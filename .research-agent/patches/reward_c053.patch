@@ -1,0 +1,16 @@
+--- a/env.py
++++ b/env.py
+@@ -962,4 +962,10 @@
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive dynamic weighting for improvement reward
++        base_gamma = 0.99
++        max_gamma = 1.5
++        # Smooth schedule: gamma increases with error magnitude
++        gamma = base_gamma + (max_gamma - base_gamma) * (1 - math.exp(-10 * current_error))
++        gamma = min(gamma, max_gamma)  # Safety gating
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        improvement_reward = gamma * potential_current - potential_last
