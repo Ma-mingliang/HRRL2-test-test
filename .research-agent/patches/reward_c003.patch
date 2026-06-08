@@ -1,20 +1,14 @@
 --- a/env.py
 +++ b/env.py
-@@ -958,11 +958,9 @@
+@@ -954,5 +954,8 @@
          # 4. 改进奖励
-         improvement_reward = 0.0
-         error_reduction = abs(state_last_raw[0]) - current_error
--        if error_reduction > 0:
--            improvement_reward = 0.3 * error_reduction
--        
--        # 4.1 Potential-based reward shaping (preserves optimal policy)
--        # Phi(s) = -k * |error|, so gamma*Phi(s') - Phi(s) = k*(|e_t| - gamma*|e_t+1|)
--        gamma = 0.99
--        k_phi = 1.0
--        potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
-+        
-+        # 4.1 Potential-based reward shaping (preserves optimal policy)
-+        # Phi(s) = -k * |error|, so gamma*Phi(s') - Phi(s) = k*(|e_t| - gamma*|e_t+1|)
-+        gamma = 0.99
-+        k_phi = 1.0
-+        potential_shaping = k_phi * (abs(state_last_raw[0]) - gamma * current_error)
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive gamma based on error magnitude
++        adaptive_gamma = gamma if current_error < 0.01 else 0.95
++        potential_current = -current_error**0.8  # Sublinear scaling for large errors
++        potential_last = -abs(state_last_raw[0])**0.8
++        improvement_reward = adaptive_gamma * potential_current - potential_last
++        improvement_reward *= 2.0  # Scale up improvement signal
