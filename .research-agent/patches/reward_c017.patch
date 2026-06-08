@@ -1,22 +1,16 @@
 --- a/env.py
 +++ b/env.py
-@@ -959,6 +959,12 @@
+@@ -959,6 +959,13 @@
          # 3. 平顺性惩罚
          smoothness_penalty = -0.05 * angular_velocity
          
-+        # 3.5. Stability bonus for low angular velocity when error is small
-+        stability_bonus = 0.0
-+        if current_error < 0.01 and angular_velocity < 0.1:
-+            # Reward for maintaining stability near target
-+            stability_bonus = 0.1 * (0.1 - angular_velocity) / 0.1
++        # 4. Safety constraint penalty for excessive angular velocity
++        safety_penalty = 0.0
++        max_safe_angular_velocity = 2.0  # rad/s threshold
++        if angular_velocity > max_safe_angular_velocity:
++            violation = angular_velocity - max_safe_angular_velocity
++            safety_penalty = -0.1 * violation**2
 +        
          gamma = 0.99
          potential_current = -current_error
          potential_last = -abs(state_last_raw[0])
-@@ -992,5 +998,5 @@
-         self.prev_error = current_error
-         
--        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
-+        reward = tracking_reward + bonus_reward + smoothness_penalty + stability_bonus + improvement_reward + action_penalty + residual_penalty + subgoal_reward
-         
-         return reward
