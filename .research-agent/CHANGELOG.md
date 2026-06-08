@@ -5578,3 +5578,29 @@ b_safety_constraint_reward_arxiv_2306_03220, b_safety_constraint_reward_arxiv_26
 
 ---
 
+## [2026-06-08T05:18:19.586412+00:00] v0582 - ✗ REJECTED
+
+**Candidate ID:** `reward_c017`
+**Description:** Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The current reward function already has smoothness_penalty for angular velocity, but it's linear and weak (-0.05 * angular_velocity). Adding a safety constraint penalty with a threshold (max_safe_angular_velocity = 2.0 rad/s) creates a stronger deterrent against unsafe oscillations that could destabilize the system. This follows the research idea of gating task rewards with explicit safety penalties. The penalty is only applied when angular velocity exceeds a safe threshold, preventing reward hacking while encouraging smoother, safer control. This should improve safety metrics without significantly impacting the already good completion_rate (1.0) and lateral_error (0.0041).)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The current reward function already has smoothness_penalty for angular velocity, but it's linear and weak (-0.05 * angular_velocity). Adding a safety constraint penalty with a threshold (max_safe_angular_velocity = 2.0 rad/s) creates a stronger deterrent against unsafe oscillations that could destabilize the system. This follows the research idea of gating task rewards with explicit safety penalties. The penalty is only applied when angular velocity exceeds a safe threshold, preventing reward hacking while encouraging smoother, safer control. This should improve safety metrics without significantly impacting the already good completion_rate (1.0) and lateral_error (0.0041).)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_7lfmnvnmfj, b_safety_constraint_reward_openreview_dhtoyebvmt
+
+---
+
