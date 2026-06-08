@@ -1,18 +1,21 @@
 --- a/env.py
 +++ b/env.py
-@@ -940,11 +940,9 @@
-         # 1. 核心跟踪奖励
-         max_penalty = 2.0
-         # Adaptive dynamic weighting: smooth schedule based on error magnitude
-         # Implements D_adaptive_dynamic_reward with safety gating
--        base_weight = 1.0
--        max_weight = 3.0
--        # Smooth exponential schedule: weight increases with error magnitude
--        error_weight = base_weight + (max_weight - base_weight) * (1 - math.exp(-10 * current_error))
--        # Safety gating: cap weight to prevent reward hacking
--        error_weight = min(error_weight, max_weight)
-+        base_weight = 1.0
-+        max_weight = 2.5
-+        # Linear schedule: weight increases linearly with error magnitude
-+        error_weight = base_weight + (max_weight - base_weight) * min(current_error * 10, 1.0)
-         tracking_reward = -error_weight * min(current_error**2, max_penalty)
+@@ -970,9 +970,19 @@
+         # 6. 残差动作惩罚（基于研究想法）
+         residual_penalty = 0.0
+         if hasattr(self, 'prev_residual') and self.prev_residual is not None:
+             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
+         self.prev_residual = target_handle_angle
+         
++        # 8. Learned preference reward (H_learned_preference_reward)
++        # Simple EMA-based preference signal with safety gating
++        if not hasattr(self, 'reward_ema'):
++            self.reward_ema = 0.0
++        current_reward_estimate = tracking_reward + bonus_reward + improvement_reward
++        self.reward_ema = 0.95 * self.reward_ema + 0.05 * current_reward_estimate
++        # Safety gating: only apply preference reward when tracking is good
++        preference_reward = 0.0
++        if current_error < 0.05:  # Only when tracking is reasonable
++            preference_reward = 0.1 * (self.reward_ema - current_reward_estimate)
+         
+         # 7. Curriculum subgoal reward - encourage progressive improvement
