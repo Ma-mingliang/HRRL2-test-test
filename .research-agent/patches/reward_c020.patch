@@ -1,20 +1,18 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,9 +954,11 @@
-         # 3.5 安全约束惩罚：防止过度振荡
-         safety_penalty = 0.0
-         max_safe_angular_velocity = 2.0  # 安全阈值
--        if angular_velocity > max_safe_angular_velocity:
--            violation = angular_velocity - max_safe_angular_velocity
--            safety_penalty = -0.5 * violation**2
--            # Safety gate: reduce task reward when violating safety constraints
--            tracking_reward *= 0.5
--            bonus_reward *= 0.5
-+        violation = max(0, angular_velocity - max_safe_angular_velocity)
-+        if violation > 0:
-+            safety_penalty = -0.5 * violation**2
-+            # Safety gate: reduce task reward when violating safety constraints
-+            tracking_reward *= 0.5
-+            bonus_reward *= 0.5
-+        else:
-+            safety_penalty = 0.0
+@@ -951,6 +951,12 @@
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
+         
++        # 3.5 安全约束惩罚：防止过度振荡
++        safety_penalty = 0.0
++        max_safe_angular_velocity = 2.0  # 弧度/秒
++        if angular_velocity > max_safe_angular_velocity:
++            safety_penalty = -0.5 * (angular_velocity - max_safe_angular_velocity)
++        
+         # 4. 改进奖励
+         gamma = 0.99
+         potential_current = -current_error
+@@ -963,1 +969,1 @@
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty

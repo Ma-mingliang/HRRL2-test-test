@@ -947,21 +947,20 @@ class Attitude_control_stage1(gym.Env):
             bonus_reward = 0.5
         elif current_error < 0.02:
             bonus_reward = 0.2
+        
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
         
         # 3.5 安全约束惩罚：防止过度振荡
         safety_penalty = 0.0
-        max_safe_angular_velocity = 2.0  # 安全阈值
+        max_safe_angular_velocity = 2.0  # 弧度/秒
         if angular_velocity > max_safe_angular_velocity:
-            violation = angular_velocity - max_safe_angular_velocity
-            safety_penalty = -0.5 * violation  # 惩罚违反安全约束
+            safety_penalty = -0.5 * (angular_velocity - max_safe_angular_velocity)
         
         # 4. 改进奖励
         gamma = 0.99
         potential_current = -current_error
         reward = tracking_reward + bonus_reward + smoothness_penalty + safety_penalty + improvement_reward + action_penalty
-        potential_current = -current_error
         potential_last = -abs(state_last_raw[0])
         improvement_reward = gamma * potential_current - potential_last
         

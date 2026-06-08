@@ -5630,3 +5630,29 @@ b_safety_constraint_reward_openreview_uqrs6vfcsd, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-08T05:19:05.926532+00:00] v0584 - ✗ REJECTED
+
+**Candidate ID:** `reward_c019`
+**Description:** Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The current reward function has good tracking performance (lateral_error: 0.0041) but may allow excessive angular velocity that could lead to unsafe oscillations. Adding a safety constraint penalty for angular velocity exceeding a safe threshold (2.0 rad/s) will: 1) Gate task reward with explicit safety penalties as suggested by the research idea, 2) Prevent reward hacking where the agent achieves good tracking through unsafe oscillatory behavior, 3) Encourage smoother, safer control while maintaining tracking performance. This minimal change adds safety awareness without disrupting the existing reward structure.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The current reward function has good tracking performance (lateral_error: 0.0041) but may allow excessive angular velocity that could lead to unsafe oscillations. Adding a safety constraint penalty for angular velocity exceeding a safe threshold (2.0 rad/s) will: 1) Gate task reward with explicit safety penalties as suggested by the research idea, 2) Prevent reward hacking where the agent achieves good tracking through unsafe oscillatory behavior, 3) Encourage smoother, safer control while maintaining tracking performance. This minimal change adds safety awareness without disrupting the existing reward structure.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+b_safety_constraint_reward_openreview_cawunem1je, b_safety_constraint_reward_openreview_pnhypbc4z7
+
+---
+
