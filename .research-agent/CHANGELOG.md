@@ -10665,3 +10665,34 @@ d_adaptive_dynamic_reward_openreview_fdms41jxqq, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T19:07:22.706296+00:00] v0697 - ✗ REJECTED
+
+**Candidate ID:** `reward_c055`
+**Description:** Added adaptive dynamic weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive dynamic weighting, the improvement reward becomes more significant when the agent is far from the target (large error), encouraging faster error reduction during coarse tracking phases. This aligns with the D_adaptive_dynamic_reward research idea and should help reduce lateral_error more effectively while maintaining the high completion_rate. The exponential schedule with safety gating prevents reward hacking.)
+
+### Reward Formula / Change
+```
+Added adaptive dynamic weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive dynamic weighting, the improvement reward becomes more significant when the agent is far from the target (large error), encouraging faster error reduction during coarse tracking phases. This aligns with the D_adaptive_dynamic_reward research idea and should help reduce lateral_error more effectively while maintaining the high completion_rate. The exponential schedule with safety gating prevents reward hacking.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 887.3903
+- **lateral_error:** 0.0076
+
+### Rejection Reason
+Score -0.1894 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_vbwm1rimjo
+
+---
+
