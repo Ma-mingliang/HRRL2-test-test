@@ -9469,3 +9469,31 @@ b_safety_constraint_reward_openreview_umvicbadkk, b_safety_constraint_reward_ope
 
 ---
 
+## [2026-06-08T15:02:37.363650+00:00] v0656 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c014`
+**Description:** Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows perfect completion rate but with lateral error of 0.0041, which is close to the high-precision threshold (0.005). Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations that might cause the agent to overshoot or destabilize. This implements the B_safety_constraint_reward research idea by gating the reward with explicit penalties for safety violations. The quadratic penalty structure ensures that small violations have minimal impact while large violations are heavily penalized, promoting smoother, safer control while maintaining task performance.)
+
+### Reward Formula / Change
+```
+Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows perfect completion rate but with lateral error of 0.0041, which is close to the high-precision threshold (0.005). Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations that might cause the agent to overshoot or destabilize. This implements the B_safety_constraint_reward research idea by gating the reward with explicit penalties for safety violations. The quadratic penalty structure ensures that small violations have minimal impact while large violations are heavily penalized, promoting smoother, safer control while maintaining task performance.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 988.1264
+- **lateral_error:** 0.0041
+
+### Source Methods
+b_safety_constraint_reward_openreview_3zar4hakpw, b_safety_constraint_reward_openreview_imlpdfbvin
+
+---
+

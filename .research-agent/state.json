@@ -39,11 +39,11 @@
     "dirty_worktree_policy": "abort"
   },
   "current_best": {
-    "candidate_id": "reward_c010",
+    "candidate_id": "reward_c014",
     "optimizer": "reward",
-    "description": "Enhanced potential-based reward shaping with adaptive gamma and error-dependent scaling to better encourage progressive improvement while preventing reward hacking (rationale: The current potential-based reward uses a fixed gamma=0.99 which may not sufficiently encourage precision when errors are small. By making gamma adaptive (higher when errors are small) and scaling the improvement reward based on error magnitude, we create stronger incentives for the agent to achieve and maintain high precision. This aligns with the research idea of using potential differences while adding safety gating through the exponential scaling that naturally reduces as errors decrease. The modification should improve lateral_error metrics by providing more nuanced feedback during the fine-tuning phase of learning.)",
-    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -962,4 +962,8 @@\n         gamma = 0.99\n-        potential_current = -current_error\n-        potential_last = -abs(state_last_raw[0])\n-        improvement_reward = gamma * potential_current - potential_last\n+        # Adaptive gamma: higher weight for small errors to encourage precision\n+        adaptive_gamma = gamma + (1.0 - gamma) * math.exp(-50 * current_error)\n+        potential_current = -current_error\n+        potential_last = -abs(state_last_raw[0])\n+        #",
-    "source_idea": "{\"source_method_ids\": [\"a_potential_based_reward_openreview_tdomx6s4f5\", \"a_potential_based_reward_arxiv_1902_06239\"], \"source_categories\": [\"A_potential_based_reward\"], \"source_papers\": [\"openreview:tDomx6S4F5\", \"arxiv:1902.06239\"], \"source_idea\": \"pool_methods\"}",
+    "description": "Added safety constraint penalty for excessive angular velocity to prevent unsafe oscillations (rationale: The baseline shows perfect completion rate but with lateral error of 0.0041, which is close to the high-precision threshold (0.005). Adding a safety constraint penalty for excessive angular velocity will discourage unsafe oscillations that might cause the agent to overshoot or destabilize. This implements the B_safety_constraint_reward research idea by gating the reward with explicit penalties for safety violations. The quadratic penalty structure ensures that small violations have minimal impact while large violations are heavily penalized, promoting smoother, safer control while maintaining task performance.)",
+    "patch_diff": "--- a/env.py\n+++ b/env.py\n@@ -959,6 +959,14 @@\n         # 3. 平顺性惩罚\n         smoothness_penalty = -0.05 * angular_velocity\n         \n+        # 4. Safety constraint penalty for excessive angular velocity\n+        safety_penalty = 0.0\n+        max_safe_angular_velocity = 2.0  # rad/s threshold\n+        if angular_velocity > max_safe_angular_velocity:\n+            # Quadratic penalty that increases with violation magnitude\n+            violation = angular_velocity - max_safe_angular_velocity\n+     ",
+    "source_idea": "{\"source_method_ids\": [\"b_safety_constraint_reward_openreview_3zar4hakpw\", \"b_safety_constraint_reward_openreview_imlpdfbvin\"], \"source_categories\": [\"B_safety_constraint_reward\"], \"source_papers\": [\"openreview:3zar4HaKPW\", \"openreview:IMlPdFbVIN\"], \"source_idea\": \"pool_methods\"}",
     "status": "rejected",
     "full_eval_result": {
       "metrics": {},
@@ -53,7 +53,7 @@
       ]
     },
     "rejection_reason": null,
-    "timestamp": "2026-06-08T14:51:12.344267+00:00"
+    "timestamp": "2026-06-08T15:02:37.363650+00:00"
   },
   "candidate_queue": [],
   "needs_more_evidence": [],
@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 86,
-    "full_evals_run": 80
+    "candidates_proposed": 87,
+    "full_evals_run": 81
   },
   "stop_reason": null,
   "progress": null,
@@ -577,6 +577,10 @@
     {
       "candidate_id": "reward_c014",
       "applied_at": "2026-06-08T14:54:15.039762+00:00"
+    },
+    {
+      "candidate_id": "reward_c015",
+      "applied_at": "2026-06-08T15:02:59.610592+00:00"
     }
   ],
   "baseline_fair_eval": {
