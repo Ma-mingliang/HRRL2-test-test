@@ -9979,3 +9979,34 @@ f_residual_aware_reward_openreview_huslmvdg5k, f_residual_aware_reward_openrevie
 
 ---
 
+## [2026-06-08T16:32:34.790724+00:00] v0674 - ✗ REJECTED
+
+**Candidate ID:** `reward_c032`
+**Description:** Added residual action smoothness penalty to encourage smoother residual control actions, following the F_residual_aware_reward research idea (rationale: The current residual penalty only penalizes changes between consecutive residual actions. The research idea suggests penalizing both residual action magnitude (||u_residual||^2) and roughness (||u_res - prev_u_res||^2). This modification adds a magnitude penalty to discourage large residual actions while maintaining the existing smoothness penalty. This should improve action smoothness and prevent residual actions from becoming too large, which could lead to reward hacking. The weights are kept small (0.01 and 0.005) to avoid dominating the task reward while still providing meaningful regularization.)
+
+### Reward Formula / Change
+```
+Added residual action smoothness penalty to encourage smoother residual control actions, following the F_residual_aware_reward research idea (rationale: The current residual penalty only penalizes changes between consecutive residual actions. The research idea suggests penalizing both residual action magnitude (||u_residual||^2) and roughness (||u_res - prev_u_res||^2). This modification adds a magnitude penalty to discourage large residual actions while maintaining the existing smoothness penalty. This should improve action smoothness and prevent residual actions from becoming too large, which could lead to reward hacking. The weights are kept small (0.01 and 0.005) to avoid dominating the task reward while still providing meaningful regularization.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 823.3763
+- **lateral_error:** 0.0090
+
+### Rejection Reason
+Score -0.2852 <= threshold 0.0
+
+### Source Methods
+f_residual_aware_reward_openreview_l8pjfrpuuq, f_residual_aware_reward_openreview_n67dlqk5c4
+
+---
+
