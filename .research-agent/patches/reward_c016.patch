@@ -1,21 +1,9 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,12 +960,14 @@
-         # 8. Residual action penalty (from research idea F_residual_aware_reward)
-         # Penalize large residual actions to encourage smooth corrections
-         residual_penalty = 0.0
-         residual_smoothness_penalty = 0.0
-         if hasattr(self, 'last_residual_action') and self.last_residual_action is not None:
--            # Scale penalty based on tracking error - more penalty when error is large
--            # Use exponential scaling to make penalty more aggressive for large errors
--            error_scale = 1.0 + 3.0 * (1.0 - np.exp(-5.0 * current_error))
--            residual_penalty = -0.2 * error_scale * np.sum(self.last_residual_action**2)
-+            # Scale penalty based on tracking error - more penalty when error is large
-+            # Use exponential scaling to make penalty more aggressive for large errors
-+            error_scale = 1.0 + 3.0 * (1.0 - np.exp(-5.0 * current_error))
-+            # Add additional scaling based on error magnitude for better gradient signal
-+            error_magnitude_scale = 1.0 + 2.0 * min(current_error, 1.0)
-+            residual_penalty = -0.2 * error_scale * error_magnitude_scale * np.sum(self.last_residual_action**2)
-             # Add smoothness penalty for residual action changes
-             if hasattr(self, 'prev_residual_action') and self.prev_residual_action is not None:
-                 residual_smoothness_penalty = -0.05 * np.sum((self.last_residual_action - self.prev_residual_action)**2)
+@@ -960,4 +960,5 @@
+         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
+-        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
++        import math
++        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+         
+         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
