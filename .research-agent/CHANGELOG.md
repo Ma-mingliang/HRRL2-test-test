@@ -10271,3 +10271,31 @@ c_curriculum_subgoal_reward_openreview_leed5is4oi, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T17:40:16.312083+00:00] v0684 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c042`
+**Description:** Modified the curriculum subgoal reward to use a more stable scaling factor and added a safety gate to prevent reward hacking when error is very small (rationale: The current subgoal reward can cause reward hacking when error is very small (e.g., 0.001) because the scaling factor 1/(current_error + 0.001) becomes very large (up to 500). This creates unstable gradients and can dominate other reward components. By adding a safety gate (current_error > 0.001) and increasing the denominator offset from 0.001 to 0.01, we prevent extreme reward magnitudes while still encouraging progress. This should lead to more stable training and better final performance, as the agent won't be incentivized to make tiny improvements just for large reward spikes.)
+
+### Reward Formula / Change
+```
+Modified the curriculum subgoal reward to use a more stable scaling factor and added a safety gate to prevent reward hacking when error is very small (rationale: The current subgoal reward can cause reward hacking when error is very small (e.g., 0.001) because the scaling factor 1/(current_error + 0.001) becomes very large (up to 500). This creates unstable gradients and can dominate other reward components. By adding a safety gate (current_error > 0.001) and increasing the denominator offset from 0.001 to 0.01, we prevent extreme reward magnitudes while still encouraging progress. This should lead to more stable training and better final performance, as the agent won't be incentivized to make tiny improvements just for large reward spikes.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 941.0295
+- **lateral_error:** 0.0037
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_pmkwnv6azi, c_curriculum_subgoal_reward_openreview_uv9aa45wym
+
+---
+
