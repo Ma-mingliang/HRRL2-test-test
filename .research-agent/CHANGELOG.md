@@ -10159,3 +10159,31 @@ c_curriculum_subgoal_reward_openreview_mhratccbtk, c_curriculum_subgoal_reward_o
 
 ---
 
+## [2026-06-08T17:12:51.565166+00:00] v0680 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c038`
+**Description:** Enhanced curriculum subgoal reward with dynamic stage weighting and improved scaling to better encourage progressive error reduction (rationale: The current subgoal reward uses inverse error scaling (1/(error+0.001)) which creates very large rewards for small errors, potentially causing instability. By increasing stage weights and using sqrt scaling (1/(sqrt(error)+0.01)), we get: 1) More balanced rewards across error magnitudes, 2) Stronger encouragement for high-precision performance, 3) Smoother gradient near zero error to avoid reward spikes. This should improve completion rate and reduce lateral error while maintaining stable training.)
+
+### Reward Formula / Change
+```
+Enhanced curriculum subgoal reward with dynamic stage weighting and improved scaling to better encourage progressive error reduction (rationale: The current subgoal reward uses inverse error scaling (1/(error+0.001)) which creates very large rewards for small errors, potentially causing instability. By increasing stage weights and using sqrt scaling (1/(sqrt(error)+0.01)), we get: 1) More balanced rewards across error magnitudes, 2) Stronger encouragement for high-precision performance, 3) Smoother gradient near zero error to avoid reward spikes. This should improve completion rate and reduce lateral error while maintaining stable training.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 958.1026
+- **lateral_error:** 0.0027
+
+### Source Methods
+c_curriculum_subgoal_reward_openreview_a3xff0pglu, c_curriculum_subgoal_reward_openreview_dju2kvsdts
+
+---
+
