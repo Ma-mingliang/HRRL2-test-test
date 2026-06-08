@@ -6728,3 +6728,96 @@ d_adaptive_dynamic_reward_openreview_d3wjfs6z2k, d_adaptive_dynamic_reward_openr
 
 ---
 
+## [2026-06-08T10:04:09.450282+00:00] v0621 - ✗ REJECTED
+
+**Candidate ID:** `reward_c002`
+**Description:** Added adaptive weighting to the improvement reward component based on current error magnitude, making the reward more responsive to error reduction at different precision levels. (rationale: The current improvement reward uses a fixed weight of 1.0 for all error magnitudes. By adding adaptive weighting similar to the tracking reward, we create a more consistent reward structure that emphasizes error reduction more strongly when errors are large. This should encourage faster convergence during early training while maintaining precision during fine-tuning. The adaptive weighting aligns with the research idea of adapting reward component weights based on error statistics, and the implementation is minimal and targeted.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on current error magnitude, making the reward more responsive to error reduction at different precision levels. (rationale: The current improvement reward uses a fixed weight of 1.0 for all error magnitudes. By adding adaptive weighting similar to the tracking reward, we create a more consistent reward structure that emphasizes error reduction more strongly when errors are large. This should encourage faster convergence during early training while maintaining precision during fine-tuning. The adaptive weighting aligns with the research idea of adapting reward component weights based on error statistics, and the implementation is minimal and targeted.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 514.4845
+- **lateral_error:** 0.0176
+
+### Rejection Reason
+Score -0.8375 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_d3wjfs6z2k, d_adaptive_dynamic_reward_openreview_eea3cqe2u1
+
+---
+
+## [2026-06-08T10:04:31.487565+00:00] v0621 - ✗ REJECTED
+
+**Candidate ID:** `reward_c007`
+**Description:** Added adaptive dynamic weighting for the tracking reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea with a smooth schedule that increases weight for larger errors while maintaining safety gating. (rationale: The current adaptive weighting uses discrete thresholds which can create discontinuities in the reward landscape. By implementing a smooth exponential schedule, we get continuous adaptation that increases penalty weight for larger errors while maintaining smooth gradients. This aligns with the D_adaptive_dynamic_reward research idea by dynamically adjusting weights based on current error statistics. The exponential schedule ensures that small errors (near zero) get minimal extra weight, while large errors get progressively stronger penalties, encouraging faster convergence without creating reward hacking risks. The safety gating prevents excessive weights that could destabilize training.)
+
+### Reward Formula / Change
+```
+Added adaptive dynamic weighting for the tracking reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward research idea with a smooth schedule that increases weight for larger errors while maintaining safety gating. (rationale: The current adaptive weighting uses discrete thresholds which can create discontinuities in the reward landscape. By implementing a smooth exponential schedule, we get continuous adaptation that increases penalty weight for larger errors while maintaining smooth gradients. This aligns with the D_adaptive_dynamic_reward research idea by dynamically adjusting weights based on current error statistics. The exponential schedule ensures that small errors (near zero) get minimal extra weight, while large errors get progressively stronger penalties, encouraging faster convergence without creating reward hacking risks. The safety gating prevents excessive weights that could destabilize training.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 746.6728
+- **lateral_error:** 0.0082
+
+### Rejection Reason
+Score -0.2791 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_d3wjfs6z2k, d_adaptive_dynamic_reward_openreview_eea3cqe2u1
+
+---
+
+## [2026-06-08T10:04:58.925038+00:00] v0622 - ✗ REJECTED
+
+**Candidate ID:** `reward_c001`
+**Description:** Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward concept with safety gating (rationale: The current improvement reward uses fixed weighting (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are larger, we encourage faster convergence during coarse tracking phases while maintaining precision during fine-tuning. This implements the D_adaptive_dynamic_reward concept with safety gating (weight cap at 3.0) to prevent reward hacking. The exponential schedule ensures smooth transitions between weight levels, which should improve training stability and potentially reduce lateral error further.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward concept with safety gating (rationale: The current improvement reward uses fixed weighting (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are larger, we encourage faster convergence during coarse tracking phases while maintaining precision during fine-tuning. This implements the D_adaptive_dynamic_reward concept with safety gating (weight cap at 3.0) to prevent reward hacking. The exponential schedule ensures smooth transitions between weight levels, which should improve training stability and potentially reduce lateral error further.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 920.1085
+- **lateral_error:** 0.0062
+
+### Rejection Reason
+Score -0.1071 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_d3wjfs6z2k, d_adaptive_dynamic_reward_openreview_eea3cqe2u1
+
+---
+

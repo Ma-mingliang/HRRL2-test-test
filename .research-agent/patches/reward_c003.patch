@@ -1,16 +1,16 @@
 --- a/env.py
 +++ b/env.py
-@@ -938,5 +938,12 @@
-         # 1. 核心跟踪奖励
-         max_penalty = 2.0
--        tracking_reward = -min(current_error**2, max_penalty)
-+        # Adaptive weighting: higher weight for larger errors, lower for small errors
-+        if current_error > 0.1:
-+            weight = 2.0  # Strong penalty for large errors
-+        elif current_error > 0.02:
-+            weight = 1.5  # Medium penalty
-+        else:
-+            weight = 1.0  # Standard penalty for small errors
-+        tracking_reward = -weight * min(current_error**2, max_penalty)
-         
-         # 2. 高精度奖励
+@@ -962,4 +962,10 @@
+         gamma = 0.99
+-        potential_current = -current_error
+-        potential_last = -abs(state_last_raw[0])
+-        improvement_reward = gamma * potential_current - potential_last
++        # Adaptive weighting for improvement reward based on error magnitude
++        # Implements D_adaptive_dynamic_reward for path_tracking layer
++        base_improvement_weight = 1.0
++        max_improvement_weight = 2.5
++        # Smooth schedule: weight increases with error magnitude
++        improvement_weight = base_improvement_weight + (max_improvement_weight - base_improvement_weight) * (1 - math.exp(-8 * current_error))
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        improvement_reward = improvement_weight * (gamma * potential_current - potential_last)
