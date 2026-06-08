@@ -7229,3 +7229,88 @@ d_adaptive_dynamic_reward_openreview_vbwm1rimjo
 
 ---
 
+## [2026-06-08T10:43:19.103818+00:00] v0625 - ✗ REJECTED
+
+**Candidate ID:** `reward_c011`
+**Description:** Added adaptive dynamic weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive dynamic weighting, we prioritize error reduction more strongly when the system is far from the target (large errors), which should accelerate learning in early stages. The exponential schedule ensures smooth transitions, and the safety gating (min with max_weight) prevents reward hacking. This aligns with the D_adaptive_dynamic_reward research idea and should improve the lateral_error metric (currently 0.0041) by encouraging more aggressive error reduction when needed.)
+
+### Reward Formula / Change
+```
+Added adaptive dynamic weighting to the improvement reward component based on error magnitude, implementing the D_adaptive_dynamic_reward research idea with safety gating (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive dynamic weighting, we prioritize error reduction more strongly when the system is far from the target (large errors), which should accelerate learning in early stages. The exponential schedule ensures smooth transitions, and the safety gating (min with max_weight) prevents reward hacking. This aligns with the D_adaptive_dynamic_reward research idea and should improve the lateral_error metric (currently 0.0041) by encouraging more aggressive error reduction when needed.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 880.5873
+- **lateral_error:** 0.0046
+
+### Rejection Reason
+Score -0.0460 <= threshold 0.0
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_vbwm1rimjo
+
+---
+
+## [2026-06-08T10:43:22.635214+00:00] v0626 - ✓ ACCEPTED
+
+**Candidate ID:** `reward_c005`
+**Description:** Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward concept from research ideas (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are large, we encourage faster convergence during coarse tracking phases while maintaining precision during fine-tuning. This implements the D_adaptive_dynamic_reward concept from research ideas with safety gating to prevent reward hacking. The baseline shows excellent performance (lateral_error=0.0041), so this change should help maintain high precision while potentially improving convergence speed during training.)
+
+### Reward Formula / Change
+```
+Added adaptive weighting to the improvement reward component based on current error magnitude, implementing the D_adaptive_dynamic_reward concept from research ideas (rationale: The current improvement reward uses a fixed weight (gamma=0.99) regardless of error magnitude. By adding adaptive weighting that increases when errors are large, we encourage faster convergence during coarse tracking phases while maintaining precision during fine-tuning. This implements the D_adaptive_dynamic_reward concept from research ideas with safety gating to prevent reward hacking. The baseline shows excellent performance (lateral_error=0.0041), so this change should help maintain high precision while potentially improving convergence speed during training.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Metrics After
+- **completion_rate:** 1.0000
+- **reward:** 919.0934
+- **lateral_error:** 0.0035
+
+### Source Methods
+d_adaptive_dynamic_reward_openreview_vbwm1rimjo
+
+---
+
+## [2026-06-08T10:44:17.267606+00:00] v0625 - ✗ REJECTED
+
+**Candidate ID:** `reward_c015`
+**Description:** Added a safety gate to the subgoal reward to prevent reward hacking when error reduction is minimal but current error is very small (rationale: The current subgoal reward can be exploited when error reduction is minimal (e.g., 0.0001) but current error is very small (e.g., 0.001), leading to disproportionately large rewards (0.0001 * 1000 = 0.1). Adding a minimum reduction threshold (0.001) prevents reward hacking from tiny improvements, while capping the inverse scaling (max 100.0) prevents extreme values. This maintains the curriculum learning benefit while improving training stability and preventing potential reward hacking as mentioned in the research ideas.)
+
+### Reward Formula / Change
+```
+Added a safety gate to the subgoal reward to prevent reward hacking when error reduction is minimal but current error is very small (rationale: The current subgoal reward can be exploited when error reduction is minimal (e.g., 0.0001) but current error is very small (e.g., 0.001), leading to disproportionately large rewards (0.0001 * 1000 = 0.1). Adding a minimum reduction threshold (0.001) prevents reward hacking from tiny improvements, while capping the inverse scaling (max 100.0) prevents extreme values. This maintains the curriculum learning benefit while improving training stability and preventing potential reward hacking as mentioned in the research ideas.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+g_llm_reward_generation_openreview_dbuuzrhoqp, g_llm_reward_generation_openreview_ieduruo55f
+
+---
+

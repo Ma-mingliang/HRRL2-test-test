@@ -1,9 +1,22 @@
 --- a/env.py
 +++ b/env.py
-@@ -960,4 +960,5 @@
-         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
--        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
-+        import math
-+        action_penalty = -0.02 * abs(target_handle_angle) / (math.pi / 4)
+@@ -960,6 +960,12 @@
+         # 3. 平顺性惩罚
+         smoothness_penalty = -0.05 * angular_velocity
          
-         reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty
++        # 3b. Stability bonus for low angular velocity when error is small
++        stability_bonus = 0.0
++        if current_error < 0.01 and angular_velocity < 0.1:
++            # Encourage maintaining stability near target
++            stability_bonus = 0.1 * (0.1 - angular_velocity) / 0.1
++        
+         gamma = 0.99
+         potential_current = -current_error
+         potential_last = -abs(state_last_raw[0])
+@@ -992,5 +998,5 @@
+         self.prev_error = current_error
+         
+-        reward = tracking_reward + bonus_reward + smoothness_penalty + improvement_reward + action_penalty + residual_penalty + subgoal_reward
++        reward = tracking_reward + bonus_reward + smoothness_penalty + stability_bonus + improvement_reward + action_penalty + residual_penalty + subgoal_reward
+         
+         return reward
