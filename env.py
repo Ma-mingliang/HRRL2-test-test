@@ -957,17 +957,17 @@ class Attitude_control_stage1(gym.Env):
         
         # 3. 平顺性惩罚
         smoothness_penalty = -0.05 * angular_velocity
-        
         gamma = 0.99
-        # Adaptive weighting for improvement reward based on error magnitude
+        # Adaptive gamma based on error magnitude
         if current_error > 0.1:
-            improvement_weight = 2.0  # Stronger improvement signal for large errors
+            adaptive_gamma = 0.95  # Less discounting for large errors
         elif current_error > 0.02:
-            improvement_weight = 1.5  # Moderate improvement signal
+            adaptive_gamma = 0.98  # Moderate discounting
         else:
-            improvement_weight = 1.0  # Standard improvement signal
-        potential_current = -improvement_weight * current_error
-        potential_last = -improvement_weight * abs(state_last_raw[0])
+            adaptive_gamma = 0.99  # Standard discounting for small errors
+        potential_current = -current_error
+        potential_last = -abs(state_last_raw[0])
+        improvement_reward = adaptive_gamma * potential_current - potential_last
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角

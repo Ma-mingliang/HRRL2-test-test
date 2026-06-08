@@ -1,15 +1,17 @@
 --- a/env.py
 +++ b/env.py
-@@ -954,4 +954,9 @@
+@@ -960,4 +960,11 @@
          gamma = 0.99
 -        potential_current = -current_error
 -        potential_last = -abs(state_last_raw[0])
 -        improvement_reward = gamma * potential_current - potential_last
-+        # Improved potential-based shaping with better scaling
-+        potential_current = -current_error**2
-+        potential_last = -abs(state_last_raw[0])**2
-+        improvement_reward = gamma * potential_current - potential_last
-+        
-+        # Stability bonus for low angular velocity when tracking well
-+        if current_error < 0.01 and angular_velocity < 0.1:
-+            improvement_reward += 0.1
++        # Adaptive gamma based on error magnitude
++        if current_error > 0.1:
++            adaptive_gamma = 0.95  # Less discounting for large errors
++        elif current_error > 0.02:
++            adaptive_gamma = 0.98  # Moderate discounting
++        else:
++            adaptive_gamma = 0.99  # Standard discounting for small errors
++        potential_current = -current_error
++        potential_last = -abs(state_last_raw[0])
++        improvement_reward = adaptive_gamma * potential_current - potential_last
