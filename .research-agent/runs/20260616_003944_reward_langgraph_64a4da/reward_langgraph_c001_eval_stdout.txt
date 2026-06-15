@@ -1,4 +1,4 @@
-[EVAL] checkpoint=D:\research-agent\HRRL2\model\checkpoints\v0731\best_model.zip
+[EVAL] checkpoint=D:\research-agent\HRRL2\model\checkpoints\v0732\best_model.zip
 [EVAL] episodes=30
 [Stage 1 - Pure RL] 初始化环境:
   - 失败惩罚: -10.0

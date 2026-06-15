@@ -68,8 +68,8 @@
     "gpu_seconds": null,
     "candidates": 0,
     "full_evals": 0,
-    "candidates_proposed": 154,
-    "full_evals_run": 130
+    "candidates_proposed": 155,
+    "full_evals_run": 131
   },
   "stop_reason": null,
   "progress": null,
@@ -777,6 +777,10 @@
     {
       "candidate_id": "reward_langgraph_c001",
       "applied_at": "2026-06-15T16:40:02.289724+00:00"
+    },
+    {
+      "candidate_id": "reward_langgraph_c001",
+      "applied_at": "2026-06-15T17:07:16.897937+00:00"
     }
   ],
   "baseline_fair_eval": {
