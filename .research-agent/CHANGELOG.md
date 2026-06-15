@@ -11236,3 +11236,133 @@ a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openrev
 
 ---
 
+## [2026-06-15T07:50:22.394378+00:00] v0722 - ✗ REJECTED
+
+**Candidate ID:** `reward_langgraph_c001`
+**Description:** Simplify the potential-based reward shaping by removing the error-dependent scaling of alpha, making the potential function more stable and less prone to reward hacking (rationale: The current error-dependent alpha scaling (1.0 + 2.0*(1-exp(-5*error))) creates a complex, non-linear potential function that can lead to unstable gradients and potential reward hacking. By using a fixed alpha=2.0, we maintain the core potential-based shaping benefit (gamma*Phi(s')-Phi(s)) while making the reward signal more predictable. This aligns with the research idea's emphasis on preserving policy incentives while avoiding reward hacking from proxy metrics. The baseline already shows excellent performance (lateral_error=0.0041), so simplifying the potential function should maintain performance while improving training stability.)
+
+### Reward Formula / Change
+```
+Simplify the potential-based reward shaping by removing the error-dependent scaling of alpha, making the potential function more stable and less prone to reward hacking (rationale: The current error-dependent alpha scaling (1.0 + 2.0*(1-exp(-5*error))) creates a complex, non-linear potential function that can lead to unstable gradients and potential reward hacking. By using a fixed alpha=2.0, we maintain the core potential-based shaping benefit (gamma*Phi(s')-Phi(s)) while making the reward signal more predictable. This aligns with the research idea's emphasis on preserving policy incentives while avoiding reward hacking from proxy metrics. The baseline already shows excellent performance (lateral_error=0.0041), so simplifying the potential function should maintain performance while improving training stability.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openreview_6lm1jxxlxb
+
+---
+
+## [2026-06-15T13:30:06.108538+00:00] v0723 - ✗ REJECTED
+
+**Candidate ID:** `reward_langgraph_c001`
+**Description:** No-op candidate (mock-llm mode)
+
+### Reward Formula / Change
+```
+No-op candidate (mock-llm mode)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty patch rejected before training
+
+### Source Methods
+test_pbrs_001
+
+---
+
+## [2026-06-15T13:37:54.348300+00:00] v0724 - ✗ REJECTED
+
+**Candidate ID:** `reward_langgraph_c001`
+**Description:** Added asymmetric safety penalty that scales exponentially with proximity to safety boundaries, based on research idea B_safety_constraint_reward. This adds a penalty term that increases sharply when the tracking error approaches a safety threshold (0.05 radians), encouraging the agent to maintain safer margins. (rationale: The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but adding asymmetric safety penalties will encourage the agent to maintain safer margins from boundaries. The exponential scaling creates strong incentives to avoid dangerous states while being less restrictive in safe regions. This should improve robustness without sacrificing the already good tracking performance, as the penalty only becomes significant when error approaches 0.05 radians (well above current 0.0041 error).)
+
+### Reward Formula / Change
+```
+Added asymmetric safety penalty that scales exponentially with proximity to safety boundaries, based on research idea B_safety_constraint_reward. This adds a penalty term that increases sharply when the tracking error approaches a safety threshold (0.05 radians), encouraging the agent to maintain safer margins. (rationale: The baseline shows excellent performance (completion_rate=1.0, lateral_error=0.0041), but adding asymmetric safety penalties will encourage the agent to maintain safer margins from boundaries. The exponential scaling creates strong incentives to avoid dangerous states while being less restrictive in safe regions. This should improve robustness without sacrificing the already good tracking performance, as the penalty only becomes significant when error approaches 0.05 radians (well above current 0.0041 error).)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Patch apply failed after 30 repair attempts
+
+### Source Methods
+test_risk_penalty_004
+
+---
+
+## [2026-06-15T14:39:26.411459+00:00] v0725 - ✗ REJECTED
+
+**Candidate ID:** `reward_langgraph_c001`
+**Description:** No-op candidate (mock-llm mode)
+
+### Reward Formula / Change
+```
+No-op candidate (mock-llm mode)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty patch rejected before training
+
+### Source Methods
+test_curriculum_003
+
+---
+
+## [2026-06-15T14:50:11.070208+00:00] v0726 - ✗ REJECTED
+
+**Candidate ID:** `reward_langgraph_c001`
+**Description:** Added asymmetric exponential penalty for large tracking errors to encourage faster convergence and prevent reward hacking (rationale: The baseline shows excellent performance (lateral_error: 0.0041, completion_rate: 1.0) but the reward function may be vulnerable to reward hacking where the agent exploits the smooth tracking reward without fully converging. Adding an asymmetric exponential penalty for errors > 0.02 rad creates a stronger gradient signal for larger errors, encouraging faster convergence while preserving the smooth reward structure for small errors. This implements the [B_safety_constraint_reward] method from the research ideas, which adds risk-aware penalties that scale exponentially with proximity to safety boundaries. The penalty is only applied for errors above 0.02 rad (well above current performance) to avoid disrupting the already good behavior while providing a safety net against regression.)
+
+### Reward Formula / Change
+```
+Added asymmetric exponential penalty for large tracking errors to encourage faster convergence and prevent reward hacking (rationale: The baseline shows excellent performance (lateral_error: 0.0041, completion_rate: 1.0) but the reward function may be vulnerable to reward hacking where the agent exploits the smooth tracking reward without fully converging. Adding an asymmetric exponential penalty for errors > 0.02 rad creates a stronger gradient signal for larger errors, encouraging faster convergence while preserving the smooth reward structure for small errors. This implements the [B_safety_constraint_reward] method from the research ideas, which adds risk-aware penalties that scale exponentially with proximity to safety boundaries. The penalty is only applied for errors above 0.02 rad (well above current performance) to avoid disrupting the already good behavior while providing a safety net against regression.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+patch_repair_exhausted after 4 attempts
+
+### Source Methods
+test_sparse_to_dense_002, test_control_energy_005
+
+---
+

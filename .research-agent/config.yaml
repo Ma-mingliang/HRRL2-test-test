@@ -1,7 +1,7 @@
 execution:
   max_steps: 50000
   train_command: E:/Anaconda/envs/RL2/python.exe .research-agent/train.py {seed}
-  eval_command: E:/Anaconda/envs/RL2/python.exe .research-agent/evaluate.py {seed}
+  eval_command: E:/Anaconda/envs/RL2/python.exe .research-agent/evaluate.py {checkpoint_path}
   full_eval_seeds:
     - 42
   confirmation_seeds:

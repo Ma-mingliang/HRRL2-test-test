@@ -1,0 +1,1 @@
+{"timestamp": "2026-06-15T13:04:27.331935+00:00", "run_id": "20260615_210427_reward_langgraph_7cc64c", "event_type": "run_start", "optimizer": "reward_langgraph", "agent_python": "E:\\Anaconda\\envs\\langgraph\\python.exe", "execution_python": "E:/Anaconda/envs/RL2/python.exe", "fallback_used": false, "project_path": "D:\\research-agent\\HRRL2", "phase": "main"}

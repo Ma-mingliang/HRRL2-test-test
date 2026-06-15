@@ -1,0 +1,43 @@
+[EVAL] checkpoint=D:\research-agent\HRRL2\model\checkpoints\v0731\best_model.zip
+[EVAL] episodes=30
+[Stage 1 - Pure RL] 初始化环境:
+  - 失败惩罚: -10.0
+  - 早期失败额外惩罚: -20.0
+  - 动作重复: 1
+Episode:0 | Steps:0 | Reward:0.00 | Mean_reward:0.00 | Angle_error:0.0000
+Episode:1 | Steps:1000 | Reward:939.73 | Mean_reward:469.86 | Angle_error:0.0044
+Episode:2 | Steps:1000 | Reward:935.83 | Mean_reward:625.18 | Angle_error:0.0039
+Episode:3 | Steps:1000 | Reward:966.53 | Mean_reward:710.52 | Angle_error:0.0038
+Episode:4 | Steps:1000 | Reward:963.63 | Mean_reward:761.14 | Angle_error:0.0040
+Episode:5 | Steps:1000 | Reward:933.19 | Mean_reward:789.82 | Angle_error:0.0048
+Episode:6 | Steps:1000 | Reward:918.41 | Mean_reward:808.19 | Angle_error:0.0052
+Episode:7 | Steps:1000 | Reward:924.82 | Mean_reward:822.77 | Angle_error:0.0050
+Episode:8 | Steps:1000 | Reward:883.55 | Mean_reward:829.52 | Angle_error:0.0069
+Episode:9 | Steps:1000 | Reward:909.22 | Mean_reward:837.49 | Angle_error:0.0052
+Episode:10 | Steps:1000 | Reward:948.89 | Mean_reward:847.62 | Angle_error:0.0043
+Episode:11 | Steps:1000 | Reward:932.73 | Mean_reward:854.71 | Angle_error:0.0045
+Episode:12 | Steps:1000 | Reward:926.18 | Mean_reward:860.21 | Angle_error:0.0053
+Episode:13 | Steps:1000 | Reward:956.24 | Mean_reward:867.07 | Angle_error:0.0048
+Episode:14 | Steps:1000 | Reward:965.74 | Mean_reward:873.65 | Angle_error:0.0045
+Episode:15 | Steps:1000 | Reward:901.30 | Mean_reward:875.37 | Angle_error:0.0056
+Episode:16 | Steps:1000 | Reward:910.39 | Mean_reward:877.43 | Angle_error:0.0059
+Episode:17 | Steps:1000 | Reward:943.65 | Mean_reward:881.11 | Angle_error:0.0054
+Episode:18 | Steps:1000 | Reward:934.60 | Mean_reward:883.93 | Angle_error:0.0051
+Episode:19 | Steps:1000 | Reward:921.09 | Mean_reward:885.79 | Angle_error:0.0053
+Episode:20 | Steps:1000 | Reward:937.48 | Mean_reward:932.66 | Angle_error:0.0049
+Episode:21 | Steps:1000 | Reward:965.07 | Mean_reward:933.93 | Angle_error:0.0051
+Episode:22 | Steps:1000 | Reward:962.83 | Mean_reward:935.28 | Angle_error:0.0044
+Episode:23 | Steps:1000 | Reward:951.20 | Mean_reward:934.51 | Angle_error:0.0068
+Episode:24 | Steps:1000 | Reward:867.87 | Mean_reward:929.72 | Angle_error:0.0081
+Episode:25 | Steps:1000 | Reward:951.50 | Mean_reward:930.64 | Angle_error:0.0052
+Episode:26 | Steps:1000 | Reward:903.27 | Mean_reward:929.88 | Angle_error:0.0080
+Episode:27 | Steps:1000 | Reward:960.93 | Mean_reward:931.69 | Angle_error:0.0077
+Episode:28 | Steps:1000 | Reward:900.09 | Mean_reward:932.51 | Angle_error:0.0089
+Episode:29 | Steps:1000 | Reward:918.42 | Mean_reward:932.97 | Angle_error:0.0106
+
+[METRICS]
+{"reward": 932.0927580347187, "completion_rate": 1.0, "lateral_error": 0.005638902125829604}
+
+completion_rate = 1.0000
+reward = 932.0928
+lateral_error = 0.0056

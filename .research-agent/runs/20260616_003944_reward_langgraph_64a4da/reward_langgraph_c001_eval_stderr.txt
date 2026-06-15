@@ -1,0 +1,5 @@
+pybullet build time: May 17 2025 21:10:52
+E:\Anaconda\envs\RL2\lib\site-packages\gymnasium\spaces\box.py:235: UserWarning: [33mWARN: Box low's precision lowered by casting to float32, current low.dtype=float64[0m
+  gym.logger.warn(
+E:\Anaconda\envs\RL2\lib\site-packages\gymnasium\spaces\box.py:305: UserWarning: [33mWARN: Box high's precision lowered by casting to float32, current high.dtype=float64[0m
+  gym.logger.warn(
