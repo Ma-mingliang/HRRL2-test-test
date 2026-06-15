@@ -1,0 +1,6 @@
+[EVAL] checkpoint=42
+[EVAL] episodes=30
+[Stage 1 - Pure RL] 初始化环境:
+  - 失败惩罚: -10.0
+  - 早期失败额外惩罚: -20.0
+  - 动作重复: 1

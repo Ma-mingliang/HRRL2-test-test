@@ -109,6 +109,14 @@ def main():
     parser.add_argument("--checkpoint-dir", type=str, default=None)
     args = parser.parse_args()
 
+    # RA_MAX_STEPS env var overrides --timesteps (used by smoke train)
+    ra_max_steps = os.environ.get("RA_MAX_STEPS")
+    if ra_max_steps:
+        try:
+            args.timesteps = int(ra_max_steps)
+        except ValueError:
+            pass
+
     checkpoint_dir = None
     if args.checkpoint_dir:
         checkpoint_dir = Path(args.checkpoint_dir)

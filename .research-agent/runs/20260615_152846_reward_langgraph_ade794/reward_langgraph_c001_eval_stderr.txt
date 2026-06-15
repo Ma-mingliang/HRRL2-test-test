@@ -1,0 +1,31 @@
+pybullet build time: May 17 2025 21:10:52
+E:\Anaconda\envs\RL2\lib\site-packages\gymnasium\spaces\box.py:235: UserWarning: [33mWARN: Box low's precision lowered by casting to float32, current low.dtype=float64[0m
+  gym.logger.warn(
+E:\Anaconda\envs\RL2\lib\site-packages\gymnasium\spaces\box.py:305: UserWarning: [33mWARN: Box high's precision lowered by casting to float32, current high.dtype=float64[0m
+  gym.logger.warn(
+Traceback (most recent call last):
+  File "D:\research-agent\HRRL2\.research-agent\evaluate.py", line 90, in <module>
+    main()
+  File "D:\research-agent\HRRL2\.research-agent\evaluate.py", line 79, in main
+    metrics = evaluate(args.checkpoint, args.episodes)
+  File "D:\research-agent\HRRL2\.research-agent\evaluate.py", line 30, in evaluate
+    model = TD3.load(checkpoint_path, env=env)
+  File "E:\Anaconda\envs\RL2\lib\site-packages\stable_baselines3\common\base_class.py", line 681, in load
+    data, params, pytorch_variables = load_from_zip_file(
+  File "E:\Anaconda\envs\RL2\lib\site-packages\stable_baselines3\common\save_util.py", line 403, in load_from_zip_file
+    file = open_path(load_path, "r", verbose=verbose, suffix="zip")
+  File "E:\Anaconda\envs\RL2\lib\functools.py", line 888, in wrapper
+    return dispatch(args[0].__class__)(*args, **kw)
+  File "E:\Anaconda\envs\RL2\lib\site-packages\stable_baselines3\common\save_util.py", line 240, in open_path_str
+    return open_path_pathlib(pathlib.Path(path), mode, verbose, suffix)
+  File "E:\Anaconda\envs\RL2\lib\site-packages\stable_baselines3\common\save_util.py", line 291, in open_path_pathlib
+    return open_path_pathlib(path, mode, verbose, suffix)
+  File "E:\Anaconda\envs\RL2\lib\site-packages\stable_baselines3\common\save_util.py", line 272, in open_path_pathlib
+    raise error
+  File "E:\Anaconda\envs\RL2\lib\site-packages\stable_baselines3\common\save_util.py", line 264, in open_path_pathlib
+    return open_path(path.open("rb"), mode, verbose, suffix)
+  File "E:\Anaconda\envs\RL2\lib\pathlib.py", line 1180, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "E:\Anaconda\envs\RL2\lib\pathlib.py", line 1038, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '42.zip'

@@ -1,0 +1,11 @@
+--- a/env.py
++++ b/env.py
+@@ -962,6 +962,5 @@
+         gamma = 0.99
+-        # Enhanced potential function with error-dependent scaling
+-        # Larger errors get stronger improvement incentives
+-        alpha = 1.0 + 2.0 * (1 - math.exp(-5 * current_error))
++        # Simplified potential function for more stable shaping
++        alpha = 2.0
+         potential_current = -alpha * current_error
+         potential_last = -alpha * abs(state_last_raw[0])

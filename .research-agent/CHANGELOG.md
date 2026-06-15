@@ -11132,3 +11132,107 @@ h_learned_preference_reward_openreview_pmkwnv6azi, h_learned_preference_reward_o
 
 ---
 
+## [2026-06-08T20:12:44.835382+00:00] v0714 - ✗ REJECTED
+
+**Candidate ID:** `reward_c072`
+**Description:** Added a learned preference reward component that uses a simple exponential moving average of past errors to simulate a preference model, with safety gating to prevent reward hacking (rationale: This implements a simplified version of the H_learned_preference_reward idea by using historical error patterns as a proxy for learned preferences. The exponential moving average creates a baseline that the agent must beat, encouraging consistent improvement over time. The safety gating (clipping) prevents reward hacking while the historical comparison provides a more stable learning signal than single-step improvements. This should help reduce the standard deviation in reward (currently 0.0000) by adding a preference-based component that adapts to the agent's performance history.)
+
+### Reward Formula / Change
+```
+Added a learned preference reward component that uses a simple exponential moving average of past errors to simulate a preference model, with safety gating to prevent reward hacking (rationale: This implements a simplified version of the H_learned_preference_reward idea by using historical error patterns as a proxy for learned preferences. The exponential moving average creates a baseline that the agent must beat, encouraging consistent improvement over time. The safety gating (clipping) prevents reward hacking while the historical comparison provides a more stable learning signal than single-step improvements. This should help reduce the standard deviation in reward (currently 0.0000) by adding a preference-based component that adapts to the agent's performance history.)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+Score 0.0000 <= threshold 0.0
+
+### Source Methods
+h_learned_preference_reward_openreview_titcv6pzia, h_learned_preference_reward_openreview_uv9aa45wym
+
+---
+
+## [2026-06-15T03:55:18.667164+00:00] v0716 - ✗ REJECTED
+
+**Candidate ID:** `reward_langgraph_c001`
+**Description:** No-op candidate (mock-llm mode)
+
+### Reward Formula / Change
+```
+No-op candidate (mock-llm mode)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty patch rejected before training
+
+### Source Methods
+a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openreview_6lm1jxxlxb
+
+---
+
+## [2026-06-15T06:06:49.703527+00:00] v0717 - ✗ REJECTED
+
+**Candidate ID:** `reward_langgraph_c001`
+**Description:** No-op candidate (mock-llm mode)
+
+### Reward Formula / Change
+```
+No-op candidate (mock-llm mode)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty patch rejected before training
+
+### Source Methods
+a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openreview_6lm1jxxlxb
+
+---
+
+## [2026-06-15T06:09:29.807279+00:00] v0718 - ✗ REJECTED
+
+**Candidate ID:** `reward_langgraph_c001`
+**Description:** No-op candidate (mock-llm mode)
+
+### Reward Formula / Change
+```
+No-op candidate (mock-llm mode)
+```
+
+### Modified Files
+- `env.py`
+
+### Metrics Before (Baseline)
+- **reward:** 930.8500 (std: 0.0000)
+- **completion_rate:** 1.0000 (std: 0.0000)
+- **lateral_error:** 0.0041 (std: 0.0000)
+
+### Rejection Reason
+empty patch rejected before training
+
+### Source Methods
+a_potential_based_reward_openreview_hqwhxvzcmj, a_potential_based_reward_openreview_6lm1jxxlxb
+
+---
+

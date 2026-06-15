@@ -960,8 +960,11 @@ class Attitude_control_stage1(gym.Env):
         smoothness_penalty = -0.05 * angular_velocity
         
         gamma = 0.99
-        potential_current = -current_error
-        potential_last = -abs(state_last_raw[0])
+        # Enhanced potential function with error-dependent scaling
+        # Larger errors get stronger improvement incentives
+        alpha = 1.0 + 2.0 * (1 - math.exp(-5 * current_error))
+        potential_current = -alpha * current_error
+        potential_last = -alpha * abs(state_last_raw[0])
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角

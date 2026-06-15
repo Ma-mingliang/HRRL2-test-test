@@ -960,8 +960,10 @@ class Attitude_control_stage1(gym.Env):
         smoothness_penalty = -0.05 * angular_velocity
         
         gamma = 0.99
-        potential_current = -current_error
-        potential_last = -abs(state_last_raw[0])
+        # Simplified potential function for more stable shaping
+        alpha = 2.0
+        potential_current = -alpha * current_error
+        potential_last = -alpha * abs(state_last_raw[0])
         improvement_reward = gamma * potential_current - potential_last
         
         # 5. 直接控制动作惩罚，鼓励车把输出平顺且不过度打角
@@ -973,20 +975,8 @@ class Attitude_control_stage1(gym.Env):
             residual_penalty = -0.01 * (target_handle_angle - self.prev_residual)**2
         self.prev_residual = target_handle_angle
         
-        # 8. Learned preference reward (simplified proxy)
-        # Uses exponential moving average of past errors as preference signal
-        preference_reward = 0.0
-        if hasattr(self, 'error_history') and len(self.error_history) > 0:
-            avg_error = np.mean(self.error_history[-10:])  # Last 10 errors
-            # Reward for being better than historical average
-            preference_reward = 0.1 * (avg_error - current_error)
-            # Safety gating: cap reward magnitude
-            preference_reward = np.clip(preference_reward, -0.5, 0.5)
-        if not hasattr(self, 'error_history'):
-            self.error_history = []
-        self.error_history.append(current_error)
-        
         # 7. Curriculum subgoal reward - encourage progressive improvement
+        subgoal_reward = 0.0
         if hasattr(self, 'prev_error') and self.prev_error is not None:
             # Reward for reducing error toward subgoal thresholds
             error_reduction = self.prev_error - current_error
